@@ -33,3 +33,4 @@ C:\Users\user1\Downloads\לימודים\finalProject\server\obj\Debug\net9.0\ref
 C:\Users\user1\Downloads\לימודים\finalProject\server\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\user1\Downloads\לימודים\finalProject\server\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\user1\Downloads\לימודים\finalProject\server\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\user1\Downloads\לימודים\finalProject\server\obj\Debug\net9.0\server.sourcelink.json
