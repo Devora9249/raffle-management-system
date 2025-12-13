@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<PurchaseModel> Purchases { get; set; }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<WinningModel> Winnings { get; set; }
+    public DbSet<RaffleModel> Raffles { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

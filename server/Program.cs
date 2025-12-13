@@ -1,8 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using server.Data;
+using server.Repositories.Implementations;
+using server.Repositories.Interfaces;
+
+
+// try
+// {
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//DI
+builder.Services.AddScoped<IGiftsRepository, GiftsRepository>();
+builder.Services.AddScoped<IDonorsRepository, DonorsRepository>();
+builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+
 
 var app = builder.Build();
 
@@ -13,28 +30,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
 
-// var summaries = new[]
-// {
-//     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-// };
-
-// app.MapGet("/weatherforecast", () =>
-// {
-//     var forecast =  Enumerable.Range(1, 5).Select(index =>
-//         new WeatherForecast
-//         (
-//             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-//             Random.Shared.Next(-20, 55),
-//             summaries[Random.Shared.Next(summaries.Length)]
-//         ))
-//         .ToArray();
-//     return forecast;
-// })
-// .WithName("GetWeatherForecast");
 
 app.Run();
+// }
+// catch (Exception ex)
+// {
+//     Log.Fatal(ex, "Application terminated unexpectedly");
+// }
+// finally
+// {
+//     Log.CloseAndFlush();
+// }
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
