@@ -6,10 +6,15 @@ namespace server.Models
         public int UserId { get; set; }
         public int GiftId { get; set; }
         public int Qty { get; set; }
+        public Status Status { get; set; } = Status.Draft;
+        public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
         public UserModel User { get; set; }
         public GiftModel Gift { get; set; }
-public PurchaseStatus Status { get; set; } = PurchaseStatus.Cart;
-public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
-    public enum PurchaseStatus { Cart, Paid, Cancelled }
+
+    public enum Status
+    {
+        Draft,
+        Completed,
+    }
 }
