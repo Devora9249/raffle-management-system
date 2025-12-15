@@ -47,12 +47,3 @@ if (app.Environment.IsDevelopment())
 
 
 app.Run();
-// }
-// catch (Exception ex)
-// {
-//     Log.Fatal(ex, "Application terminated unexpectedly");
-// }
-// finally
-// {
-//     Log.CloseAndFlush();
-// }
