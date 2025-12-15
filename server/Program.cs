@@ -20,14 +20,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //DI
 ///repositories
-builder.Services.AddScoped<IGiftsRepository, GiftsRepository>();
-builder.Services.AddScoped<IDonorsRepository, DonorsRepository>();
-builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IGiftRepository, GiftRepository>();
+builder.Services.AddScoped<IDonorRepository, DonorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 ///services
-builder.Services.AddScoped<IGiftsService, GiftsService>();
-builder.Services.AddScoped<IDonorsService, DonorsService>();
-builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IGiftService, GiftService>();
+builder.Services.AddScoped<IDonorService, DonorService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 
 
