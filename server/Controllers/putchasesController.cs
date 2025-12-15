@@ -16,39 +16,58 @@ public class PurchaseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllPurchasesAsync());
+    public async Task<IActionResult> GetAll()
+        => Ok(await _service.GetAllAsync());
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var p = await _service.GetPurchaseByIdAsync(id);
-        return p == null ? NotFound() : Ok(p);
+        var purchase = await _service.GetByIdAsync(id);
+        ///////////////
+        return purchase == null ? NotFound() : Ok(purchase);
+        ///////////////
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(PurchaseModel purchase) => Ok(await _service.AddPurchaseAsync(purchase));
+    public async Task<IActionResult> Create(PurchaseModel purchase)
+    {
+        var created = await _service.AddAsync(purchase);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+    }
 
     [HttpPut]
-    public async Task<IActionResult> Update(PurchaseModel purchase) => Ok(await _service.UpdatePurchaseAsync(purchase));
+    public async Task<IActionResult> Update(PurchaseModel purchase)
+        => Ok(await _service.UpdateAsync(purchase));
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var ok = await _service.DeletePurchaseAsync(id);
+        var ok = await _service.DeleteAsync(id);
         return ok ? NoContent() : NotFound();
     }
 
     // פרטי רוכשים לפי מתנה
-    [HttpGet("purchasers-by-gift/{giftId:int}")]
-    public async Task<IActionResult> PurchasersByGift(int giftId)
-        => Ok(await _service.GetPurchasersByGiftAsync(giftId));
+    [HttpGet("byGift/{giftId}")]
+    public async Task<IActionResult> GetByGift(int giftId)
+        => Ok(await _service.GetByGiftAsync(giftId));
 
-    // סל
-    [HttpGet("cart/{userId:int}")]
-    public async Task<IActionResult> GetCart(int userId)
+    // סל של משתמש
+    [HttpGet("cart/{userId}")]
+    public async Task<IActionResult> GetUserCart(int userId)
         => Ok(await _service.GetUserCartAsync(userId));
 
-    [HttpPost("checkout/{userId:int}")]
-    public async Task<IActionResult> Checkout(int userId)
-        => Ok(new { completedItems = await _service.CheckoutAsync(userId) });
+[HttpPost("checkout/{userId}")]
+public async Task<IActionResult> Checkout(int userId)
+{
+    var completedCount = await _service.CheckoutAsync(userId);
+
+    if (completedCount == 0)
+        return BadRequest(new { message = "Cart is empty" });
+
+    return Ok(new
+    {
+        message = "Checkout completed successfully",
+        itemsCompleted = completedCount
+    });
+}
 }

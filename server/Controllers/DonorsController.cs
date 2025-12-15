@@ -18,11 +18,11 @@ public class DonorController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllDonorsAsync());
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var donor = await _service.GetDonorByIdAsync(id);
-        return donor == null ? NotFound() : Ok(donor);
+        return Ok(donor);
     }
 
     [HttpPost]
@@ -31,10 +31,12 @@ public class DonorController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update(DonorModel donor) => Ok(await _service.UpdateDonorAsync(donor));
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var ok = await _service.DeleteDonorAsync(id);
-        return ok ? NoContent() : NotFound();
+        return Ok("deleted: " + ok);
     }
 }
+
+//אין בדיקות שהאידי נמצא לפני עדכון ומחיקה

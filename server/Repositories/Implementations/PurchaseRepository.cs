@@ -3,14 +3,88 @@ using server.Data;
 using server.Models;
 using server.Repositories.Interfaces;
 
-namespace server.Repositories.Implementations
+namespace server.Repositories.Implementations;
+
+public class PurchaseRepository : IPurchaseRepository
 {
-    public class PurchaseRepository : IPurchaseRepository
+    private readonly AppDbContext _context;
+
+    public PurchaseRepository(AppDbContext context)
     {
-     Task<PurchaseModel?> GetByIdAsync(int id);
-        Task<List<PurchaseModel>> GetAllAsync();
-        Task<List<PurchaseModel>> GetByGiftAsync(int giftId);
-        Task<List<PurchaseModel>> GetUserCartAsync(int userId); // Draft
-        Task AddAsync(PurchaseModel purchase);
+        _context = context;
     }
+
+    public async Task<List<PurchaseModel>> GetAllAsync()
+    {
+        return await _context.Purchases.ToListAsync();
+    }
+
+    public async Task<PurchaseModel?> GetByIdAsync(int id)
+    {
+        return await _context.Purchases.FindAsync(id);
+    }
+
+    public async Task<PurchaseModel> AddAsync(PurchaseModel purchase)
+    {
+        _context.Purchases.Add(purchase);
+        await _context.SaveChangesAsync();
+        return purchase;
+    }
+
+    public async Task<PurchaseModel> UpdateAsync(PurchaseModel purchase)
+    {
+        var existing = await _context.Purchases.FindAsync(purchase.Id);
+        if (existing == null)
+            throw new KeyNotFoundException("Purchase not found");
+
+        _context.Entry(existing).CurrentValues.SetValues(purchase);
+        await _context.SaveChangesAsync();
+        return existing;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var purchase = await _context.Purchases.FindAsync(id);
+        if (purchase == null)
+            return false;
+
+        _context.Purchases.Remove(purchase);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    // רוכשים לפי מתנה (רק Completed)
+    public async Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
+    {
+        return await _context.Purchases
+            .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
+            .ToListAsync();
+    }
+
+    // סל של משתמש (Draft)
+    public async Task<List<PurchaseModel>> GetUserCartAsync(int userId)
+    {
+        return await _context.Purchases
+            .Where(p => p.UserId == userId && p.Status == Status.Draft)
+            .ToListAsync();
+    }
+
+public async Task<int> CheckoutAsync(int userId)
+{
+    var cartItems = await _context.Purchases
+        .Where(p => p.UserId == userId && p.Status == Status.Draft)
+        .ToListAsync();
+
+    if (!cartItems.Any())
+        return 0;
+
+    foreach (var item in cartItems)
+    {
+        item.Status = Status.Completed;
+        item.PurchaseDate = DateTime.UtcNow;
+    }
+
+    await _context.SaveChangesAsync();
+    return cartItems.Count;
+}
 }
