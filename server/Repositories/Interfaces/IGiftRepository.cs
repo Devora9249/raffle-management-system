@@ -19,3 +19,20 @@ namespace server.Repositories.Interfaces
 
     }
 }
+using server.Models;
+
+// namespace server.Repositories.Interfaces
+// {
+//     public interface IGiftRepository
+//     {
+//         Task<IEnumerable<GiftModel>> GetAllGiftsAsync();
+//         Task<GiftModel?> GetGiftByIdAsync(int id);
+//         Task<GiftModel> AddGiftAsync(GiftModel gift);
+//         Task<GiftModel> UpdateGiftAsync(GiftModel gift);
+//         Task<bool> DeleteGiftAsync(int id);
+
+//         Task<IEnumerable<GiftModel>> SearchByNameAsync(string name);
+//         Task<IEnumerable<GiftModel>> FilterByDonorAsync(int donorId);
+//         Task<IEnumerable<GiftModel>> SortByPriceAsync(bool ascending);
+//     }
+// }
