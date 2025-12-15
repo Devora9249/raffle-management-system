@@ -1,8 +1,8 @@
 using server.Models;
 
-namespace server.Repositories.Interfaces
+namespace server.Services.Interfaces
 {
-    public interface IDonorRepository
+    public interface IDonorService
     {
         Task<IEnumerable<DonorModel>> GetAllDonorsAsync();
         Task<DonorModel?> GetDonorByIdAsync(int id);
