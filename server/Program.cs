@@ -16,9 +16,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //DI
+///repositories
 builder.Services.AddScoped<IGiftsRepository, GiftsRepository>();
 builder.Services.AddScoped<IDonorsRepository, DonorsRepository>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+///services
+builder.Services.AddScoped<IGiftsService, GiftsService>();
+builder.Services.AddScoped<IDonorsService, DonorsService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+
+
+
 
 
 var app = builder.Build();
