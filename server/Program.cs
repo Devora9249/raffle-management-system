@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Services.Implementations;
+using server.Services.Interfaces;
 using server.Repositories.Implementations;
 using server.Repositories.Interfaces;
+
 
 
 // try
@@ -31,6 +34,7 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 
 
 
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

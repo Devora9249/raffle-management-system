@@ -2,6 +2,7 @@
 using server.Models;
 using server.Services.Interfaces;
 using server.Repositories.Interfaces;
+using server.DTOs.Categories;
 
 namespace server.Services.Implementations
 {
@@ -19,13 +20,24 @@ namespace server.Services.Implementations
             return await _categoryRepository.GetAllCategoriesAsync();
         }
 
-        public async Task<CategoryModel> AddCategoryAsync(CategoryModel category)
+        public async Task<CategoryModel> AddCategoryAsync(CategoryCreateDto dto)
         {
+            var category = new CategoryModel   
+            {
+                Name = dto.Name
+            };
+
             return await _categoryRepository.AddCategoryAsync(category);
         }
 
-        public async Task<CategoryModel> UpdateCategoryAsync(CategoryModel category)
+        public async Task<CategoryModel> UpdateCategoryAsync(CategoryUpdateDto dto)
         {
+            var category = new CategoryModel
+            {
+                Id = dto.Id,
+                Name = dto.Name
+            };
+
             return await _categoryRepository.UpdateCategoryAsync(category);
         }
 
@@ -35,4 +47,3 @@ namespace server.Services.Implementations
         }
     }
 }
-  

@@ -1,4 +1,5 @@
-    using server.Models;
+using server.DTOs;
+using server.Models;
     using server.Models.Enums;
 
     namespace server.Services.Interfaces
@@ -6,22 +7,22 @@
         public interface IGiftService
         {
             //CRUD
-            Task<IEnumerable<GiftModel>> GetAllGiftsAsync(PriceSort sort);
-            Task<GiftModel?> GetGiftByIdAsync(int id);
-            Task<GiftModel> AddGiftAsync(GiftModel gift);
-            Task<GiftModel> UpdateGiftAsync(GiftModel gift);
+            Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
+            Task<GiftResponseDto?> GetGiftByIdAsync(int id);
+            Task<GiftResponseDto> AddGiftAsync(GiftResponseDto gift);
+            Task<GiftResponseDto> UpdateGiftAsync(GiftResponseDto gift);
             Task<bool> DeleteGiftAsync(int id);
 
             //בנוסף
-            Task <IEnumerable<GiftModel>> FilterByGiftName(string name);
-            Task <IEnumerable<GiftModel>> FilterByGiftDonor(string name);        
+            Task <IEnumerable<GiftResponseDto>> FilterByGiftName(string name);
+            Task <IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);        
 
 
         }
     }
 
 
-    using server.Models;
+    // using server.Models;
 
 // namespace server.Services.Interfaces
 // {
