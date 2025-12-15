@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Services.Implementations;
+using server.Services.Interfaces;
 using server.Repositories.Implementations;
 using server.Repositories.Interfaces;
+
 
 
 // try
@@ -16,11 +19,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //DI
-builder.Services.AddScoped<IGiftsRepository, GiftsRepository>();
-builder.Services.AddScoped<IDonorsRepository, DonorsRepository>();
-builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IGiftRepository, GiftRepository>();
+// builder.Services.AddScoped<IDonorRepository, DonorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IGiftService, GiftService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 using server.Models;
 using server.Models.Enums;
+using server.DTOs.Categories;
 
 namespace server.Services.Interfaces
 {
@@ -7,8 +8,8 @@ namespace server.Services.Interfaces
     {
         //CRUD
         Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync();
-        Task<CategoryModel> AddCategoryAsync(CategoryModel category);
-        Task<CategoryModel> UpdateCategoryAsync(CategoryModel category);
+        Task<CategoryModel> AddCategoryAsync(CategoryCreateDto category);
+        Task<CategoryModel> UpdateCategoryAsync(CategoryUpdateDto category);
         Task<bool> DeleteCategoryAsync(int id);
     }
 }
