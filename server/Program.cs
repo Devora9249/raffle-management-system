@@ -4,6 +4,8 @@ using server.Services.Implementations;
 using server.Services.Interfaces;
 using server.Repositories.Implementations;
 using server.Repositories.Interfaces;
+using server.Services;
+using server.Services.Options;
 
 
 
@@ -17,6 +19,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<EmailSettingsOptions>(
+    builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IWinningService, WinningService>();
 
 //DI
 ///repositories
@@ -50,6 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
