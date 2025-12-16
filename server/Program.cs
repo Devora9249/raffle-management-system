@@ -4,14 +4,15 @@ using server.Services.Implementations;
 using server.Services.Interfaces;
 using server.Repositories.Implementations;
 using server.Repositories.Interfaces;
-using server.Services;
-using server.Services.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
-// try
-// {
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -23,7 +24,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.Configure<EmailSettingsOptions>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IWinningService, WinningService>();
-
 //DI
 ///repositories
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();
@@ -32,6 +32,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 ///services
 builder.Services.AddScoped<IGiftService, GiftService>();
+// builder.Services.AddScoped<IAuthService, AuthService>();
+
 // builder.Services.AddScoped<IDonorService, DonorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
@@ -45,6 +47,31 @@ builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<JwtService>();
+
+
+// Auth
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var jwt = builder.Configuration.GetSection("Jwt");
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwt["Issuer"],
+            ValidAudience = jwt["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwt["Key"]!)
+            ),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 
 builder.Services.AddControllers();
 var app = builder.Build();
@@ -56,6 +83,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

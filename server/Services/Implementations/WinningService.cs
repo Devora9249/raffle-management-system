@@ -6,7 +6,7 @@ using server.Models.Enums;
 
 namespace server.Services.Implementations;
 
-public class WinningService
+public class WinningService: IWinningService
 {
     private readonly IWinningRepository _winningRepository;
     private readonly IPurchaseRepository _PurchaseRepository;

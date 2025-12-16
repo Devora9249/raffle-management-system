@@ -20,6 +20,13 @@ public class UserRepository : IUserRepository
     public async Task<UserModel?> GetUserByIdAsync(int id)
         => await _context.Users.FindAsync(id);
 
+
+    public async Task<UserModel?> GetByEmailAsync(string email)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
+    
     public async Task<UserModel> AddUserAsync(UserModel user)
     {
         _context.Users.Add(user);

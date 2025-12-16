@@ -6,6 +6,7 @@ namespace server.Repositories.Interfaces
     {
         Task<IEnumerable<UserModel>> GetAllUsersAsync();
         Task<UserModel?> GetUserByIdAsync(int id);
+        public Task<UserModel?> GetByEmailAsync(string email);
         Task<UserModel> AddUserAsync(UserModel user);
         Task<UserModel> UpdateUserAsync(UserModel user);
         Task<bool> DeleteUserAsync(int id);

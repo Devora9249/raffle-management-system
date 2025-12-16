@@ -28,7 +28,6 @@ namespace server.DTOs
 
     public class UserUpdateDto
     {
-        // [Required] ..למה זה זה לא חובה לעדכן את ה-id
         public int Id { get; set; }
 
         [MaxLength(100)]
@@ -61,7 +60,26 @@ namespace server.DTOs
         public string Phone { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
-
         public RoleEnum Role { get; set; }
+
+        public static UserResponseDto FromModel(UserModel user)
+        {
+            return new UserResponseDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Phone = user.Phone,
+                City = user.City,
+                Address = user.Address,
+                Role = user.Role,
+
+            };
+        }
     }
+
+
 }
+
+
+
