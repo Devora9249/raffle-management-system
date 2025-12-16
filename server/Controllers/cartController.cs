@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using server.Dtos.Cart;
-using server.Dtos.Purchases;
-using server.Models;
+using server.DTOs.Cart;
 using server.Services.Interfaces;
 
 namespace server.Controllers;
@@ -10,123 +8,72 @@ namespace server.Controllers;
 [Route("api/[controller]")]
 public class CartController : ControllerBase
 {
-    private readonly IPurchaseService _purchaseService;
+    private readonly ICartService _service;
 
-    public CartController(IPurchaseService purchaseService)
+    public CartController(ICartService service)
     {
-        _purchaseService = purchaseService;
+        _service = service;
     }
 
-    // הצגת סל של משתמש (Draft)
     [HttpGet("{userId:int}")]
-    public async Task<ActionResult<List<PurchaseReadDto>>> GetCart(int userId)
+    [ProducesResponseType(typeof(IEnumerable<CartItemResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCart(int userId)
+        => Ok(await _service.GetCartAsync(userId));
+
+    [HttpPost]
+    [ProducesResponseType(typeof(CartItemResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Add([FromBody] CartAddDto dto)
     {
-        var items = await _purchaseService.GetUserCartAsync(userId);
-
-        var dto = items.Select(p => new PurchaseReadDto
+        try
         {
-            Id = p.Id,
-            UserId = p.UserId,
-            GiftId = p.GiftId,
-            Qty = p.Qty,
-            Status = p.Status,
-            PurchaseDate = p.PurchaseDate
-        }).ToList();
-
-        return Ok(dto);
+            var created = await _service.AddToCartAsync(dto);
+            return Ok(created);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
-    // הוספה לסל (תמיד Draft)
-    [HttpPost("add")]
-    public async Task<ActionResult<PurchaseReadDto>> AddToCart([FromBody] AddToCartDto dto)
+    [HttpPut]
+    [ProducesResponseType(typeof(CartItemResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateQty([FromBody] CartUpdateDto dto)
     {
-        if (dto.Qty <= 0)
-            return BadRequest(new { message = "Qty must be greater than 0" });
-
-        var purchase = new PurchaseModel
+        try
         {
-            UserId = dto.UserId,
-            GiftId = dto.GiftId,
-            Qty = dto.Qty,
-            Status = Status.Draft,
-            PurchaseDate = DateTime.UtcNow
-        };
-
-        var created = await _purchaseService.AddAsync(purchase);
-
-        return Ok(new PurchaseReadDto
+            var updated = await _service.UpdateQtyAsync(dto);
+            return Ok(updated);
+        }
+        catch (KeyNotFoundException)
         {
-            Id = created.Id,
-            UserId = created.UserId,
-            GiftId = created.GiftId,
-            Qty = created.Qty,
-            Status = created.Status,
-            PurchaseDate = created.PurchaseDate
-        });
+            return NotFound(new { message = "Cart item not found." });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
-    // עדכון כמות של פריט בסל (רק Draft)
-    [HttpPut("{purchaseId:int}")]
-    public async Task<IActionResult> UpdateQty(int purchaseId, [FromBody] UpdateCartQtyDto dto)
-    {
-        if (dto.Qty <= 0)
-            return BadRequest(new { message = "Qty must be greater than 0" });
-
-        var existing = await _purchaseService.GetByIdAsync(purchaseId);
-        if (existing == null)
-            return NotFound(new { message = "Cart item not found" });
-
-        if (existing.Status != Status.Draft)
-            return BadRequest(new { message = "Only Draft items can be updated in cart" });
-
-        existing.Qty = dto.Qty;
-
-        var updated = await _purchaseService.UpdateAsync(existing);
-        return Ok(new PurchaseReadDto
-        {
-            Id = updated.Id,
-            UserId = updated.UserId,
-            GiftId = updated.GiftId,
-            Qty = updated.Qty,
-            Status = updated.Status,
-            PurchaseDate = updated.PurchaseDate
-        });
-    }
-
-    // מחיקת פריט מהסל (רק Draft)
     [HttpDelete("{purchaseId:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Remove(int purchaseId)
     {
-        var existing = await _purchaseService.GetByIdAsync(purchaseId);
-        if (existing == null)
-            return NotFound(new { message = "Cart item not found" });
-
-        if (existing.Status != Status.Draft)
-            return BadRequest(new { message = "Only Draft items can be deleted from cart" });
-
-        var ok = await _purchaseService.DeleteAsync(purchaseId);
-        return ok ? NoContent() : NotFound();
-    }
-
-    // Checkout: כל Draft של המשתמש -> Completed
-    [HttpPost("checkout/{userId:int}")]
-    public async Task<ActionResult<CheckoutResultDto>> Checkout(int userId)
-    {
-        var completedCount = await _purchaseService.CheckoutAsync(userId);
-
-        if (completedCount == 0)
-            return BadRequest(new CheckoutResultDto
-            {
-                UserId = userId,
-                ItemsCompleted = 0,
-                Message = "Cart is empty"
-            });
-
-        return Ok(new CheckoutResultDto
+        try
         {
-            UserId = userId,
-            ItemsCompleted = completedCount,
-            Message = "Checkout completed successfully"
-        });
+            var ok = await _service.RemoveAsync(purchaseId);
+            return ok ? NoContent() : NotFound(new { message = "Cart item not found." });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
+
+    [HttpPost("checkout/{userId:int}")]
+    [ProducesResponseType(typeof(CartCheckoutResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Checkout(int userId)
+        => Ok(await _service.CheckoutAsync(userId));
 }

@@ -34,6 +34,11 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+builder.Services.AddScoped<ICartService, CartService>();
+
 
 builder.Services.AddControllers();
 var app = builder.Build();
