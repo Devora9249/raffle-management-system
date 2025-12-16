@@ -1,18 +1,16 @@
-using server.Models;
+using server.DTOs.Purchases;
 
 namespace server.Services.Interfaces
 {
     public interface IPurchaseService
     {
-        Task<List<PurchaseModel>> GetAllAsync();
-        Task<PurchaseModel?> GetByIdAsync(int id);
-        Task<PurchaseModel> AddAsync(PurchaseModel purchase);
-        Task<PurchaseModel> UpdateAsync(PurchaseModel purchase);
+        Task<IEnumerable<PurchaseResponseDto>> GetAllAsync();
+        Task<PurchaseResponseDto?> GetByIdAsync(int id);
+
+        Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto);
+        Task<PurchaseResponseDto> UpdateAsync(PurchaseUpdateDto updateDto);
         Task<bool> DeleteAsync(int id);
 
-        Task<List<PurchaseModel>> GetByGiftAsync(int giftId);
-        Task<List<PurchaseModel>> GetUserCartAsync(int userId);
-        Task<int> CheckoutAsync(int userId);
-
+        Task<List<PurchaseResponseDto>> GetByGiftAsync(int giftId);
     }
 }
