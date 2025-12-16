@@ -1,0 +1,57 @@
+using Microsoft.EntityFrameworkCore;
+using server.Data;
+using server.Models;
+using server.Repositories.Interfaces;
+
+ namespace server.Repositories.Implementations;
+
+ public class WinningRepository : IWinningRepository
+ {
+     private readonly AppDbContext _context;
+
+     public WinningRepository(AppDbContext context)
+     {
+         _context = context;
+     }
+
+     public async Task<List<WinningModel>> GetAllWinningsAsync()
+     {
+         return await _context.Winnings.ToListAsync();
+     }
+
+     public async Task<WinningModel?> GetWinningByIdAsync(int id)
+     {
+         return await _context.Winnings.FindAsync(id);
+     }
+
+     public async Task<WinningModel> AddWinningAsync(WinningModel winning)
+     {
+         _context.Winnings.Add(winning);
+         await _context.SaveChangesAsync();
+         return winning;
+     }
+
+     public async Task<WinningModel> UpdateWinningAsync(WinningModel winning)
+     {
+         var existing = await _context.Winnings.FindAsync(winning.Id);
+         if (existing == null)
+             throw new KeyNotFoundException("Winning not found");
+
+         _context.Entry(existing).CurrentValues.SetValues(winning);
+         await _context.SaveChangesAsync();
+         return existing;
+     }
+
+     public async Task<bool> DeleteWinningAsync(int id)
+     {
+         var winning = await _context.Winnings.FindAsync(id);
+         if (winning == null)
+             return false;
+
+         _context.Winnings.Remove(winning);
+         await _context.SaveChangesAsync();
+         return true;
+     }
+
+     //
+ }
