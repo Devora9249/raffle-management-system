@@ -1,6 +1,6 @@
 namespace server.Services.Interfaces
 {
-    public interface IWinningService
+    public interface IEmailService
     {
         Task SendWinningEmailAsync(int giftId, int winnerId);
     }

@@ -5,20 +5,20 @@ namespace server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WinningController : ControllerBase
+    public class EmailController : ControllerBase
     {
-        private readonly IWinningService _winningService;
+        private readonly IEmailService _emailService;
 
-        public WinningController(IWinningService winningService)
+        public EmailController(IEmailService emailService)
         {
-            _winningService = winningService;
+            _emailService = emailService;
         }
 
-        // POST: /api/winning/send-mail?giftId=1&winnerId=3
+        // POST: /api/email/send-mail?giftId=1&winnerId=3
         [HttpPost("send-mail")]
         public async Task<IActionResult> SendWinningMail([FromQuery] int giftId, [FromQuery] int winnerId)
         {
-            await _winningService.SendWinningEmailAsync(giftId, winnerId);
+            await _emailService.SendWinningEmailAsync(giftId, winnerId);
             return Ok("Mail sent");
         }
     }

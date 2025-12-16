@@ -2,24 +2,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using server.Data;
 using server.Services.Interfaces;
-using server.Services.Options;
 using System.Net;
 using System.Net.Mail;
 
 namespace server.Services
 {
-    public class WinningService : IWinningService
+    public class EmailService : IEmailService
     {
         private readonly AppDbContext _context;
         private readonly EmailSettingsOptions _emailSettings;
 
-        public WinningService(
-    AppDbContext context,
-    IOptions<EmailSettingsOptions> options)
-{
-    _context = context;
-    _emailSettings = options.Value;
-}
+        public EmailService(AppDbContext context,IOptions<EmailSettingsOptions> options)
+        {
+            _context = context;
+            _emailSettings = options.Value;
+        }
 
         public async Task SendWinningEmailAsync(int giftId, int winnerId)
         {
@@ -74,28 +71,28 @@ namespace server.Services
         }
 
         private async Task SendEmailAsync(string to, string subject, string body)
-{
-    var smtp = new SmtpClient(_emailSettings.Host, _emailSettings.Port)
-    {
-        EnableSsl = _emailSettings.EnableSSL,
-        Credentials = new NetworkCredential(
-            _emailSettings.Username,
-            _emailSettings.Password)
-    };
+        {
+            var smtp = new SmtpClient(_emailSettings.Host, _emailSettings.Port)
+            {
+                EnableSsl = _emailSettings.EnableSSL,
+                Credentials = new NetworkCredential(
+                    _emailSettings.Username,
+                    _emailSettings.Password)
+            };
 
-    var mail = new MailMessage
-    {
-        From = new MailAddress(_emailSettings.Username),
-        Subject = subject,
-        Body = body,
-        IsBodyHtml = false
-    };
+            var mail = new MailMessage
+            {
+                From = new MailAddress(_emailSettings.Username),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = false
+            };
 
-    mail.To.Add(to);
-    mail.Add("devora.video@gmail.com");
-    mail.Add("potat4241@gmail.com")
+            mail.To.Add(to);
+            mail.To.Add("devora.video@gmail.com");
+            mail.To.Add("porat4241@gmail.com");
 
-    await smtp.SendMailAsync(mail);
-}
+                await smtp.SendMailAsync(mail);
+        }
     }
 }
