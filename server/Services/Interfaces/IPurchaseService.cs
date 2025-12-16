@@ -1,4 +1,4 @@
-using server.DTOs.Purchases;
+using server.DTOs;
 
 namespace server.Services.Interfaces
 {

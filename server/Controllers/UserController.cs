@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using server.Services.Interfaces;
-using server.DTOs.Users;
+using server.DTOs;
 
 namespace server.Controllers;
 

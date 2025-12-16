@@ -1,4 +1,4 @@
-using server.DTOs.Users;
+using server.DTOs;
 
 namespace server.Services.Interfaces
 {

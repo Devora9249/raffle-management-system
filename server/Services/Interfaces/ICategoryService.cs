@@ -1,6 +1,6 @@
 using server.Models;
 using server.Models.Enums;
-using server.DTOs.Categories;
+using server.DTOs;
 
 namespace server.Services.Interfaces
 {

@@ -1,4 +1,4 @@
-using server.DTOs.Cart;
+using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;

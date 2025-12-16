@@ -2,7 +2,7 @@
 using server.Models;
 using server.Services.Interfaces;
 using server.Repositories.Interfaces;
-using server.DTOs.Categories;
+using server.DTOs;
 
 namespace server.Services.Implementations
 {

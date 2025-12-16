@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using server.DTOs.Cart;
+using server.DTOs;
 using server.Services.Interfaces;
 
 namespace server.Controllers;

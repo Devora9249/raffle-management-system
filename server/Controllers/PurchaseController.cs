@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using server.DTOs.Purchases;
+using server.DTOs;
 using server.Services.Interfaces;
 
 namespace server.Controllers;
@@ -65,6 +65,7 @@ public class PurchaseController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

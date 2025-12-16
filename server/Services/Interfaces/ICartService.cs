@@ -1,4 +1,4 @@
-using server.DTOs.Cart;
+using server.DTOs;
 
 namespace server.Services.Interfaces
 {
