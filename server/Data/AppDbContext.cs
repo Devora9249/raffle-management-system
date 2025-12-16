@@ -24,17 +24,17 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // DonorModel configuration
-        modelBuilder.Entity<DonorModel>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Email).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.Phone).HasMaxLength(20);
-            entity.HasMany(e => e.Gifts)
-                .WithOne(e => e.Donor)
-                .HasForeignKey(e => e.DonorId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
+        // modelBuilder.Entity<DonorModel>(entity =>
+        // {
+        //     entity.HasKey(e => e.Id);
+        //     entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+        //     entity.Property(e => e.Email).IsRequired().HasMaxLength(200);
+        //     entity.Property(e => e.Phone).HasMaxLength(20);
+        //     entity.HasMany(e => e.Gifts)
+        //         .WithOne(e => e.Donor)
+        //         .HasForeignKey(e => e.DonorId)
+        //         .OnDelete(DeleteBehavior.Restrict);
+        // });
 
         // CategoryModel configuration
         modelBuilder.Entity<CategoryModel>(entity =>
@@ -67,12 +67,12 @@ public class AppDbContext : DbContext
                    .HasForeignKey(e => e.CategoryId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
-            entity.HasOne(e => e.Donor)
-                   .WithMany(d => d.Gifts)
-                   .HasForeignKey(e => e.DonorId)
-                   .IsRequired()
-                   .OnDelete(DeleteBehavior.Restrict);
-        });
+        //     entity.HasOne(e => e.Donor)
+        //            .WithMany(d => d.Gifts)
+        //            .HasForeignKey(e => e.DonorId)
+        //            .IsRequired()
+        //            .OnDelete(DeleteBehavior.Restrict);
+         });
 
         // UserModel configuration
         modelBuilder.Entity<UserModel>(entity =>

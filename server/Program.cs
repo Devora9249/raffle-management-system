@@ -7,6 +7,7 @@ using server.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using server.Services;
 
 
 
@@ -18,34 +19,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//חיבור לדאטה בייס
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//הגדרות מייל
 builder.Services.Configure<EmailSettingsOptions>(
     builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddScoped<IWinningService, WinningService>();
+
 //DI
 ///repositories
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();
-// builder.Services.AddScoped<IDonorRepository, DonorRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-///services
-builder.Services.AddScoped<IGiftService, GiftService>();
-// builder.Services.AddScoped<IAuthService, AuthService>();
-
-// builder.Services.AddScoped<IDonorService, DonorService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IPurchaseService, PurchaseService>();
-
+builder.Services.AddScoped<IWinningRepository, WinningRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IDonorService, DonorService>();
-
-
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 
+///services
+builder.Services.AddScoped<IGiftService, GiftService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDonorService, DonorService>();
+builder.Services.AddScoped<IWinningService, WinningService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
