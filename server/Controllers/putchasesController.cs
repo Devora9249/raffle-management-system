@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using server.Models;
+using server.DTOs.Purchases;
 using server.Services.Interfaces;
 
 namespace server.Controllers;
@@ -16,58 +16,67 @@ public class PurchaseController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PurchaseResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
         => Ok(await _service.GetAllAsync());
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(PurchaseResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
-        var purchase = await _service.GetByIdAsync(id);
-        ///////////////
-        return purchase == null ? NotFound() : Ok(purchase);
-        ///////////////
+        var p = await _service.GetByIdAsync(id);
+        return p == null ? NotFound(new { message = $"Purchase with ID {id} not found." }) : Ok(p);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(PurchaseModel purchase)
+    [ProducesResponseType(typeof(PurchaseResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] PurchaseCreateDto dto)
     {
-        var created = await _service.AddAsync(purchase);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        try
+        {
+            var created = await _service.AddAsync(dto);
+            return Ok(created);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update(PurchaseModel purchase)
-        => Ok(await _service.UpdateAsync(purchase));
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(PurchaseResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(int id, [FromBody] PurchaseUpdateDto dto)
+    {
+        try
+        {
+            dto.Id = id;
+            var updated = await _service.UpdateAsync(dto);
+            return Ok(updated);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { message = $"Purchase with ID {id} not found." });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         var ok = await _service.DeleteAsync(id);
-        return ok ? NoContent() : NotFound();
+        return ok ? NoContent() : NotFound(new { message = $"Purchase with ID {id} not found." });
     }
 
-    // פרטי רוכשים לפי מתנה
-    [HttpGet("byGift/{giftId}")]
+    [HttpGet("byGift/{giftId:int}")]
+    [ProducesResponseType(typeof(IEnumerable<PurchaseResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByGift(int giftId)
         => Ok(await _service.GetByGiftAsync(giftId));
-
-    // סל של משתמש
-    [HttpGet("cart/{userId}")]
-    public async Task<IActionResult> GetUserCart(int userId)
-        => Ok(await _service.GetUserCartAsync(userId));
-
-[HttpPost("checkout/{userId}")]
-public async Task<IActionResult> Checkout(int userId)
-{
-    var completedCount = await _service.CheckoutAsync(userId);
-
-    if (completedCount == 0)
-        return BadRequest(new { message = "Cart is empty" });
-
-    return Ok(new
-    {
-        message = "Checkout completed successfully",
-        itemsCompleted = completedCount
-    });
-}
 }

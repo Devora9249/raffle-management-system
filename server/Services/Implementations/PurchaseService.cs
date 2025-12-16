@@ -1,3 +1,4 @@
+using server.DTOs.Purchases;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
@@ -13,38 +14,59 @@ namespace server.Services.Implementations
             _repo = repo;
         }
 
-        public Task<List<PurchaseModel>> GetAllAsync()
-            => _repo.GetAllAsync();
+        public async Task<IEnumerable<PurchaseResponseDto>> GetAllAsync()
+            => (await _repo.GetAllAsync()).Select(ToResponseDto);
 
-        public Task<PurchaseModel?> GetByIdAsync(int id)
-            => _repo.GetByIdAsync(id);
-
-        public async Task<PurchaseModel> AddAsync(PurchaseModel purchase)
+        public async Task<PurchaseResponseDto?> GetByIdAsync(int id)
         {
-            if (purchase.Qty <= 0)
-                throw new ArgumentException("Qty must be greater than 0");
-
-            return await _repo.AddAsync(purchase);
+            var p = await _repo.GetByIdAsync(id);
+            return p == null ? null : ToResponseDto(p);
         }
 
-        public async Task<PurchaseModel> UpdateAsync(PurchaseModel purchase)
+        public async Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto)
         {
-            if (purchase.Qty <= 0)
-                throw new ArgumentException("Qty must be greater than 0");
+            if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
-            return await _repo.UpdateAsync(purchase);
+            var purchase = new PurchaseModel
+            {
+                UserId = createDto.UserId,
+                GiftId = createDto.GiftId,
+                Qty = createDto.Qty,
+                Status = Status.Completed,      // רכישה אמיתית = Completed
+                PurchaseDate = DateTime.UtcNow
+            };
+
+            var created = await _repo.AddAsync(purchase);
+            return ToResponseDto(created);
+        }
+
+        public async Task<PurchaseResponseDto> UpdateAsync(PurchaseUpdateDto updateDto)
+        {
+            var existing = await _repo.GetByIdAsync(updateDto.Id);
+            if (existing == null) throw new KeyNotFoundException("Purchase not found");
+
+            if (updateDto.Qty.HasValue) existing.Qty = updateDto.Qty.Value;
+            if (updateDto.Status.HasValue) existing.Status = updateDto.Status.Value;
+
+            var updated = await _repo.UpdateAsync(existing);
+            return ToResponseDto(updated);
         }
 
         public Task<bool> DeleteAsync(int id)
             => _repo.DeleteAsync(id);
 
-        public Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
-            => _repo.GetByGiftAsync(giftId);
+        public async Task<List<PurchaseResponseDto>> GetByGiftAsync(int giftId)
+            => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
 
-        public Task<List<PurchaseModel>> GetUserCartAsync(int userId)
-            => _repo.GetUserCartAsync(userId);
-            
-         public async Task<int> CheckoutAsync(int userId)
-            => await _repo.CheckoutAsync(userId);
+        private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
+            => new PurchaseResponseDto
+            {
+                Id = p.Id,
+                UserId = p.UserId,
+                GiftId = p.GiftId,
+                Qty = p.Qty,
+                Status = p.Status,
+                PurchaseDate = p.PurchaseDate
+            };
     }
 }
