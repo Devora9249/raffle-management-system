@@ -16,7 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<PurchaseModel> Purchases { get; set; }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<WinningModel> Winnings { get; set; }
-    public DbSet<RaffleModel> Raffles { get; set; }
+    // public DbSet<RaffleModel> Raffles { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -135,16 +135,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<WinningModel>(entity =>
         {
             entity.HasKey(e => e.Id);
-
-            entity.Property(e => e.RaffleDate)
-                .IsRequired()
-                .HasDefaultValueSql("GETUTCDATE()");
-
-            entity.HasOne(e => e.Raffle)
-                   .WithMany(r => r.Winnings)
-                   .HasForeignKey(e => e.RaffleId)
-                   .IsRequired()
-                   .OnDelete(DeleteBehavior.Cascade);
             
             entity.HasOne(e => e.User)
                      .WithMany()
@@ -159,32 +149,32 @@ public class AppDbContext : DbContext
                    .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // RaffleModel configuration
-        modelBuilder.Entity<RaffleModel>(entity =>
-        {
-            entity.HasKey(e => e.Id);
+        // // RaffleModel configuration
+        // modelBuilder.Entity<RaffleModel>(entity =>
+        // {
+        //     entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.RaffleDate)
-                .IsRequired()
-                .HasDefaultValueSql("GETUTCDATE()");
+        //     entity.Property(e => e.RaffleDate)
+        //         .IsRequired()
+        //         .HasDefaultValueSql("GETUTCDATE()");
 
-            entity.Property(e => e.Description)
-                .IsRequired()
-                .HasMaxLength(500);
+        //     entity.Property(e => e.Description)
+        //         .IsRequired()
+        //         .HasMaxLength(500);
 
-            entity.Property(e => e.IsActive)
-                .IsRequired()
-                .HasDefaultValue(true);
+        //     entity.Property(e => e.IsActive)
+        //         .IsRequired()
+        //         .HasDefaultValue(true);
 
-            entity.HasMany(e => e.Gifts)
-                  .WithOne()
-                  .HasForeignKey("RaffleId")
-                  .OnDelete(DeleteBehavior.Restrict);
+        //     entity.HasMany(e => e.Gifts)
+        //           .WithOne()
+        //           .HasForeignKey("RaffleId")
+        //           .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasMany(e => e.Winnings)
-                  .WithOne(e => e.Raffle)
-                  .HasForeignKey(e => e.RaffleId)
-                  .OnDelete(DeleteBehavior.Cascade);
-        });
+        //     entity.HasMany(e => e.Winnings)
+        //           .WithOne(e => e.Raffle)
+        //           .HasForeignKey(e => e.RaffleId)
+        //           .OnDelete(DeleteBehavior.Cascade);
+        // });
     }
 }

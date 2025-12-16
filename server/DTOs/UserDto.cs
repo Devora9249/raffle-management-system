@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using server.Models;
 
-namespace server.DTOs.Users
+namespace server.DTOs
 {
     public class UserCreateDto
     {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using server.Models;
 
-namespace server.DTOs.Purchases
+namespace server.DTOs
 {
     public class PurchaseCreateDto
     {
