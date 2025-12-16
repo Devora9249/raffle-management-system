@@ -41,6 +41,8 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IDonorService, DonorService>();
+
 
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 

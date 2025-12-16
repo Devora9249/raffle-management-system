@@ -94,5 +94,12 @@ public class GiftRepository : IGiftRepository
         .Where(g => g.Donor.Name.Contains(name))
         .ToListAsync();
     }
+public async Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId)
+{
+    return await _context.Gifts
+        .Where(g => g.DonorId == donorId)
+        .Include(g => g.Category)
+        .ToListAsync();
+}
 
 }

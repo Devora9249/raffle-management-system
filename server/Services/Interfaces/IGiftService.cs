@@ -16,6 +16,7 @@ using server.Models;
             //בנוסף
             Task <IEnumerable<GiftResponseDto>> FilterByGiftName(string name);
             Task <IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);        
+            Task<List<GiftResponseDto>> GetByDonorAsync(int donorId);
 
 
         }
