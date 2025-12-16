@@ -38,7 +38,7 @@ namespace server.Services.Implementations
 
             var created = await _repo.AddAsync(purchase);
             return ToResponseDto(created);
-        }
+        } 
 
         public async Task<PurchaseResponseDto> UpdateAsync(PurchaseUpdateDto updateDto)
         {

@@ -24,7 +24,7 @@ namespace server.DTOs
         public int? Qty { get; set; }
 
         // אם תרצי לאפשר שינוי סטטוס בקנייה (למשל Admin) - תשאירי כאן:
-        // public Status? Status { get; set; }
+         public Status? Status { get; set; }
     }
 
     public class PurchaseResponseDto
