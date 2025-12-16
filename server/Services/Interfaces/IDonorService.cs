@@ -1,0 +1,15 @@
+using server.DTOs.Donors;
+using server.Models;
+
+namespace server.Services.Interfaces
+{
+    public interface IDonorService
+    {
+        // Admin
+        Task<List<DonorListItemDto>> GetDonorsAsync(string? search, string? city);
+        Task SetUserRoleAsync(int userId, RoleEnum role);
+
+        // Donor dashboard
+        Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId);
+    }
+}

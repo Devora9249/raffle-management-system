@@ -7,7 +7,7 @@ namespace server.Models
         public int CategoryId { get; set; }
         public decimal Price { get; set; }
         public int DonorId { get; set; }
-        public DonorModel Donor { get; set; }
+        public UserModel Donor { get; set; }
         public CategoryModel Category { get; set; }
 
         

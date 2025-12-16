@@ -1,0 +1,122 @@
+using Microsoft.EntityFrameworkCore;
+using server.Data;
+using server.DTOs.Donors;
+using server.Models;
+using server.Services.Interfaces;
+
+namespace server.Services
+{
+    public class DonorService : IDonorService
+    {
+        private readonly AppDbContext _context;
+
+        public DonorService(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // -------- פעולות אדמין --------
+        public async Task<List<DonorListItemDto>> GetDonorsAsync(string? search, string? city)
+        {
+            var q = _context.Users
+                .Where(u => u.Role == RoleEnum.Donor)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+                q = q.Where(u =>
+                    u.Name.Contains(search) ||
+                    u.Email.Contains(search) ||
+                    u.Phone.Contains(search));
+            }
+
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                city = city.Trim();
+                q = q.Where(u => u.City.Contains(city));
+            }
+
+            return await q
+                .OrderBy(u => u.Name)
+                .Select(u => new DonorListItemDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    City = u.City
+                })
+                .ToListAsync();
+        }
+
+        public async Task SetUserRoleAsync(int userId, RoleEnum role)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) throw new Exception("User not found");
+
+            user.Role = role;
+            await _context.SaveChangesAsync();
+        }
+
+        // -------- דשבורד לתורם --------
+        public async Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId)
+        {
+            var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);
+            if (donor == null) throw new Exception("Donor user not found");
+            if (donor.Role != RoleEnum.Donor) throw new Exception("User is not a Donor");
+
+            // 1) מתנות של התורם
+            var gifts = await _context.Gifts
+                .Where(g => g.DonorId == donorId)
+                .Select(g => new { g.Id, g.Description })
+                .ToListAsync();
+
+            var giftIds = gifts.Select(g => g.Id).ToList();
+
+            // 2) סטטיסטיקת רכישות Completed בלבד
+            var purchaseStats = await _context.Purchases
+                .Where(p => giftIds.Contains(p.GiftId) && p.Status == Status.Completed)
+                .GroupBy(p => p.GiftId)
+                .Select(grp => new
+                {
+                    GiftId = grp.Key,
+                    TicketsSold = grp.Sum(x => x.Qty), // ✅ אצלך זה Qty
+                    UniqueBuyers = grp.Select(x => x.UserId).Distinct().Count()
+                })
+                .ToListAsync();
+
+            // 3) זכיות לפי GiftId
+            var winningGiftIds = await _context.Winnings
+                .Where(w => giftIds.Contains(w.GiftId))
+                .Select(w => w.GiftId)
+                .Distinct()
+                .ToListAsync();
+
+            int Tickets(int giftId) =>
+                purchaseStats.FirstOrDefault(x => x.GiftId == giftId)?.TicketsSold ?? 0;
+
+            int Buyers(int giftId) =>
+                purchaseStats.FirstOrDefault(x => x.GiftId == giftId)?.UniqueBuyers ?? 0;
+
+            return new DonorDashboardResponseDto
+            {
+                DonorId = donor.Id,
+                DonorName = donor.Name,
+
+                TotalGifts = gifts.Count,
+                TotalTicketsSold = purchaseStats.Sum(x => x.TicketsSold),
+                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), // סה"כ ייחודיים לכל מתנה (אפשר גם אחרת)
+
+                Gifts = gifts.Select(g => new DonorGiftStatsDto
+                {
+                    GiftId = g.Id,
+                    Description = g.Description,
+                    TicketsSold = Tickets(g.Id),
+                    UniqueBuyers = Buyers(g.Id),
+                    HasWinning = winningGiftIds.Contains(g.Id)
+                }).ToList()
+            };
+        }
+    }
+}

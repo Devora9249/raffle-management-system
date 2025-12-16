@@ -40,6 +40,12 @@ public class GiftController : ControllerBase
         return Ok(gift);
     }
 
+[HttpGet("byDonor/{donorId:int}")]
+[ProducesResponseType(typeof(IEnumerable<GiftResponseDto>), StatusCodes.Status200OK)]
+public async Task<IActionResult> GetByDonor(int donorId)
+    => Ok(await _giftService.GetByDonorAsync(donorId));
+
+    
     [HttpPost]
     [ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,18 +66,19 @@ public class GiftController : ControllerBase
     [ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GiftResponseDto>> Update( [FromBody] GiftResponseDto updateDto)
+   public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftResponseDto updateDto)
+{
+    try
     {
-        try
-        {
-            var gift = await _giftService.UpdateGiftAsync(updateDto);
-            return Ok(gift);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        updateDto.Id = id;
+        var gift = await _giftService.UpdateGiftAsync(updateDto);
+        return Ok(gift);
     }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+}
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

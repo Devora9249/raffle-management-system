@@ -15,6 +15,7 @@ namespace server.Repositories.Interfaces
         //בנוסף
         Task <IEnumerable<GiftModel>> FilterByGiftName(string name);
         Task <IEnumerable<GiftModel>> FilterByGiftDonor(string name);        
+Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId);
 
 
     }

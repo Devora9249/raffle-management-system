@@ -123,4 +123,18 @@ public class GiftService : IGiftService
             DonorId = g.DonorId
         });
     }
+    public async Task<List<GiftResponseDto>> GetByDonorAsync(int donorId)
+{
+    var gifts = await _giftRepository.GetByDonorAsync(donorId);
+
+    return gifts.Select(g => new GiftResponseDto
+    {
+        Id = g.Id,
+        Description = g.Description,
+        CategoryId = g.CategoryId,
+        Price = g.Price,
+        DonorId = g.DonorId
+    }).ToList();
+}
+
 }
