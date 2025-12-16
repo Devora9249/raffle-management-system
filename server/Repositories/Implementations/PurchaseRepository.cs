@@ -48,9 +48,12 @@ public class PurchaseRepository : IPurchaseRepository
     }
 
     public async Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
-        => await _context.Purchases
-            .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
-            .ToListAsync();
+
+            => await _context.Purchases
+                .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
+                .ToListAsync();
+
+
 
     public async Task<List<PurchaseModel>> GetUserCartAsync(int userId)
         => await _context.Purchases
