@@ -54,10 +54,10 @@ public class PurchaseRepository : IPurchaseRepository
     }
 
     // רוכשים לפי מתנה (רק Completed)
-    public async Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
+    public async Task<List<PurchaseModel>> GetByGiftAsync( int giftId)
     {
         return await _context.Purchases
-            .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
+            .Where( p => p.GiftId == giftId && p.Status == Status.Completed )
             .ToListAsync();
     }
 
