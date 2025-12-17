@@ -8,7 +8,8 @@ namespace server.Services.Interfaces
         Task<PurchaseResponseDto?> GetByIdAsync(int id);
 
         Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto);
-        Task<PurchaseResponseDto> UpdateAsync(PurchaseUpdateDto updateDto);
+     Task UpdateAsync(int id, PurchaseUpdateDto dto);
+
         Task<bool> DeleteAsync(int id);
 
         Task<List<PurchaseResponseDto>> GetByGiftAsync(int giftId);

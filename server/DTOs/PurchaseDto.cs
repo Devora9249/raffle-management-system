@@ -17,13 +17,12 @@ namespace server.DTOs
 
     public class PurchaseUpdateDto
     {
-        // [Required]
-        public int Id { get; set; }
+        
 
         [Range(1, int.MaxValue)]
         public int? Qty { get; set; }
 
-        // אם תרצי לאפשר שינוי סטטוס בקנייה (למשל Admin) - תשאירי כאן:
+       
          public Status? Status { get; set; }
     }
 

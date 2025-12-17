@@ -56,12 +56,16 @@ public class AuthService : IAuthService
         if (exists != null)
             throw new ArgumentException("Email already exists");
 
-        var user = new UserModel
-        {
-            Email = dto.Email,
-            Password = HashPassword(dto.Password),
-            Role = dto.Role,
-        };
+     var user = new UserModel
+{
+    Name = dto.Name,
+    Email = dto.Email,
+    Phone = dto.Phone,
+    City = dto.City,
+    Address = dto.Address,
+    Password = HashPassword(dto.Password),
+    Role = dto.Role
+};
 
         await _userRepository.AddUserAsync(user);
 

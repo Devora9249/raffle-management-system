@@ -46,50 +46,56 @@ public class GiftService : IGiftService
         };
     }
 
-    public async Task<GiftResponseDto> AddGiftAsync(GiftResponseDto dto)
+   public async Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto)
+{
+    var model = new GiftModel
     {
-        var model = new GiftModel
-        {
-            Description = dto.Description,
-            CategoryId = dto.CategoryId,
-            Price = dto.Price,
-            DonorId = dto.DonorId
-        };
+        Description = dto.Description,
+        CategoryId = dto.CategoryId,
+        Price = dto.Price,
+        DonorId = dto.DonorId
+    };
 
-        var createdGift = await _giftRepository.AddGiftAsync(model);
+    var created = await _giftRepository.AddGiftAsync(model);
 
-        return new GiftResponseDto
-        {
-            Id = createdGift.Id,
-            Description = createdGift.Description,
-            CategoryId = createdGift.CategoryId,
-            Price = createdGift.Price,
-            DonorId = createdGift.DonorId
-        };
-    }
-
-    public async Task<GiftResponseDto> UpdateGiftAsync(GiftResponseDto gift)
+    return new GiftResponseDto
     {
-        var model = new GiftModel
-        {
-            Id = gift.Id,
-            Description = gift.Description,
-            CategoryId = gift.CategoryId,
-            Price = gift.Price,
-            DonorId = gift.DonorId
-        };
+        Id = created.Id,
+        Description = created.Description,
+        CategoryId = created.CategoryId,
+        Price = created.Price,
+        DonorId = created.DonorId
+    };
+}
 
-        var updatedGift = await _giftRepository.UpdateGiftAsync(model);
 
-        return new GiftResponseDto
-        {
-            Id = updatedGift.Id,
-            Description = updatedGift.Description,
-            CategoryId = updatedGift.CategoryId,
-            Price = updatedGift.Price,
-            DonorId = updatedGift.DonorId
-        };
-    }
+    public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto)
+{
+    var existing = await _giftRepository.GetGiftByIdAsync(id);
+    if (existing == null)
+        throw new KeyNotFoundException("Gift not found");
+
+    if (dto.Description != null)
+        existing.Description = dto.Description;
+
+    if (dto.Price.HasValue)
+        existing.Price = dto.Price.Value;
+
+    if (dto.CategoryId.HasValue)
+        existing.CategoryId = dto.CategoryId.Value;
+
+    var updated = await _giftRepository.UpdateGiftAsync(existing);
+
+    return new GiftResponseDto
+    {
+        Id = updated.Id,
+        Description = updated.Description,
+        CategoryId = updated.CategoryId,
+        Price = updated.Price,
+        DonorId = updated.DonorId
+    };
+}
+
 
     public async Task<bool> DeleteGiftAsync(int id)
     {

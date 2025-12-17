@@ -39,18 +39,20 @@ namespace server.Services.Implementations
             var created = await _repo.AddAsync(purchase);
             return ToResponseDto(created);
         } 
+public async Task UpdateAsync(int id, PurchaseUpdateDto dto)
+{
+    var purchase = await _repo.GetByIdAsync(id);
+    if (purchase == null) throw new KeyNotFoundException("Purchase not found");
 
-        public async Task<PurchaseResponseDto> UpdateAsync(PurchaseUpdateDto updateDto)
-        {
-            var existing = await _repo.GetByIdAsync(updateDto.Id);
-            if (existing == null) throw new KeyNotFoundException("Purchase not found");
+    if (dto.Qty.HasValue)
+        purchase.Qty = dto.Qty.Value;
 
-            if (updateDto.Qty.HasValue) existing.Qty = updateDto.Qty.Value;
-            if (updateDto.Status.HasValue) existing.Status = updateDto.Status.Value;
+    if (dto.Status.HasValue)
+        purchase.Status = dto.Status.Value;
 
-            var updated = await _repo.UpdateAsync(existing);
-            return ToResponseDto(updated);
-        }
+    await _repo.UpdateAsync(purchase);
+}
+
 
         public Task<bool> DeleteAsync(int id)
             => _repo.DeleteAsync(id);

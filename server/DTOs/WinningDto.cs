@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 
 namespace server.DTOs;
 public class WinningResponseDto
@@ -11,7 +12,10 @@ public class WinningResponseDto
 
 public class WinningCreateDto
 {
-    public int Id { get; set; }
+   
+    [Required]
     public int GiftId { get; set; }
+
+    [Required]
     public int WinnerId { get; set; }
 }

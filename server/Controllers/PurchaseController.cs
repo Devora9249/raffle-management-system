@@ -52,9 +52,9 @@ public class PurchaseController : ControllerBase
     {
         try
         {
-            dto.Id = id;
-            var updated = await _service.UpdateAsync(dto);
-            return Ok(updated);
+            
+            await _service.UpdateAsync(id,dto);
+            return NoContent();
         }
         catch (KeyNotFoundException)
         {

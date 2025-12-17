@@ -47,32 +47,14 @@ public async Task<IActionResult> GetByDonor(int donorId)
 
     
     [HttpPost]
-    [ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftResponseDto GiftDto)
-    {
-        try
-        {
-            var gift = await _giftService.AddGiftAsync(GiftDto);
-            return Ok(gift);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
-    [HttpPut("{id}")]
-    [ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-   public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftResponseDto updateDto)
+[ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status201Created)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
 {
     try
     {
-        updateDto.Id = id;
-        var gift = await _giftService.UpdateGiftAsync(updateDto);
-        return Ok(gift);
+        var gift = await _giftService.AddGiftAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
     }
     catch (ArgumentException ex)
     {
@@ -80,11 +62,33 @@ public async Task<IActionResult> GetByDonor(int donorId)
     }
 }
 
-    [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<bool> Delete(int id)
+[HttpPut("{id}")]
+[ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftUpdateDto dto)
+{
+    try
     {
-        return await _giftService.DeleteGiftAsync(id);
+        var gift = await _giftService.UpdateGiftAsync(id, dto);
+        return Ok(gift);
     }
+    catch (KeyNotFoundException ex)
+    {
+        return NotFound(new { message = ex.Message });
+    }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+}
+
+   [HttpDelete("{id}")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<IActionResult> Delete(int id)
+{
+    var ok = await _giftService.DeleteGiftAsync(id);
+    return ok ? NoContent() : NotFound(new { message = $"Gift with ID {id} not found." });
+}
 }

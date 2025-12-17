@@ -28,17 +28,13 @@ public class WinningController : ControllerBase
         return await _winningService.GetWinningByIdAsync(id);
     }
 
-    [HttpPost]
-    public async Task<WinningCreateDto> AddWinningAsync([FromBody] WinningCreateDto dto)
-    {
-        return await _winningService.AddWinningAsync(dto);
-    }
+   [HttpPost]
+public async Task<WinningResponseDto> AddWinningAsync([FromBody] WinningCreateDto dto)
+    => await _winningService.AddWinningAsync(dto);
 
-    [HttpPut("{id}")]
-    public async Task<WinningCreateDto> UpdateWinningAsync(int id, [FromBody] WinningCreateDto dto)
-    {
-        return await _winningService.UpdateWinningAsync(id, dto);
-    }
+[HttpPut("{id}")]
+public async Task<WinningResponseDto> UpdateWinningAsync(int id, [FromBody] WinningCreateDto dto)
+    => await _winningService.UpdateWinningAsync(id, dto);
 
     [HttpDelete("{id}")]
     public async Task<bool> DeleteWinningAsync(int id)

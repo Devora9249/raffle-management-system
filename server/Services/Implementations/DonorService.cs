@@ -14,7 +14,7 @@ namespace server.Services
         {
             _context = context;
         }
-
+///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
         public async Task<List<DonorListItemDto>> GetDonorsAsync(string? search, string? city)
         {
@@ -49,7 +49,7 @@ namespace server.Services
                 })
                 .ToListAsync();
         }
-
+///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
         public async Task SetUserRoleAsync(int userId, RoleEnum role)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -60,6 +60,7 @@ namespace server.Services
         }
 
         // -------- דשבורד לתורם --------
+        ///מטרה: להחזיר “דשבורד לתורם” — נתונים מסכמים לתורם ספציפי: מתנות שלו, כמות כרטיסים שנמכרו, כמה קונים ייחודיים לכל מתנה, והאם יש זכייה.
         public async Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId)
         {
             var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);

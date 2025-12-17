@@ -33,7 +33,7 @@ namespace server.Services.Implementations
                 Phone = createDto.Phone,
                 City = createDto.City,
                 Address = createDto.Address,
-                Password = createDto.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(createDto.Password),
                 Role = createDto.Role
             };
 
@@ -52,7 +52,7 @@ namespace server.Services.Implementations
             if (updateDto.Phone != null) existing.Phone = updateDto.Phone;
             if (updateDto.City != null) existing.City = updateDto.City;
             if (updateDto.Address != null) existing.Address = updateDto.Address;
-            if (updateDto.Password != null) existing.Password = updateDto.Password;
+            if (updateDto.Password != null) existing.Password = BCrypt.Net.BCrypt.HashPassword(updateDto.Password);
             if (updateDto.Role.HasValue) existing.Role = updateDto.Role.Value;
 
             var updated = await _repo.UpdateUserAsync(existing);

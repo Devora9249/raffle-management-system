@@ -26,6 +26,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //הגדרות מייל
 builder.Services.Configure<EmailSettingsOptions>(
     builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //DI
 ///repositories

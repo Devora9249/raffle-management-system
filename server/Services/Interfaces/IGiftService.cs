@@ -9,8 +9,8 @@ using server.Models;
             //CRUD
             Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
             Task<GiftResponseDto?> GetGiftByIdAsync(int id);
-            Task<GiftResponseDto> AddGiftAsync(GiftResponseDto gift);
-            Task<GiftResponseDto> UpdateGiftAsync(GiftResponseDto gift);
+            Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto);
+Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto);
             Task<bool> DeleteGiftAsync(int id);
 
             //בנוסף

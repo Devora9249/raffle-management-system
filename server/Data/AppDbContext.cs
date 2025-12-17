@@ -67,6 +67,11 @@ public class AppDbContext : DbContext
                    .HasForeignKey(e => e.CategoryId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
+                   entity.HasOne(g => g.Donor)
+      .WithMany() // אין לנו אוסף Gifts בתוך UserModel כרגע
+      .HasForeignKey(g => g.DonorId)
+      .IsRequired()
+      .OnDelete(DeleteBehavior.Restrict);
         //     entity.HasOne(e => e.Donor)
         //            .WithMany(d => d.Gifts)
         //            .HasForeignKey(e => e.DonorId)

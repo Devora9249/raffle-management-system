@@ -17,7 +17,7 @@ namespace server.DTOs
         [Required, MaxLength(100)]
         public string City { get; set; } = string.Empty;
 
-        [Required, MaxLength(200)]
+        [Required, MaxLength(300)]
         public string Address { get; set; } = string.Empty;
 
         [Required, MinLength(6)]
@@ -42,7 +42,7 @@ namespace server.DTOs
         [MaxLength(100)]
         public string? City { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(300)]
         public string? Address { get; set; }
 
         [MinLength(6)]

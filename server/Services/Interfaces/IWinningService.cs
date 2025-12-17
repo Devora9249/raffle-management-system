@@ -6,8 +6,8 @@ namespace server.Services.Interfaces
     {
         Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync();
         Task<WinningResponseDto?> GetWinningByIdAsync(int id);
-        Task<WinningCreateDto> AddWinningAsync(WinningCreateDto dto);
-        Task<WinningCreateDto> UpdateWinningAsync(int id, WinningCreateDto dto);
+        Task<WinningResponseDto> AddWinningAsync(WinningCreateDto dto);
+        Task<WinningResponseDto> UpdateWinningAsync(int id, WinningCreateDto dto);
         Task<bool> DeleteWinningAsync(int id);
         Task<IEnumerable<WinningResponseDto>> RaffleAsync();
         Task<decimal> GetTotalIncome();

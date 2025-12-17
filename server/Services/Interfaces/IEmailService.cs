@@ -1,7 +1,10 @@
 namespace server.Services.Interfaces
 {
+    using server.Models;
     public interface IEmailService
     {
-        Task SendWinningEmailAsync(int giftId, int winnerId);
+        // שינוי החתימה לקבלת המודל המלא
+       Task SendWinningEmailAsync(int giftId, int winnerId);
+
     }
 }

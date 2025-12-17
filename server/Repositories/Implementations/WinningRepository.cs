@@ -15,14 +15,21 @@ using server.Repositories.Interfaces;
      }
 
      public async Task<List<WinningModel>> GetAllWinningsAsync()
-     {
-         return await _context.Winnings.ToListAsync();
-     }
+{
+    return await _context.Winnings
+        .Include(w => w.Gift)
+        .Include(w => w.User)
+        .ToListAsync();
+}
 
-     public async Task<WinningModel?> GetWinningByIdAsync(int id)
-     {
-         return await _context.Winnings.FindAsync(id);
-     }
+public async Task<WinningModel?> GetWinningByIdAsync(int id)
+{
+    return await _context.Winnings
+        .Include(w => w.Gift)
+        .Include(w => w.User)
+        .FirstOrDefaultAsync(w => w.Id == id);
+}
+
 
      public async Task<WinningModel> AddWinningAsync(WinningModel winning)
      {
