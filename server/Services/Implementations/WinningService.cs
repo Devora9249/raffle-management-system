@@ -136,9 +136,11 @@ public class WinningService : IWinningService
         return await GetAllWinningsAsync();
     }
 
-    public async Task<decimal> GetTotalIncome()
-    {
-        var purchases = await _purchaseRepository.GetAllAsync();
-        return purchases.Sum(p => p.Qty * p.Gift.Price); // דורש Include(Gift) בריפו
-    }
+public async Task<decimal> GetTotalIncome()
+{
+    var purchases = await _purchaseRepository.GetAllAsync();
+    return purchases
+        .Where(p => p.Status == Status.Completed)
+        .Sum(p => p.Qty * (p.Gift?.Price ?? 0m));
+}
 }

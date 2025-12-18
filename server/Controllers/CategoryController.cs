@@ -62,7 +62,7 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            var category = await _categoryService.UpdateCategoryAsync(updateDto);
+            var category = await _categoryService.UpdateCategoryAsync(id,updateDto);
 
             if (category == null)
             {

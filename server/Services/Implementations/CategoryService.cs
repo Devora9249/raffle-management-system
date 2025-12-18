@@ -1,4 +1,3 @@
-
 using server.Models;
 using server.Services.Interfaces;
 using server.Repositories.Interfaces;
@@ -22,7 +21,7 @@ namespace server.Services.Implementations
 
         public async Task<CategoryModel> AddCategoryAsync(CategoryCreateDto dto)
         {
-            var category = new CategoryModel   
+            var category = new CategoryModel
             {
                 Name = dto.Name
             };
@@ -30,16 +29,14 @@ namespace server.Services.Implementations
             return await _categoryRepository.AddCategoryAsync(category);
         }
 
-       public async Task<CategoryModel> UpdateCategoryAsync(int id, CategoryUpdateDto dto)
-{
-    var category = new CategoryModel
-    {
-        Id = id,
-        Name = dto.Name
-    };
+        public async Task<CategoryModel> UpdateCategoryAsync(int id, CategoryUpdateDto dto)
+        {
+            var category = new CategoryModel
+            {
+                Id = id,
+                Name = dto.Name
+            };
 
-    return await _categoryRepository.UpdateCategoryAsync(category);
-}
             return await _categoryRepository.UpdateCategoryAsync(category);
         }
 

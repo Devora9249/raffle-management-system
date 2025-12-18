@@ -14,11 +14,16 @@ public class PurchaseRepository : IPurchaseRepository
         _context = context;
     }
 
+    // ✅ חשוב ל-Income: נטען גם Gift (וגם User אם תרצי בהמשך)
     public async Task<IEnumerable<PurchaseModel>> GetAllAsync()
-        => await _context.Purchases.ToListAsync();
+        => await _context.Purchases
+            .Include(p => p.Gift)
+            .ToListAsync();
 
     public async Task<PurchaseModel?> GetByIdAsync(int id)
-        => await _context.Purchases.FindAsync(id);
+        => await _context.Purchases
+            .Include(p => p.Gift)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<PurchaseModel> AddAsync(PurchaseModel purchase)
     {
@@ -48,15 +53,14 @@ public class PurchaseRepository : IPurchaseRepository
     }
 
     public async Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
-
-            => await _context.Purchases
-                .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
-                .ToListAsync();
-
-
+        => await _context.Purchases
+            .Include(p => p.Gift)
+            .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
+            .ToListAsync();
 
     public async Task<List<PurchaseModel>> GetUserCartAsync(int userId)
         => await _context.Purchases
+            .Include(p => p.Gift)
             .Where(p => p.UserId == userId && p.Status == Status.Draft)
             .ToListAsync();
 
