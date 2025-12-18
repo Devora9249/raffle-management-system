@@ -41,19 +41,21 @@ namespace server.Services.Implementations
             return ToResponseDto(created);
         }
 
-        public async Task<UserResponseDto> UpdateUserAsync(UserUpdateDto updateDto)
+        public async Task<UserResponseDto> UpdateUserAsync(int id, UserUpdateDto dto)
+
         {
-            var existing = await _repo.GetUserByIdAsync(updateDto.Id);
+
+            var existing = await _repo.GetUserByIdAsync(id);
             if (existing == null)
                 throw new KeyNotFoundException("User not found");
 
-            if (updateDto.Name != null) existing.Name = updateDto.Name;
-            if (updateDto.Email != null) existing.Email = updateDto.Email;
-            if (updateDto.Phone != null) existing.Phone = updateDto.Phone;
-            if (updateDto.City != null) existing.City = updateDto.City;
-            if (updateDto.Address != null) existing.Address = updateDto.Address;
-            if (updateDto.Password != null) existing.Password = BCrypt.Net.BCrypt.HashPassword(updateDto.Password);
-            if (updateDto.Role.HasValue) existing.Role = updateDto.Role.Value;
+            if (dto.Name != null) existing.Name = dto.Name;
+            if (dto.Email != null) existing.Email = dto.Email;
+            if (dto.Phone != null) existing.Phone = dto.Phone;
+            if (dto.City != null) existing.City = dto.City;
+            if (dto.Address != null) existing.Address = dto.Address;
+            if (dto.Password != null) existing.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            if (dto.Role.HasValue) existing.Role = dto.Role.Value;
 
             var updated = await _repo.UpdateUserAsync(existing);
             return ToResponseDto(updated);

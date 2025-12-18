@@ -38,16 +38,18 @@ public async Task<WinningModel?> GetWinningByIdAsync(int id)
          return winning;
      }
 
-     public async Task<WinningModel> UpdateWinningAsync(WinningModel winning)
-     {
-         var existing = await _context.Winnings.FindAsync(winning.Id);
-         if (existing == null)
-             throw new KeyNotFoundException("Winning not found");
+  public async Task<WinningModel> UpdateWinningAsync(int id, WinningModel winning)
+{
+    var existing = await _context.Winnings.FindAsync(id);
+    if (existing == null)
+        throw new KeyNotFoundException("Winning not found");
 
-         _context.Entry(existing).CurrentValues.SetValues(winning);
-         await _context.SaveChangesAsync();
-         return existing;
-     }
+    existing.GiftId = winning.GiftId;
+    existing.WinnerId = winning.WinnerId;
+
+    await _context.SaveChangesAsync();
+    return existing;
+}
 
      public async Task<bool> DeleteWinningAsync(int id)
      {

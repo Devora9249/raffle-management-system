@@ -43,29 +43,22 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserResponseDto>> Update(int id, [FromBody] UserUpdateDto updateDto)
+public async Task<ActionResult<UserResponseDto>> Update(int id, [FromBody] UserUpdateDto dto)
+{
+    try
     {
-        try
-        {
-            // כמו בקטגוריות – אפשר להתעלם מ-id ולהשתמש ב-dto.Id,
-            // אבל עדיף לסנכרן כדי למנוע בלבול:
-            updateDto.Id = id;
-
-            var user = await _userService.UpdateUserAsync(updateDto);
-
-            if (user == null)
-                return NotFound(new { message = $"User with ID {id} not found." });
-
-            return Ok(user);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound(new { message = $"User with ID {id} not found." });
-        }
+        var user = await _userService.UpdateUserAsync(id, dto);
+        return Ok(user);
+    }
+    catch (KeyNotFoundException)
+    {
+        return NotFound(new { message = $"User with ID {id} not found." });
+    }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+}
     }
 
     [HttpDelete("{id}")]

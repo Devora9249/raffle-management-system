@@ -36,11 +36,12 @@ public async Task<WinningResponseDto> AddWinningAsync([FromBody] WinningCreateDt
 public async Task<WinningResponseDto> UpdateWinningAsync(int id, [FromBody] WinningCreateDto dto)
     => await _winningService.UpdateWinningAsync(id, dto);
 
-    [HttpDelete("{id}")]
-    public async Task<bool> DeleteWinningAsync(int id)
-    {
-        return await _winningService.DeleteWinningAsync(id);
-    }
+ [HttpDelete("{id:int}")]
+public async Task<IActionResult> DeleteWinningAsync(int id)
+{
+    var ok = await _winningService.DeleteWinningAsync(id);
+    return ok ? NoContent() : NotFound(new { message = $"Winning with ID {id} not found." });
+}
 
     [HttpGet("total-income")]
     public async Task<decimal> GetTotalIncome()

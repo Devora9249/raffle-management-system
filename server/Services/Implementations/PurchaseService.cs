@@ -32,7 +32,7 @@ namespace server.Services.Implementations
                 UserId = createDto.UserId,
                 GiftId = createDto.GiftId,
                 Qty = createDto.Qty,
-                Status = Status.Completed,      // רכישה אמיתית = Completed
+                Status = Status.Draft,      // רכישה אמיתית = Completed
                 PurchaseDate = DateTime.UtcNow
             };
 

@@ -78,7 +78,8 @@ public class AuthService : IAuthService
         return new LoginResponseDto
         {
             Token = token,
-            ExpiresIn = 3600,
+            ExpiresIn = int.Parse(_config.GetSection("Jwt")["ExpiresMinutes"]!) * 60,
+
             User = UserResponseDto.FromModel(user)
         };
     }

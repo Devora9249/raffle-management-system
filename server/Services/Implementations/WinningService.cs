@@ -126,7 +126,7 @@ public class WinningService : IWinningService
             catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
-    throw;
+    
 }
         }
 
