@@ -6,7 +6,7 @@ namespace server.Services.Interfaces
     {
         Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
         Task<UserResponseDto> AddUserAsync(UserCreateDto createDto);
-        Task<UserResponseDto> UpdateUserAsync(UserUpdateDto updateDto);
+Task<UserResponseDto> UpdateUserAsync(int id, UserUpdateDto dto);
         Task<bool> DeleteUserAsync(int id);
     }
 }

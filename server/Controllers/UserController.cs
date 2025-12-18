@@ -59,8 +59,7 @@ public async Task<ActionResult<UserResponseDto>> Update(int id, [FromBody] UserU
         return BadRequest(new { message = ex.Message });
     }
 }
-    }
-
+    
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

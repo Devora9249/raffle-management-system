@@ -76,26 +76,29 @@ public class WinningService : IWinningService
     }
 
     public async Task<WinningResponseDto> UpdateWinningAsync(int id, WinningCreateDto dto)
+{
+    var model = new WinningModel
     {
-        var updated = await _winningRepository.UpdateWinningAsync(new WinningModel
-        {
-            Id = id,
-            GiftId = dto.GiftId,
-            WinnerId = dto.WinnerId
-        });
+        Id = id,
+        GiftId = dto.GiftId,
+        WinnerId = dto.WinnerId
+    };
 
-        var full = await _winningRepository.GetWinningByIdAsync(updated.Id);
-        if (full == null) throw new Exception("Winning was updated but could not be loaded.");
+    var updated = await _winningRepository.UpdateWinningAsync(id, model);
 
-        return new WinningResponseDto
-        {
-            Id = full.Id,
-            GiftId = full.GiftId,
-            giftName = full.Gift?.Description ?? "",
-            WinnerId = full.WinnerId,
-            winnerName = full.User?.Name ?? ""
-        };
-    }
+    var full = await _winningRepository.GetWinningByIdAsync(updated.Id);
+    if (full == null) throw new Exception("Winning was updated but could not be loaded.");
+
+    return new WinningResponseDto
+    {
+        Id = full.Id,
+        GiftId = full.GiftId,
+        giftName = full.Gift?.Description ?? "",
+        WinnerId = full.WinnerId,
+        winnerName = full.User?.Name ?? ""
+    };
+}
+
 
     public Task<bool> DeleteWinningAsync(int id)
         => _winningRepository.DeleteWinningAsync(id);
