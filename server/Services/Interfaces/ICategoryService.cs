@@ -9,7 +9,8 @@ namespace server.Services.Interfaces
         //CRUD
         Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync();
         Task<CategoryModel> AddCategoryAsync(CategoryCreateDto category);
-        Task<CategoryModel> UpdateCategoryAsync(CategoryUpdateDto category);
+      Task<CategoryModel> UpdateCategoryAsync(int id, CategoryUpdateDto dto);
+
         Task<bool> DeleteCategoryAsync(int id);
     }
 }

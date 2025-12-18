@@ -30,14 +30,16 @@ namespace server.Services.Implementations
             return await _categoryRepository.AddCategoryAsync(category);
         }
 
-        public async Task<CategoryModel> UpdateCategoryAsync(CategoryUpdateDto dto)
-        {
-            var category = new CategoryModel
-            {
-                Id = dto.Id,
-                Name = dto.Name
-            };
+       public async Task<CategoryModel> UpdateCategoryAsync(int id, CategoryUpdateDto dto)
+{
+    var category = new CategoryModel
+    {
+        Id = id,
+        Name = dto.Name
+    };
 
+    return await _categoryRepository.UpdateCategoryAsync(category);
+}
             return await _categoryRepository.UpdateCategoryAsync(category);
         }
 
