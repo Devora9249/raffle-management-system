@@ -10,6 +10,7 @@ namespace server.Models
         public string Address { get; set; } = string.Empty; 
         public string Password { get; set; } = string.Empty;
         public RoleEnum Role { get; set; }
+        public bool IsActive { get; set; } = true;
         public List<PurchaseModel> Cart { get; set; } = new();
     }
     public enum RoleEnum

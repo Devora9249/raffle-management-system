@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Services.Interfaces;
 using server.DTOs;
 using server.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace server.Controllers;
@@ -26,69 +27,44 @@ public class GiftController : ControllerBase
         return Ok(gifts);
     }
 
-[HttpGet("{id}")]
-    [ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{id}")]
     public async Task<ActionResult<GiftResponseDto>> GetById(int id)
     {
         var gift = await _giftService.GetGiftByIdAsync(id);
-        if (gift == null)
-        {
-            return NotFound(new { message = $"Gift with ID {id} not found." });
-        }
-
         return Ok(gift);
     }
 
-[HttpGet("byDonor/{donorId:int}")]
-[ProducesResponseType(typeof(IEnumerable<GiftResponseDto>), StatusCodes.Status200OK)]
-public async Task<IActionResult> GetByDonor(int donorId)
-    => Ok(await _giftService.GetByDonorAsync(donorId));
+    [HttpGet("byCategory/{categoryId:int}")]
+    public async Task<IActionResult> GetByCategory(int categoryId)
+        => Ok(await _giftService.GetByGiftByCategoryAsync(categoryId));
 
-    
+
+    [HttpGet("byDonor/{donorId:int}")]
+    public async Task<IActionResult> GetByDonor(int donorId)
+        => Ok(await _giftService.GetByDonorAsync(donorId));
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-[ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status201Created)]
-[ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
-{
-    try
+    public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
     {
         var gift = await _giftService.AddGiftAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
     }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { message = ex.Message });
-    }
-}
 
-[HttpPut("{id}")]
-[ProducesResponseType(typeof(GiftResponseDto), StatusCodes.Status200OK)]
-[ProducesResponseType(StatusCodes.Status404NotFound)]
-[ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftUpdateDto dto)
-{
-    try
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftUpdateDto dto)
     {
         var gift = await _giftService.UpdateGiftAsync(id, dto);
         return Ok(gift);
     }
-    catch (KeyNotFoundException ex)
-    {
-        return NotFound(new { message = ex.Message });
-    }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { message = ex.Message });
-    }
-}
 
-   [HttpDelete("{id}")]
-[ProducesResponseType(StatusCodes.Status204NoContent)]
-[ProducesResponseType(StatusCodes.Status404NotFound)]
-public async Task<IActionResult> Delete(int id)
-{
-    var ok = await _giftService.DeleteGiftAsync(id);
-    return ok ? NoContent() : NotFound(new { message = $"Gift with ID {id} not found." });
-}
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _giftService.DeleteGiftAsync(id);
+        return NoContent();
+    }
+
 }

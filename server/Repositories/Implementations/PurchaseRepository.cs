@@ -14,7 +14,6 @@ public class PurchaseRepository : IPurchaseRepository
         _context = context;
     }
 
-    // ✅ חשוב ל-Income: נטען גם Gift (וגם User אם תרצי בהמשך)
     public async Task<IEnumerable<PurchaseModel>> GetAllAsync()
         => await _context.Purchases
             .Include(p => p.Gift)
@@ -32,10 +31,10 @@ public class PurchaseRepository : IPurchaseRepository
         return purchase;
     }
 
-    public async Task<PurchaseModel> UpdateAsync(PurchaseModel purchase)
+    public async Task<PurchaseModel?> UpdateAsync(PurchaseModel purchase)
     {
         var existing = await _context.Purchases.FindAsync(purchase.Id);
-        if (existing == null) throw new KeyNotFoundException("Purchase not found");
+        if (existing == null) return null;
 
         _context.Entry(existing).CurrentValues.SetValues(purchase);
         await _context.SaveChangesAsync();
@@ -52,7 +51,7 @@ public class PurchaseRepository : IPurchaseRepository
         return true;
     }
 
-    public async Task<List<PurchaseModel>> GetByGiftAsync(int giftId)
+    public async Task<IEnumerable<PurchaseModel>> GetByGiftAsync(int giftId)
         => await _context.Purchases
             .Include(p => p.Gift)
             .Where(p => p.GiftId == giftId && p.Status == Status.Completed)

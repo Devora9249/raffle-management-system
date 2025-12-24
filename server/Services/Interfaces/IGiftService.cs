@@ -1,29 +1,30 @@
 using server.DTOs;
 using server.Models;
-    using server.Models.Enums;
+using server.Models.Enums;
 
-    namespace server.Services.Interfaces
+namespace server.Services.Interfaces
+{
+    public interface IGiftService
     {
-        public interface IGiftService
-        {
-            //CRUD
-            Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
-            Task<GiftResponseDto?> GetGiftByIdAsync(int id);
-            Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto);
-Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto);
-            Task<bool> DeleteGiftAsync(int id);
+        //CRUD
+        Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
+        Task<GiftResponseDto?> GetGiftByIdAsync(int id);
+        Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId);
+        Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto);
+        Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto);
+        Task<bool> DeleteGiftAsync(int id);
 
-            //בנוסף
-            Task <IEnumerable<GiftResponseDto>> FilterByGiftName(string name);
-            Task <IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);        
-            Task<List<GiftResponseDto>> GetByDonorAsync(int donorId);
+        //בנוסף
+        Task<IEnumerable<GiftResponseDto>> FilterByGiftName(string name);
+        Task<IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);
+        Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId);
 
 
-        }
     }
+}
 
 
-    // using server.Models;
+// using server.Models;
 
 // namespace server.Services.Interfaces
 // {

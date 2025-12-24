@@ -29,20 +29,30 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
-    // REGISTER
     [HttpPost("register")]
-    [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<LoginResponseDto>> Register([FromBody] RegisterDto dto)
     {
-        try
-        {
-            var result = await _authService.RegisterAsync(dto);
-            return Created("", result);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _authService.RegisterAsync(dto);
+        return Created("", result);
     }
+
+    // REGISTER
+    // [HttpPost("register")]
+    // [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status201Created)]
+    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // public async Task<ActionResult<LoginResponseDto>> Register([FromBody] RegisterDto dto)
+    // {
+    //     try
+    //     {
+    //         var result = await _authService.RegisterAsync(dto);
+    //         return Created("", result);
+    //     }
+    //     catch (ArgumentException ex)
+    //     {
+    //         return BadRequest(new { message = ex.Message });
+    //     }
+    // }
+
+
+
 }

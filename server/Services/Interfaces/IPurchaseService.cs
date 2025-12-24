@@ -8,10 +8,10 @@ namespace server.Services.Interfaces
         Task<PurchaseResponseDto?> GetByIdAsync(int id);
 
         Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto);
-     Task UpdateAsync(int id, PurchaseUpdateDto dto);
+        Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto);
 
         Task<bool> DeleteAsync(int id);
 
-        Task<List<PurchaseResponseDto>> GetByGiftAsync(int giftId);
+        Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId);
     }
 }

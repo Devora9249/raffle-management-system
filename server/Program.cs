@@ -8,6 +8,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using server.Services;
+using server.Middlewares;
+using server.Models;
+using System.Security.Claims;
+using Microsoft.OpenApi.Models;
+
+
 
 
 
@@ -17,7 +23,42 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "server",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Bearer {token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+
+
 
 //חיבור לדאטה בייס
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -48,6 +89,7 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddScoped<JwtService>();
 
 
@@ -68,6 +110,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwt["Key"]!)
             ),
+            RoleClaimType = ClaimTypes.Role,
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -76,12 +119,52 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 var app = builder.Build();
 
+// יצירת משתמש אדמין אם לא קיים
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+
+
+
+    var adminPassword = configuration["Admin:Password"];
+
+    if (string.IsNullOrWhiteSpace(adminPassword))
+    {
+        throw new Exception("Admin password is not configured");
+    }
+
+    if (!context.Users.Any(u => u.Email == configuration["EmailSettings:AdminEmail"]))
+    {
+        var password = configuration["Admin:Password"];
+
+        var admin = new UserModel
+        {
+            Name = "Admin1",
+            Email = configuration["EmailSettings:AdminEmail"],
+            Password = authService.HashPassword(password),
+            Role = RoleEnum.Admin
+        };
+
+        Console.WriteLine(admin.Role + " ❤️");
+
+        context.Users.Add(admin);
+        context.SaveChanges();
+        Console.WriteLine("Admin user created. 😍");
+    }
+}
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseGlobalExceptionHandling();
 
 app.UseAuthentication();
 app.UseAuthorization();

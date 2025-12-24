@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using server.Services.Interfaces;
 using server.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace server.Controllers;
 
@@ -14,63 +15,43 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<UserResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetAll()
     {
         var users = await _userService.GetAllUsersAsync();
         return Ok(users);
     }
 
-    [HttpPost]
-    [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserCreateDto createDto)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserResponseDto>> GetById(int id)
     {
-        try
-        {
-            var user = await _userService.AddUserAsync(createDto);
-            return Ok(user);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var user = await _userService.GetUserByIdAsync(id);
+        return Ok(user);
     }
 
+    [HttpPost]
+    public async Task<ActionResult<UserResponseDto>> Create([FromBody] UserCreateDto createDto)
+    {
+        var user = await _userService.AddUserAsync(createDto);
+        return Ok(user);
+    }
+
+
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<ActionResult<UserResponseDto>> Update(int id, [FromBody] UserUpdateDto dto)
-{
-    try
+    public async Task<ActionResult<UserResponseDto>> Update(int id, [FromBody] UserUpdateDto dto)
     {
         var user = await _userService.UpdateUserAsync(id, dto);
         return Ok(user);
     }
-    catch (KeyNotFoundException)
-    {
-        return NotFound(new { message = $"User with ID {id} not found." });
-    }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { message = ex.Message });
-    }
-}
-    
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _userService.DeleteUserAsync(id);
-
-        if (!result)
-            return NotFound(new { message = $"User with ID {id} not found." });
-
+        await _userService.DeleteUserAsync(id);
         return NoContent();
-        //מה זה אומר? אין תוכן להחזיר, אבל הפעולה הצליחה
     }
+
+
 }

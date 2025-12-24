@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using server.Services.Interfaces;
 using server.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace server.Controllers;
 
@@ -38,57 +39,35 @@ public class CategoryController : ControllerBase
     //     return Ok(category);
     // }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CategoryResponseDto>> GetById(int id)
+    {
+        var category = await _categoryService.GetCategoryByIdAsync(id);
+        return Ok(category);
+    }
+
+
     [HttpPost]
-    [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryResponseDto>> Create([FromBody] CategoryCreateDto createDto)
+    public async Task<ActionResult<CategoryResponseDto>> Create([FromBody] CategoryCreateDto dto)
     {
-        try
-        {
-            var category = await _categoryService.AddCategoryAsync(createDto);
-            return Ok(category);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var category = await _categoryService.AddCategoryAsync(dto);
+        return CreatedAtAction(nameof(GetAll), new { id = category.Id }, category);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryResponseDto>> Update(int id, [FromBody] CategoryUpdateDto updateDto)
+    public async Task<ActionResult<CategoryResponseDto>> Update(int id, [FromBody] CategoryUpdateDto dto)
     {
-        try
-        {
-            var category = await _categoryService.UpdateCategoryAsync(id,updateDto);
-
-            if (category == null)
-            {
-                return NotFound(new { message = $"Category with ID {id} not found." });
-            }
-
-            return Ok(category);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var category = await _categoryService.UpdateCategoryAsync(id, dto);
+        return Ok(category);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _categoryService.DeleteCategoryAsync(id);
-
-        if (!result)
-        {
-            return NotFound(new { message = $"Category with ID {id} not found." });
-        }
-
+        await _categoryService.DeleteCategoryAsync(id);
         return NoContent();
     }
+
 }

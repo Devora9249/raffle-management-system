@@ -7,8 +7,9 @@ namespace server.Repositories.Interfaces
     {
         //CRUD
         Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync();
+        Task<CategoryModel?> GetCategoryByIdAsync(int id);
         Task<CategoryModel> AddCategoryAsync(CategoryModel category);
-        Task<CategoryModel> UpdateCategoryAsync(CategoryModel category);
+        Task<CategoryModel?> UpdateCategoryAsync(CategoryModel category);
         Task<bool> DeleteCategoryAsync(int id);
     }
 }

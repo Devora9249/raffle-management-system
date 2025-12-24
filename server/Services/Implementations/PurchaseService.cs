@@ -38,26 +38,41 @@ namespace server.Services.Implementations
 
             var created = await _repo.AddAsync(purchase);
             return ToResponseDto(created);
-        } 
-public async Task UpdateAsync(int id, PurchaseUpdateDto dto)
-{
-    var purchase = await _repo.GetByIdAsync(id);
-    if (purchase == null) throw new KeyNotFoundException("Purchase not found");
+        }
+        public async Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto)
+        {
+            // 1️⃣ שליפת הרכישה
+            var purchase = await _repo.GetByIdAsync(id);
+            if (purchase == null)
+                throw new KeyNotFoundException("Purchase not found");
 
-    if (dto.Qty.HasValue)
-        purchase.Qty = dto.Qty.Value;
+            // 2️⃣ חוקים עסקיים
+            if (dto.Qty.HasValue && dto.Qty.Value <= 0)
+                throw new ArgumentException("Qty must be greater than 0");
 
-    if (dto.Status.HasValue)
-        purchase.Status = dto.Status.Value;
+            // 3️⃣ עדכון שדות
+            if (dto.Qty.HasValue)
+                purchase.Qty = dto.Qty.Value;
 
-    await _repo.UpdateAsync(purchase);
-}
+            if (dto.Status.HasValue)
+                purchase.Status = dto.Status.Value;
+
+            // 4️⃣ שמירה (כיבוד חוזה ה-Repository)
+            var updated = await _repo.UpdateAsync(purchase);
+            if (updated == null)
+                throw new KeyNotFoundException("Purchase not found");
+
+            // 5️⃣ החזרת DTO
+            return ToResponseDto(updated);
+        }
+
+
 
 
         public Task<bool> DeleteAsync(int id)
             => _repo.DeleteAsync(id);
 
-        public async Task<List<PurchaseResponseDto>> GetByGiftAsync(int giftId)
+        public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
             => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
 
         private static PurchaseResponseDto ToResponseDto(PurchaseModel p)

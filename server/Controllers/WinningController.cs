@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs;
 using server.Services.Interfaces;
@@ -16,39 +17,46 @@ public class WinningController : ControllerBase
         _winningService = winningService;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
     {
         return await _winningService.GetAllWinningsAsync();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
-    public async Task<WinningResponseDto?> GetWinningByIdAsync(int id)
+    public async Task<WinningResponseDto> GetWinningByIdAsync(int id)
     {
         return await _winningService.GetWinningByIdAsync(id);
     }
 
-   [HttpPost]
-public async Task<WinningResponseDto> AddWinningAsync([FromBody] WinningCreateDto dto)
-    => await _winningService.AddWinningAsync(dto);
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<WinningResponseDto> AddWinningAsync([FromBody] WinningCreateDto dto)
+         => await _winningService.AddWinningAsync(dto);
 
-[HttpPut("{id}")]
-public async Task<WinningResponseDto> UpdateWinningAsync(int id, [FromBody] WinningCreateDto dto)
-    => await _winningService.UpdateWinningAsync(id, dto);
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
+    public async Task<WinningResponseDto> UpdateWinningAsync(int id, [FromBody] WinningCreateDto dto)
+            => await _winningService.UpdateWinningAsync(id, dto);
 
- [HttpDelete("{id:int}")]
-public async Task<IActionResult> DeleteWinningAsync(int id)
-{
-    var ok = await _winningService.DeleteWinningAsync(id);
-    return ok ? NoContent() : NotFound(new { message = $"Winning with ID {id} not found." });
-}
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteWinningAsync(int id)
+    {
+        await _winningService.DeleteWinningAsync(id);
+        return NoContent();
+    }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("total-income")]
     public async Task<decimal> GetTotalIncome()
     {
         return await _winningService.GetTotalIncome();
     }
-
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("doRaffle")]
     public async Task<IActionResult> DoRaffle()
     {

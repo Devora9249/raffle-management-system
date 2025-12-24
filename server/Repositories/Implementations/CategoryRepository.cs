@@ -19,6 +19,11 @@ public class CategoryRepository : ICategoryRepository
         return await _context.Categories.ToListAsync();
     }
 
+    public async Task<CategoryModel?> GetCategoryByIdAsync(int id)
+    {
+        return await _context.Categories.FindAsync(id);
+    }
+
     public async Task<CategoryModel> AddCategoryAsync(CategoryModel category)
     {
         _context.Categories.Add(category);
@@ -26,13 +31,10 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
-    public async Task<CategoryModel> UpdateCategoryAsync(CategoryModel category)
+    public async Task<CategoryModel?> UpdateCategoryAsync(CategoryModel category)
     {
         var existingCategory = await _context.Categories.FindAsync(category.Id);
-        if (existingCategory == null)
-        {
-            throw new KeyNotFoundException("Category not found");
-        }
+        if (existingCategory == null) return null;
         _context.Entry(existingCategory).CurrentValues.SetValues(category);
         await _context.SaveChangesAsync();
         return existingCategory;

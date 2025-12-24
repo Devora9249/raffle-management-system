@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Donors;
 using server.Models;
@@ -16,21 +17,22 @@ namespace server.Controllers
             _donorService = donorService;
         }
 
-        // -------- פעולות אדמין --------
-
+        [Authorize(Roles = "Admin")]
         // GET /api/donor?search=...&city=...
         [HttpGet]
         public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(
-            [FromQuery] string? search,
-            [FromQuery] string? city)
-            => Ok(await _donorService.GetDonorsAsync(search, city));
+                    [FromQuery] string? search,
+                    [FromQuery] string? city)
+                    => Ok(await _donorService.GetDonorsAsync(search, city));
 
+        [Authorize(Roles = "Admin")]
         // PATCH /api/donor/role/5?role=Donor
         [HttpPatch("role/{userId}")]
         public async Task<IActionResult> SetRole(int userId, [FromQuery] RoleEnum role)
         {
             await _donorService.SetUserRoleAsync(userId, role);
-            return Ok();
+            return NoContent();
+
         }
 
         // -------- דשבורד לתורם --------

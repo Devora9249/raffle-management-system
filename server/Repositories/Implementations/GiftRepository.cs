@@ -46,6 +46,14 @@ public class GiftRepository : IGiftRepository
         .FirstOrDefaultAsync(g => g.Id == id);
     }
 
+    public async Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId)
+    {
+        return await _context.Gifts
+        .Where(g => g.CategoryId == categoryId)
+        .Include(g => g.Category)
+        .ToListAsync();
+    }
+
 
     public async Task<GiftModel> AddGiftAsync(GiftModel gift)
     {
@@ -54,13 +62,11 @@ public class GiftRepository : IGiftRepository
         return gift;
     }
 
-    public async Task<GiftModel> UpdateGiftAsync(GiftModel gift)
+    public async Task<GiftModel?> UpdateGiftAsync(GiftModel gift)
     {
         var existingGift = await _context.Gifts.FindAsync(gift.Id);
-        if (existingGift == null)
-        {
-            throw new KeyNotFoundException("Gift not found");
-        }
+        if (existingGift == null)return null;
+
         _context.Entry(existingGift).CurrentValues.SetValues(gift);
         await _context.SaveChangesAsync();
         return existingGift;

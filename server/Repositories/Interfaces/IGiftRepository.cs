@@ -8,14 +8,15 @@ namespace server.Repositories.Interfaces
         //CRUD
         Task<IEnumerable<GiftModel>> GetAllGiftsAsync(PriceSort sort);
         Task<GiftModel?> GetGiftByIdAsync(int id);
+        Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId);
         Task<GiftModel> AddGiftAsync(GiftModel gift);
-        Task<GiftModel> UpdateGiftAsync(GiftModel gift);
+        Task<GiftModel?> UpdateGiftAsync(GiftModel gift);
         Task<bool> DeleteGiftAsync(int id);
 
         //בנוסף
-        Task <IEnumerable<GiftModel>> FilterByGiftName(string name);
-        Task <IEnumerable<GiftModel>> FilterByGiftDonor(string name);        
-Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId);
+        Task<IEnumerable<GiftModel>> FilterByGiftName(string name);
+        Task<IEnumerable<GiftModel>> FilterByGiftDonor(string name);
+        Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId);
 
 
     }

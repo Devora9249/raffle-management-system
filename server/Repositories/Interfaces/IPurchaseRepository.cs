@@ -8,10 +8,10 @@ namespace server.Repositories.Interfaces
         Task<PurchaseModel?> GetByIdAsync(int id);
 
         Task<PurchaseModel> AddAsync(PurchaseModel purchase);
-        Task<PurchaseModel> UpdateAsync(PurchaseModel purchase);
+        Task<PurchaseModel?> UpdateAsync(PurchaseModel purchase);
         Task<bool> DeleteAsync(int id);
 
-        Task<List<PurchaseModel>> GetByGiftAsync(int giftId);   // Completed
+        Task<IEnumerable<PurchaseModel>> GetByGiftAsync(int giftId);   // Completed
         Task<List<PurchaseModel>> GetUserCartAsync(int userId); // Draft
         Task<int> CheckoutAsync(int userId);                    // Draft -> Completed
     }

@@ -14,9 +14,9 @@ namespace server.Services
         {
             _context = context;
         }
-///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
+        ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
-        public async Task<List<DonorListItemDto>> GetDonorsAsync(string? search, string? city)
+        public async Task<IEnumerable<DonorListItemDto>> GetDonorsAsync(string? search, string? city)
         {
             var q = _context.Users
                 .Where(u => u.Role == RoleEnum.Donor)
@@ -49,11 +49,11 @@ namespace server.Services
                 })
                 .ToListAsync();
         }
-///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
+        ///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
         public async Task SetUserRoleAsync(int userId, RoleEnum role)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null) throw new Exception("User not found");
+            if (user == null) throw new KeyNotFoundException("User not found");
 
             user.Role = role;
             await _context.SaveChangesAsync();
@@ -64,8 +64,8 @@ namespace server.Services
         public async Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId)
         {
             var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);
-            if (donor == null) throw new Exception("Donor user not found");
-            if (donor.Role != RoleEnum.Donor) throw new Exception("User is not a Donor");
+            if (donor == null) throw new KeyNotFoundException("Donor user not found");
+            if (donor.Role != RoleEnum.Donor) throw new InvalidOperationException("User is not a Donor");
 
             // 1) מתנות של התורם
             var gifts = await _context.Gifts

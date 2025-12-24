@@ -6,7 +6,7 @@ namespace server.Services.Interfaces
     public interface IDonorService
     {
         // Admin
-        Task<List<DonorListItemDto>> GetDonorsAsync(string? search, string? city);
+        Task<IEnumerable<DonorListItemDto>> GetDonorsAsync(string? search, string? city);
         Task SetUserRoleAsync(int userId, RoleEnum role);
 
         // Donor dashboard

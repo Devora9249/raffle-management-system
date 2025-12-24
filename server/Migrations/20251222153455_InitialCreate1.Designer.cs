@@ -12,7 +12,7 @@ using server.Data;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251213201105_InitialCreate1")]
+    [Migration("20251222153455_InitialCreate1")]
     partial class InitialCreate1
     {
         /// <inheritdoc />
@@ -43,38 +43,6 @@ namespace server.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("server.Models.DonorModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Donors");
-                });
-
             modelBuilder.Entity("server.Models.GiftModel", b =>
                 {
                     b.Property<int>("Id")
@@ -98,16 +66,11 @@ namespace server.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("RaffleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("DonorId");
-
-                    b.HasIndex("RaffleId");
 
                     b.ToTable("Gifts", t =>
                         {
@@ -146,40 +109,12 @@ namespace server.Migrations
 
                     b.HasIndex("GiftId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "Status");
 
                     b.ToTable("Purchases", t =>
                         {
                             t.HasCheckConstraint("CK_Purchase_Qty_Positive", "[Qty] > 0");
                         });
-                });
-
-            modelBuilder.Entity("server.Models.RaffleModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("RaffleDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RaffleModel");
                 });
 
             modelBuilder.Entity("server.Models.UserModel", b =>
@@ -205,6 +140,9 @@ namespace server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -227,6 +165,9 @@ namespace server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -241,22 +182,12 @@ namespace server.Migrations
                     b.Property<int>("GiftId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RaffleDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("RaffleId")
-                        .HasColumnType("int");
-
                     b.Property<int>("WinnerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GiftId");
-
-                    b.HasIndex("RaffleId");
 
                     b.HasIndex("WinnerId");
 
@@ -271,16 +202,11 @@ namespace server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("server.Models.DonorModel", "Donor")
-                        .WithMany("Gifts")
+                    b.HasOne("server.Models.UserModel", "Donor")
+                        .WithMany()
                         .HasForeignKey("DonorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("server.Models.RaffleModel", null)
-                        .WithMany("Gifts")
-                        .HasForeignKey("RaffleId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 
@@ -314,12 +240,6 @@ namespace server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("server.Models.RaffleModel", "Raffle")
-                        .WithMany("Winnings")
-                        .HasForeignKey("RaffleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("server.Models.UserModel", "User")
                         .WithMany()
                         .HasForeignKey("WinnerId")
@@ -328,26 +248,12 @@ namespace server.Migrations
 
                     b.Navigation("Gift");
 
-                    b.Navigation("Raffle");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("server.Models.CategoryModel", b =>
                 {
                     b.Navigation("Gifts");
-                });
-
-            modelBuilder.Entity("server.Models.DonorModel", b =>
-                {
-                    b.Navigation("Gifts");
-                });
-
-            modelBuilder.Entity("server.Models.RaffleModel", b =>
-                {
-                    b.Navigation("Gifts");
-
-                    b.Navigation("Winnings");
                 });
 
             modelBuilder.Entity("server.Models.UserModel", b =>

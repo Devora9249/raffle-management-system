@@ -106,7 +106,7 @@ namespace server.Migrations
 
                     b.HasIndex("GiftId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "Status");
 
                     b.ToTable("Purchases", t =>
                         {
@@ -137,6 +137,9 @@ namespace server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -153,9 +156,7 @@ namespace server.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("Role")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -199,7 +200,7 @@ namespace server.Migrations
                     b.HasOne("server.Models.UserModel", "Donor")
                         .WithMany()
                         .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");

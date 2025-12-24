@@ -20,6 +20,15 @@ namespace server.Services.Implementations
             return users.Select(ToResponseDto);
         }
 
+        public async Task<UserResponseDto> GetUserByIdAsync(int id)
+        {
+            var user = await _repo.GetUserByIdAsync(id);
+            if (user == null)
+                throw new KeyNotFoundException("User not found");
+
+            return ToResponseDto(user);
+        }
+
         public async Task<UserResponseDto> AddUserAsync(UserCreateDto createDto)
         {
             // בדיקות בסיסיות (אופציונלי)

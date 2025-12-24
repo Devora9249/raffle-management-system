@@ -31,8 +31,6 @@ public class RegisterDto
 
     [MaxLength(300)]
     public string Address { get; set; } = string.Empty;
-
-    public RoleEnum Role { get; set; } = RoleEnum.User;
 }
 
 public class LoginResponseDto

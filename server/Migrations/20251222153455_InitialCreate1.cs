@@ -25,37 +25,6 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Donors", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RaffleModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RaffleDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RaffleModel", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -67,7 +36,8 @@ namespace server.Migrations
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false, defaultValue: 2)
+                    Role = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,8 +53,7 @@ namespace server.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    DonorId = table.Column<int>(type: "int", nullable: false),
-                    RaffleId = table.Column<int>(type: "int", nullable: true)
+                    DonorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,15 +66,9 @@ namespace server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Gifts_Donors_DonorId",
+                        name: "FK_Gifts_Users_DonorId",
                         column: x => x.DonorId,
-                        principalTable: "Donors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Gifts_RaffleModel_RaffleId",
-                        column: x => x.RaffleId,
-                        principalTable: "RaffleModel",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -146,8 +109,6 @@ namespace server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RaffleDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    RaffleId = table.Column<int>(type: "int", nullable: false),
                     GiftId = table.Column<int>(type: "int", nullable: false),
                     WinnerId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -160,12 +121,6 @@ namespace server.Migrations
                         principalTable: "Gifts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Winnings_RaffleModel_RaffleId",
-                        column: x => x.RaffleId,
-                        principalTable: "RaffleModel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Winnings_Users_WinnerId",
                         column: x => x.WinnerId,
@@ -185,29 +140,25 @@ namespace server.Migrations
                 column: "DonorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_RaffleId",
-                table: "Gifts",
-                column: "RaffleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Purchases_GiftId",
                 table: "Purchases",
                 column: "GiftId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Purchases_UserId",
+                name: "IX_Purchases_UserId_Status",
                 table: "Purchases",
-                column: "UserId");
+                columns: new[] { "UserId", "Status" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Winnings_GiftId",
                 table: "Winnings",
                 column: "GiftId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Winnings_RaffleId",
-                table: "Winnings",
-                column: "RaffleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Winnings_WinnerId",
@@ -228,16 +179,10 @@ namespace server.Migrations
                 name: "Gifts");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Donors");
-
-            migrationBuilder.DropTable(
-                name: "RaffleModel");
+                name: "Users");
         }
     }
 }

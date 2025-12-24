@@ -26,21 +26,20 @@ namespace server.Services
                 .Include(g => g.Donor)
                 .FirstOrDefaultAsync(g => g.Id == giftId);
 
-            if (gift == null) throw new Exception("Gift not found");
+            if (gift == null) throw new KeyNotFoundException("Gift not found");
 
             var donor = gift.Donor;
-            if (donor == null) throw new Exception("Donor not found for this gift");
+            if (donor == null) throw new KeyNotFoundException("Donor not found for this gift");
 
             var winner = await _context.Users.FirstOrDefaultAsync(u => u.Id == winnerId);
-            if (winner == null) throw new Exception("Winner user not found");
+            if (winner == null) throw new KeyNotFoundException("Winner user not found");
 
             var donorEmail = donor.Email;
             if (string.IsNullOrWhiteSpace(donorEmail))
-                throw new Exception("לתורם אין Email");
-
+                throw new InvalidOperationException("לתורם אין Email");
             var winnerEmail = winner.Email;
             if (string.IsNullOrWhiteSpace(winnerEmail))
-                throw new Exception("לזוכה אין Email");
+                throw new InvalidOperationException("לזוכה אין Email");
 
             var raffleDate = DateTime.Now.ToString("dd/MM/yyyy");
 

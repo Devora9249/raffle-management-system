@@ -56,16 +56,16 @@ public class AuthService : IAuthService
         if (exists != null)
             throw new ArgumentException("Email already exists");
 
-     var user = new UserModel
-{
-    Name = dto.Name,
-    Email = dto.Email,
-    Phone = dto.Phone,
-    City = dto.City,
-    Address = dto.Address,
-    Password = HashPassword(dto.Password),
-    Role = dto.Role
-};
+        var user = new UserModel
+        {
+            Name = dto.Name,
+            Email = dto.Email,
+            Phone = dto.Phone,
+            City = dto.City,
+            Address = dto.Address,
+            Password = HashPassword(dto.Password),
+            Role = RoleEnum.User
+        };
 
         await _userRepository.AddUserAsync(user);
 
@@ -89,7 +89,7 @@ public class AuthService : IAuthService
         return BCrypt.Net.BCrypt.Verify(password, passwordHash);
     }
 
-    private string HashPassword(string password)
+    public string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }

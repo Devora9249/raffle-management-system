@@ -33,9 +33,8 @@ public class GiftService : IGiftService
     {
         var gift = await _giftRepository.GetGiftByIdAsync(id);
         if (gift == null)
-        {
             return null;
-        }
+
         return new GiftResponseDto
         {
             Id = gift.Id,
@@ -46,55 +45,75 @@ public class GiftService : IGiftService
         };
     }
 
-   public async Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto)
-{
-    var model = new GiftModel
+    public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
     {
-        Description = dto.Description,
-        CategoryId = dto.CategoryId,
-        Price = dto.Price,
-        DonorId = dto.DonorId
-    };
+        var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
+        if(gifts == null) return null;
 
-    var created = await _giftRepository.AddGiftAsync(model);
+        return gifts.Select(g => new GiftResponseDto
+        {
+            Id = g.Id,
+            Description = g.Description,
+            CategoryId = g.CategoryId,
+            Price = g.Price,
+            DonorId = g.DonorId
+        });
+    }
 
-    return new GiftResponseDto
+    public async Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto)
     {
-        Id = created.Id,
-        Description = created.Description,
-        CategoryId = created.CategoryId,
-        Price = created.Price,
-        DonorId = created.DonorId
-    };
-}
+        var model = new GiftModel
+        {
+            Description = dto.Description,
+            CategoryId = dto.CategoryId,
+            Price = dto.Price,
+            DonorId = dto.DonorId
+        };
+
+        var created = await _giftRepository.AddGiftAsync(model);
+
+        return new GiftResponseDto
+        {
+            Id = created.Id,
+            Description = created.Description,
+            CategoryId = created.CategoryId,
+            Price = created.Price,
+            DonorId = created.DonorId
+        };
+    }
 
 
     public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto)
-{
-    var existing = await _giftRepository.GetGiftByIdAsync(id);
-    if (existing == null)
-        throw new KeyNotFoundException("Gift not found");
-
-    if (dto.Description != null)
-        existing.Description = dto.Description;
-
-    if (dto.Price.HasValue)
-        existing.Price = dto.Price.Value;
-
-    if (dto.CategoryId.HasValue)
-        existing.CategoryId = dto.CategoryId.Value;
-
-    var updated = await _giftRepository.UpdateGiftAsync(existing);
-
-    return new GiftResponseDto
     {
-        Id = updated.Id,
-        Description = updated.Description,
-        CategoryId = updated.CategoryId,
-        Price = updated.Price,
-        DonorId = updated.DonorId
-    };
-}
+        var existing = await _giftRepository.GetGiftByIdAsync(id);
+        if (existing == null)
+            throw new KeyNotFoundException($"Gift {id} not found");
+
+        if (dto.Description != null)
+            existing.Description = dto.Description;
+    
+        if (dto.Price.HasValue)
+            existing.Price = dto.Price.Value;
+
+        if (dto.CategoryId.HasValue)
+            existing.CategoryId = dto.CategoryId.Value;
+
+        var updated = await _giftRepository.UpdateGiftAsync(existing);
+
+        if (updated == null)
+            throw new KeyNotFoundException($"Gift {id} not found");
+
+        return new GiftResponseDto
+        {
+            Id = updated.Id,
+            Description = updated.Description,
+            CategoryId = updated.CategoryId,
+            Price = updated.Price,
+            DonorId = updated.DonorId
+        };
+    }
+
+    
 
 
     public async Task<bool> DeleteGiftAsync(int id)
@@ -129,18 +148,18 @@ public class GiftService : IGiftService
             DonorId = g.DonorId
         });
     }
-    public async Task<List<GiftResponseDto>> GetByDonorAsync(int donorId)
-{
-    var gifts = await _giftRepository.GetByDonorAsync(donorId);
-
-    return gifts.Select(g => new GiftResponseDto
+    public async Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId)
     {
-        Id = g.Id,
-        Description = g.Description,
-        CategoryId = g.CategoryId,
-        Price = g.Price,
-        DonorId = g.DonorId
-    }).ToList();
-}
+        var gifts = await _giftRepository.GetByDonorAsync(donorId);
+
+        return gifts.Select(g => new GiftResponseDto
+        {
+            Id = g.Id,
+            Description = g.Description,
+            CategoryId = g.CategoryId,
+            Price = g.Price,
+            DonorId = g.DonorId
+        });
+    }
 
 }

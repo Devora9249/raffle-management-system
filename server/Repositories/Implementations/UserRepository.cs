@@ -15,16 +15,23 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
-        => await _context.Users.ToListAsync();
+    {
+        return await _context.Users
+            .Where(u => u.IsActive)
+            .ToListAsync();
+    }
 
     public async Task<UserModel?> GetUserByIdAsync(int id)
-        => await _context.Users.FindAsync(id);
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == id && u.IsActive);
+    }
 
 
     public async Task<UserModel?> GetByEmailAsync(string email)
     {
         return await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email && u.IsActive);
     }
     
     public async Task<UserModel> AddUserAsync(UserModel user)
@@ -34,10 +41,10 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<UserModel> UpdateUserAsync(UserModel user)
+    public async Task<UserModel?> UpdateUserAsync(UserModel user)
     {
-        var existing = await _context.Users.FindAsync(user.Id);
-        if (existing == null) throw new KeyNotFoundException("User not found");
+        var existing = await GetUserByIdAsync(user.Id);
+        if (existing == null) return null;
 
         _context.Entry(existing).CurrentValues.SetValues(user);
         await _context.SaveChangesAsync();
@@ -49,7 +56,10 @@ public class UserRepository : IUserRepository
         var user = await _context.Users.FindAsync(id);
         if (user == null) return false;
 
-        _context.Users.Remove(user);
+        // _context.Users.Remove(user);
+        // await _context.SaveChangesAsync();
+        // return true;
+        user.IsActive = false;
         await _context.SaveChangesAsync();
         return true;
     }

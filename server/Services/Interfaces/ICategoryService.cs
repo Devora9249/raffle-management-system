@@ -4,13 +4,14 @@ using server.DTOs;
 
 namespace server.Services.Interfaces
 {
-    public interface ICategoryService
-    {
-        //CRUD
-        Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync();
-        Task<CategoryModel> AddCategoryAsync(CategoryCreateDto category);
-      Task<CategoryModel> UpdateCategoryAsync(int id, CategoryUpdateDto dto);
+  public interface ICategoryService
+  {
+    //CRUD
+    Task<IEnumerable<CategoryResponseDto>> GetAllCategoriesAsync();
+    Task<CategoryResponseDto> GetCategoryByIdAsync(int id);
+    Task<CategoryResponseDto> AddCategoryAsync(CategoryCreateDto category);
+    Task<CategoryResponseDto> UpdateCategoryAsync(int id, CategoryUpdateDto dto);
 
-        Task<bool> DeleteCategoryAsync(int id);
-    }
+    Task DeleteCategoryAsync(int id);
+  }
 }

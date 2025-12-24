@@ -92,8 +92,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Password).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Role)
                   .HasConversion<int>()
-                  .IsRequired()
-                  .HasDefaultValue(RoleEnum.User);
+                  .IsRequired();
             entity.HasMany(e => e.Cart)
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
@@ -105,6 +104,8 @@ public class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Qty).IsRequired();
+            entity.HasIndex(p => new { p.UserId, p.Status });
+
 
             entity.ToTable(t =>
             {
