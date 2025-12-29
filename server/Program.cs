@@ -12,12 +12,36 @@ using server.Middlewares;
 using server.Models;
 using System.Security.Claims;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//serilog
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.File(
+            path: "Logs/log-.txt",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 14);
+});
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration) 
+    .WriteTo.Console() 
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+Log.Information("Application is starting");
+
 
 
 
@@ -126,8 +150,6 @@ using (var scope = app.Services.CreateScope())
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
     var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
 
-
-
     var adminPassword = configuration["Admin:Password"];
 
     if (string.IsNullOrWhiteSpace(adminPassword))
@@ -165,9 +187,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseGlobalExceptionHandling();
+app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+
 
 app.Run();
