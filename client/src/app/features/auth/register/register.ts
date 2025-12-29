@@ -1,37 +1,50 @@
-import { Component, EventEmitter, Output, SimpleChanges, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { RegisterDto } from '../../../core/dto/register-dto';
 import { AuthService } from '../../../core/services/register-service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })
 export class RegisterComponent {
-  constructor(private authService: AuthService, private router: Router) {}
 
-  // אובייקט למילוי טופס הרישום
-  model: RegisterDto = {
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    city: '',
-    address: ''
-  };
+  form!: FormGroup;
 
-  // אירוע למי שרוצה לקבל עדכון אחרי רישום
-  @Output() registered: EventEmitter<RegisterDto> = new EventEmitter<RegisterDto>();
+  @Output() registered = new EventEmitter<RegisterDto>();
 
-  // קריאה ל-API להרשמה
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      phone: [''],
+      city: [''],
+      address: ['']
+    });
+  }
+
   save() {
-    this.authService.register(this.model).subscribe({
-      next: (res) => {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const model: RegisterDto = this.form.value;
+
+    this.authService.register(model).subscribe({
+      next: () => {
         alert('Registration successful!');
-        this.registered.emit(this.model );
+        this.registered.emit(model);
+        this.form.reset();
       },
       error: (err) => {
         console.error('Registration failed', err);
@@ -40,20 +53,7 @@ export class RegisterComponent {
     });
   }
 
-  // איפוס הטופס
   undoChanges() {
-    this.model = {
-      name: '',
-      email: '',
-      password: '',
-      phone: '',
-      city: '',
-      address: ''
-    };
-  }
-
-  // אם תצטרכי לבצע משהו כשקלט משתנה
-  ngOnChanges(changes: SimpleChanges) {
-    // כאן אפשר לבדוק שינויים ב-inputs אם יהיו בעתיד
+    this.form.reset();
   }
 }
