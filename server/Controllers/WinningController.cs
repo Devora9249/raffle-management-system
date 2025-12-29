@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs;
+using server.Services.Implementations;
 using server.Services.Interfaces;
 
 
@@ -58,9 +59,8 @@ public class WinningController : ControllerBase
     
     [Authorize(Roles = "Admin")]
     [HttpGet("doRaffle")]
-    public async Task<IActionResult> DoRaffle()
+    public async Task<IEnumerable<WinningResponseDto>> DoRaffle()
     {
-        await _winningService.RaffleAsync();
-        return Ok();
+        return await _winningService.RaffleAsync();
     }
 }

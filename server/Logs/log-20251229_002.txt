@@ -1,5 +1,5 @@
-2025-12-25 13:38:34.765 +02:00 [ERR] An error occurred using the connection to database 'RaffleDb' on server 'localhost,1433'.
-2025-12-25 13:38:34.857 +02:00 [ERR] An exception occurred while iterating over the results of a query for context type 'server.Data.AppDbContext'.
+2025-12-29 18:23:18.731 +02:00 [ERR] An error occurred using the connection to database 'RaffleDb' on server 'localhost,1433'.
+2025-12-29 18:23:18.803 +02:00 [ERR] An exception occurred while iterating over the results of a query for context type 'server.Data.AppDbContext'.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 0 - No connection could be made because the target machine actively refused it.)
  ---> System.ComponentModel.Win32Exception (10061): No connection could be made because the target machine actively refused it.
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)

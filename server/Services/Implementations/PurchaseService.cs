@@ -2,6 +2,7 @@ using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
+using server.Models.Enums;
 
 namespace server.Services.Implementations
 {
@@ -69,8 +70,13 @@ namespace server.Services.Implementations
 
 
 
-        public Task<bool> DeleteAsync(int id)
-            => _repo.DeleteAsync(id);
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var p = await _repo.DeleteAsync(id);
+            if (!p)
+                throw new KeyNotFoundException("Purchase not found or could not be deleted");
+           return p;
+        } 
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
             => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
