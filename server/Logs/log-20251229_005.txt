@@ -117,3 +117,4 @@ System.Collections.Generic.KeyNotFoundException: Donor user not found
 2025-12-29 19:10:42.631 +02:00 [INF] HTTP GET /api/Winning responded 200 in 15.4615 ms
 2025-12-29 19:11:01.765 +02:00 [INF] HTTP GET /api/User responded 200 in 5.2382 ms
 2025-12-29 19:11:38.904 +02:00 [INF] HTTP GET /api/Winning/doRaffle responded 200 in 20758.0850 ms
+2025-12-29 22:14:29.841 +02:00 [INF] Application is starting

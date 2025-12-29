@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Gift } from '../models/gift.model';
-import { GiftResponseDto } from '../dto/gift/gift-response.dto';
-import { GiftCreateDto } from '../dto/gift/gift-create.dto';
-import { GiftUpdateDto } from '../dto/gift/gift-update.dto';
+import { Gift } from '../models/gift-model';
+import { GiftResponseDto, GiftCreateDto, GiftUpdateDto} from '../dto/gift-dto';
 
 @Injectable({ providedIn: 'root' })
 export class GiftsService {

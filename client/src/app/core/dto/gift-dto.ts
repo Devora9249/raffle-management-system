@@ -1,11 +1,4 @@
-// import { Injectable } from '@angular/core';
 
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class GiftDto {
-  
-// }
 export interface GiftResponseDto {
   id: number;
   description: string;
