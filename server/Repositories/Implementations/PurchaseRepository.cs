@@ -45,6 +45,7 @@ public class PurchaseRepository : IPurchaseRepository
     {
         var existing = await _context.Purchases.FindAsync(id);
         if (existing == null) return false;
+        if(existing.Status == Status.Completed) return false;
 
         _context.Purchases.Remove(existing);
         await _context.SaveChangesAsync();

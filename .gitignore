@@ -3,3 +3,6 @@
 .vs/
 appsettings.json
 appsettings.Development.json
+
+server/Logs/
+*.log
