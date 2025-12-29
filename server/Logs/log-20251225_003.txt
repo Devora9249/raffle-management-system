@@ -1,3 +1,0 @@
-2025-12-25 15:06:39.037 +02:00 [INF] HTTP POST /api/auth/login responded 401 in 1342.6030 ms
-2025-12-25 15:06:50.469 +02:00 [INF] HTTP POST /api/auth/login responded 200 in 700.3894 ms
-2025-12-25 15:07:10.604 +02:00 [INF] HTTP GET /api/User responded 401 in 25.4675 ms
