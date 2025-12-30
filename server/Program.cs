@@ -14,13 +14,9 @@ using System.Security.Claims;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-//serilog
+// serilog
 builder.Host.UseSerilog((context, services, configuration) =>
 {
     configuration
@@ -42,10 +38,19 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Application is starting");
 
+// --- Services ---
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev",
+        policy => policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
-
-// Add services to the container.
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -81,41 +86,32 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
-
-
-//חיבור לדאטה בייס
+// Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//הגדרות מייל
+// Email
 builder.Services.Configure<EmailSettingsOptions>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-//DI
-///repositories
+// Repositories
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<IWinningRepository, WinningRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 
-///services
+// Services
 builder.Services.AddScoped<IGiftService, GiftService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDonorService, DonorService>();
 builder.Services.AddScoped<IWinningService, WinningService>();
-builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
-
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddScoped<JwtService>();
-
 
 // Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -139,9 +135,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 builder.Services.AddControllers();
+
+// --- Build app ---
 var app = builder.Build();
+
+// הפעלת CORS
+app.UseCors("AllowAngularDev");
 
 // יצירת משתמש אדמין אם לא קיים
 using (var scope = app.Services.CreateScope())
@@ -151,35 +151,25 @@ using (var scope = app.Services.CreateScope())
     var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
 
     var adminPassword = configuration["Admin:Password"];
-
     if (string.IsNullOrWhiteSpace(adminPassword))
-    {
         throw new Exception("Admin password is not configured");
-    }
 
     if (!context.Users.Any(u => u.Email == configuration["EmailSettings:AdminEmail"]))
     {
-        var password = configuration["Admin:Password"];
-
+        var password = configuration["Admin:Password"]!;
         var admin = new UserModel
         {
             Name = "Admin1",
-            Email = configuration["EmailSettings:AdminEmail"],
+            Email = configuration["EmailSettings:AdminEmail"]!,
             Password = authService.HashPassword(password),
             Role = RoleEnum.Admin
         };
-
-        Console.WriteLine(admin.Role + " ❤️");
-
         context.Users.Add(admin);
         context.SaveChanges();
-        Console.WriteLine("Admin user created. 😍");
     }
 }
 
-
-
-// Configure the HTTP request pipeline.
+// --- Middleware ---
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -192,7 +182,5 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-
 
 app.Run();

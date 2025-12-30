@@ -6,3 +6,5 @@ appsettings.Development.json
 
 server/Logs/
 *.log
+bin/
+obj/

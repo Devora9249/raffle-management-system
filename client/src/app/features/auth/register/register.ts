@@ -1,0 +1,59 @@
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { RegisterDto } from '../../../core/dto/register-dto';
+import { AuthService } from '../../../core/services/register-service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-register',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './register.html',
+  styleUrls: ['./register.scss'],
+})
+export class RegisterComponent {
+
+  form!: FormGroup;
+
+  @Output() registered = new EventEmitter<RegisterDto>();
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      phone: [''],
+      city: [''],
+      address: ['']
+    });
+  }
+
+  save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const model: RegisterDto = this.form.value;
+
+    this.authService.register(model).subscribe({
+      next: () => {
+        alert('Registration successful!');
+        this.registered.emit(model);
+        this.form.reset();
+      },
+      error: (err) => {
+        console.error('Registration failed', err);
+        alert('Registration failed. Check your input.');
+      }
+    });
+  }
+
+  undoChanges() {
+    this.form.reset();
+  }
+}
