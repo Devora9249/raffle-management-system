@@ -7,3 +7,10 @@ export interface Gift {
 
   displayPrice: string;
 }
+
+export enum PriceSort {
+  None = 'None',
+  Ascending = 'Ascending',
+  Descending = 'Descending',
+}
+

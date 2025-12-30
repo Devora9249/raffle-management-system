@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { GiftCard } from '../giftCard/gift-card/gift-card';
+import { Gift } from '../../../core/models/gift-model';
 
 @Component({
   selector: 'app-gifts-grid',
-  imports: [],
+  imports: [GiftCard],
   templateUrl: './gifts-grid.html',
   styleUrl: './gifts-grid.scss',
+  standalone: true,
 })
 export class GiftsGrid {
-
+  
+  @Input() gifts: Gift[] = [];
 }

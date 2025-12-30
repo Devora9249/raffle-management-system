@@ -1,5 +1,5 @@
-<p>gifts-page works!</p>
-@for( gift of gifts; track gift.id ){
-    <h1>{{gift.description}}</h1>>
-}
+<h1>gifts-page</h1>
+<app-gifts-header></app-gifts-header>
+<app-gifts-grid [gifts]="gifts"></app-gifts-grid>
+
     

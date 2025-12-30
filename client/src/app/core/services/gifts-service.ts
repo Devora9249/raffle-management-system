@@ -3,19 +3,22 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Gift } from '../models/gift-model';
 import { GiftResponseDto, GiftCreateDto, GiftUpdateDto} from '../dto/gift-dto';
+import { PriceSort } from '../models/gift-model'
 
 @Injectable({ providedIn: 'root' })
 export class GiftsService {
 
-  private readonly baseUrl = '/api/Gift';
+  private readonly baseUrl = 'http://localhost:5071/api/Gift';
 
   constructor(private http: HttpClient) {}
 
-  getAll(sort?: string): Observable<Gift[]> {
-    return this.http
-      .get<GiftResponseDto[]>(this.baseUrl, { params: { sort: sort ?? '' } })
-      .pipe(map(dtos => dtos.map(dto => this.mapToModel(dto))));
-  }
+getAll(sort: 0): Observable<Gift[]> {
+  return this.http
+    .get<GiftResponseDto[]>(this.baseUrl, {
+      params: { sort }
+    })
+    .pipe(map(dtos => dtos.map(dto => this.mapToModel(dto))));
+}
 
   getById(id: number): Observable<Gift> {
     return this.http

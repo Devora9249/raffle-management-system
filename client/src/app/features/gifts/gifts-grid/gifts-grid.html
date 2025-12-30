@@ -1,1 +1,5 @@
-<p>gifts-grid works!</p>
+@for( gift of gifts; track gift.id ){
+    <app-gift-card></app-gift-card>
+    <h1>{{gift.description}}</h1>
+    
+}
