@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })
-export class RegisterComponent {
+export class Register {
 
   form!: FormGroup;
 
