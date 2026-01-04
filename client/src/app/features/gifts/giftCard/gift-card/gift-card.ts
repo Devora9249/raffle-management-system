@@ -2,7 +2,7 @@ import { Component, Input, input } from '@angular/core';
 import { AddToCartButton } from '../add-to-cart-button/add-to-cart-button';
 import { CartItemQty } from '../cart-item-qty/cart-item-qty';
 import { AdminOptions } from '../admin-options/admin-options';
-import { Gift } from '../../../../core/models/gift-model';
+import { GiftResponseDto } from '../../../../core/models/gift-model';
 import { CardModule } from 'primeng/card';
 
 
@@ -13,6 +13,6 @@ import { CardModule } from 'primeng/card';
   styleUrl: './gift-card.scss',
 })
 export class GiftCard {
-   @Input() gift!: Gift ;
+   @Input() gift!: GiftResponseDto ;
 
 }

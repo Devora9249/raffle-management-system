@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { GiftCard } from '../giftCard/gift-card/gift-card';
-import { Gift } from '../../../core/models/gift-model';
+import { GiftResponseDto } from '../../../core/models/gift-model';
 
 @Component({
   selector: 'app-gifts-grid',
@@ -11,5 +11,5 @@ import { Gift } from '../../../core/models/gift-model';
 })
 export class GiftsGrid {
   
-  @Input() gifts: Gift[] = [];
+  @Input() gifts: GiftResponseDto[] = [];
 }

@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { GiftsService } from '../../../core/services/gifts-service';
-import { Gift } from '../../../core/models/gift-model';
 import { GiftCard } from '../giftCard/gift-card/gift-card';
 import { GiftsGrid } from '../gifts-grid/gifts-grid';
 import { GiftsHeader } from '../giftsHeader/gifts-header/gifts-header';
-import { PriceSort } from '../../../core/models/gift-model';
+import { GiftResponseDto, PriceSort } from '../../../core/models/gift-model';
 
 @Component({
   selector: 'app-gifts-page',
@@ -14,7 +13,7 @@ import { PriceSort } from '../../../core/models/gift-model';
   standalone: true,
 })
 export class GiftsPage {
-  gifts: Gift[] = []; 
+  gifts: GiftResponseDto[] = []; 
 
   constructor(private giftsService: GiftsService) {}
 

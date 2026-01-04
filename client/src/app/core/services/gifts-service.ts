@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Gift } from '../models/gift-model';
-import { GiftResponseDto, GiftCreateDto, GiftUpdateDto} from '../dto/gift-dto';
-import { PriceSort } from '../models/gift-model'
+import { GiftResponseDto, GiftCreateDto, GiftUpdateDto, PriceSort } from '../models/gift-model'
 
 @Injectable({ providedIn: 'root' })
 export class GiftsService {
@@ -12,44 +10,31 @@ export class GiftsService {
 
   constructor(private http: HttpClient) {}
 
-getAll(sort: PriceSort): Observable<Gift[]> {
+getAll(sort: PriceSort): Observable<GiftResponseDto[]> {
   return this.http
     .get<GiftResponseDto[]>(this.baseUrl, {
       params: { sort }
     })
-    .pipe(map(dtos => dtos.map(dto => this.mapToModel(dto))));
 }
 
-  getById(id: number): Observable<Gift> {
+  getById(id: number): Observable<GiftResponseDto> {
     return this.http
       .get<GiftResponseDto>(`${this.baseUrl}/${id}`)
-      .pipe(map(dto => this.mapToModel(dto)));
   }
 
-  create(dto: GiftCreateDto): Observable<Gift> {
+  create(dto: GiftCreateDto): Observable<GiftResponseDto> {
     return this.http
       .post<GiftResponseDto>(this.baseUrl, dto)
-      .pipe(map(dto => this.mapToModel(dto)));
   }
 
-  update(id: number, dto: GiftUpdateDto): Observable<Gift> {
+  update(id: number, dto: GiftUpdateDto): Observable<GiftResponseDto> {
     return this.http
       .put<GiftResponseDto>(`${this.baseUrl}/${id}`, dto)
-      .pipe(map(dto => this.mapToModel(dto)));
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  private mapToModel(dto: GiftResponseDto): Gift {
-    return {
-      id: dto.id,
-      description: dto.description,
-      price: dto.price,
-      categoryName: dto.categoryName,
-      donorId: dto.donorId,
-      displayPrice: `${dto.price} ₪`
-    };
-  }
+
 }
