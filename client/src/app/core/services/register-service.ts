@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoginDto, RegisterDto, LoginResponseDto } from '../dto/register-dto';
+import { LoginDto, RegisterDto, LoginResponseDto } from '../models/auth-model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
