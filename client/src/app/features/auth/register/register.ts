@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { RegisterDto } from '../../../core/models/auth-model';
-import { AuthService } from '../../../core/services/register-service';
+import { AuthService } from '../../../core/services/auth-service';
 import { Router } from '@angular/router';
 
 @Component({
