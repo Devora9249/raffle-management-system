@@ -19,7 +19,9 @@ export class GiftsPage {
   constructor(private giftsService: GiftsService) {}
 
   ngOnInit(): void {
-    this.giftsService.getAll().subscribe(gifts => {
+    console.log("in 👍");
+    
+    this.giftsService.getAll(PriceSort.None).subscribe(gifts => {
       this.gifts = gifts;
       console.log(gifts, 'gifts in gp');
       
