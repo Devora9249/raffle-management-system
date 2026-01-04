@@ -12,7 +12,7 @@ export class GiftsService {
 
   constructor(private http: HttpClient) {}
 
-getAll(sort: 0): Observable<Gift[]> {
+getAll(sort: PriceSort): Observable<Gift[]> {
   return this.http
     .get<GiftResponseDto[]>(this.baseUrl, {
       params: { sort }
@@ -47,7 +47,7 @@ getAll(sort: 0): Observable<Gift[]> {
       id: dto.id,
       description: dto.description,
       price: dto.price,
-      categoryId: dto.categoryId,
+      categoryName: dto.categoryName,
       donorId: dto.donorId,
       displayPrice: `${dto.price} ₪`
     };

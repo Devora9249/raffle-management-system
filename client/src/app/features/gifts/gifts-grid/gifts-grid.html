@@ -1,5 +1,3 @@
 @for( gift of gifts; track gift.id ){
-    <app-gift-card></app-gift-card>
-    <h1>{{gift.description}}</h1>
-    
+    <app-gift-card [gift]="gift"></app-gift-card>
 }

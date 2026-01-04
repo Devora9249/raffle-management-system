@@ -3,7 +3,7 @@ export interface GiftResponseDto {
   id: number;
   description: string;
   price: number;
-  categoryId: number;
+  categoryName: string;
   donorId: number;
 }
 

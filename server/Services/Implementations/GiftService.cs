@@ -23,7 +23,7 @@ public class GiftService : IGiftService
         {
             Id = g.Id,
             Description = g.Description,
-            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -39,7 +39,7 @@ public class GiftService : IGiftService
         {
             Id = gift.Id,
             Description = gift.Description,
-            CategoryId = gift.CategoryId,
+            CategoryName = gift.Category.Name,
             Price = gift.Price,
             DonorId = gift.DonorId
         };
@@ -54,7 +54,7 @@ public class GiftService : IGiftService
         {
             Id = g.Id,
             Description = g.Description,
-            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -76,7 +76,7 @@ public class GiftService : IGiftService
         {
             Id = created.Id,
             Description = created.Description,
-            CategoryId = created.CategoryId,
+            CategoryName = created.Category.Name,
             Price = created.Price,
             DonorId = created.DonorId
         };
@@ -107,7 +107,7 @@ public class GiftService : IGiftService
         {
             Id = updated.Id,
             Description = updated.Description,
-            CategoryId = updated.CategoryId,
+            CategoryName = updated.Category.Name,
             Price = updated.Price,
             DonorId = updated.DonorId
         };
@@ -129,7 +129,7 @@ public class GiftService : IGiftService
         {
             Id = g.Id,
             Description = g.Description,
-            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -143,7 +143,7 @@ public class GiftService : IGiftService
         {
             Id = g.Id,
             Description = g.Description,
-            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -156,7 +156,7 @@ public class GiftService : IGiftService
         {
             Id = g.Id,
             Description = g.Description,
-            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
             Price = g.Price,
             DonorId = g.DonorId
         });

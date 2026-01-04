@@ -2,7 +2,7 @@ export interface Gift {
   id: number;
   description: string;
   price: number;
-  categoryId: number;
+  categoryName: string;
   donorId: number;
 
   displayPrice: string;
