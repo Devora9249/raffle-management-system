@@ -47,9 +47,13 @@ export class Register {
         this.form.reset();
       },
       error: (err) => {
-        console.error('Registration failed', err);
-        alert('Registration failed. Check your input.');
+      let msg = 'Registration failed. Check your input.';
+      if (err.status === 400 && err.error?.message) {
+        msg = err.error.message;
       }
+      alert(msg);
+      console.error('Registration failed', err);
+    }
     });
   }
 

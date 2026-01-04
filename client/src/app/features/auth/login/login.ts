@@ -37,7 +37,7 @@ export class LoginComponent {
       next: (res) => {
         this.authService.saveToken(res.token);
         alert('Login successful!');
-        this.router.navigate(['/dashboard']); // ניתוב אחרי התחברות
+        this.router.navigate(['/gifts']); // ניתוב אחרי התחברות
       },
       error: (err) => {
         console.error('Login failed', err);
