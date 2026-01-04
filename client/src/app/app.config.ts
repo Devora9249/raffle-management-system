@@ -11,13 +11,13 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    providePrimeNG({
-      theme: {
-        preset: mainDesign,
-        options: {
-          darkModeSelector: false
-        }
-      }
-    })
+    // providePrimeNG({
+    //   theme: {
+    //     preset: mainDesign,
+    //     options: {
+    //       darkModeSelector: false
+    //     }
+    //   }
+    // })
   ]
 };
