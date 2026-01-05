@@ -12,12 +12,14 @@ export interface GiftCreateDto {
   price: number;
   categoryId: number;
   donorId: number;
+  imageUrl?: string;
 }
 
 export interface GiftUpdateDto {
   description?: string;
   price?: number;
   categoryId?: number;
+  imageUrl?: string;
 }
 
  export enum PriceSort {

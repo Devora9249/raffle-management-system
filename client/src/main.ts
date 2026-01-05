@@ -6,11 +6,13 @@ import { ApplicationConfig } from '@angular/core';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(App, {
   providers: [
+    provideAnimationsAsync(),
     provideHttpClient(),
-    provideRouter(routes),
+    provideRouter(routes), 
     providePrimeNG({
       theme: {
         preset: Aura

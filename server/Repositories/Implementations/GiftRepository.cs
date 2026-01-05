@@ -21,7 +21,7 @@ public class GiftRepository : IGiftRepository
     public async Task<IEnumerable<GiftModel>> GetAllGiftsAsync(PriceSort sort)
     {
         IQueryable<GiftModel> query = _context.Gifts.Include(g => g.Category);
-        
+
         //מיון לפי מחיר
         switch (sort)
         {
@@ -36,7 +36,7 @@ public class GiftRepository : IGiftRepository
         }
         return await query.ToListAsync();
 
- 
+
     }
 
     public async Task<GiftModel?> GetGiftByIdAsync(int id)
@@ -59,13 +59,17 @@ public class GiftRepository : IGiftRepository
     {
         _context.Gifts.Add(gift);
         await _context.SaveChangesAsync();
-        return gift;
+
+        return await _context.Gifts
+            .Include(g => g.Category)
+            .FirstAsync(g => g.Id == gift.Id);
     }
+
 
     public async Task<GiftModel?> UpdateGiftAsync(GiftModel gift)
     {
         var existingGift = await _context.Gifts.FindAsync(gift.Id);
-        if (existingGift == null)return null;
+        if (existingGift == null) return null;
 
         _context.Entry(existingGift).CurrentValues.SetValues(gift);
         await _context.SaveChangesAsync();
@@ -100,12 +104,12 @@ public class GiftRepository : IGiftRepository
         .Where(g => g.Donor.Name.Contains(name))
         .ToListAsync();
     }
-public async Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId)
-{
-    return await _context.Gifts
-        .Where(g => g.DonorId == donorId)
-        .Include(g => g.Category)
-        .ToListAsync();
-}
+    public async Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId)
+    {
+        return await _context.Gifts
+            .Where(g => g.DonorId == donorId)
+            .Include(g => g.Category)
+            .ToListAsync();
+    }
 
 }

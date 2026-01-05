@@ -36,5 +36,10 @@ getAll(sort: PriceSort): Observable<GiftResponseDto[]> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
+  getGiftsByCategory(categoryId: number | null): Observable<GiftResponseDto[]> {
+    return this.http.get<GiftResponseDto[]>(`${this.baseUrl}/ByCategory/${categoryId}`, {
+    });
+  }
+
 
 }

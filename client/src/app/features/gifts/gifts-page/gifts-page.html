@@ -1,5 +1,13 @@
 <h1>gifts-page</h1>
-<app-gifts-header></app-gifts-header>
+<app-gifts-header [categories]="categories"
+                  (sortChange)="onSortChange($event)"
+                  (categoryChange)="onCategoryChange($event)"
+                  [sortType]="sortType"
+                  [selectedCategoryId]="selectedCategoryId"
+                  (created)="onGiftCreated()"></app-gifts-header>
 <app-gifts-grid [gifts]="gifts"></app-gifts-grid>
+
+
+ 
 
     

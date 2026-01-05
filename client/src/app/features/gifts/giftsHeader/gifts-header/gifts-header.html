@@ -1,2 +1,8 @@
-<app-sort-panel></app-sort-panel>
-<app-add-product-button></app-add-product-button>
+<app-sort-panel [sortType]="sortType" (sortChange)="onSortChange($event)"></app-sort-panel>
+<app-add-product-button  (created)="onGiftCreated()"></app-add-product-button>
+<select [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategoryChange($event)">
+  <option [ngValue]="null">All Categories</option>
+  @for( category of categories; track category.id ){
+  <option [ngValue]="category.id">{{category.name}}</option>
+}
+</select>

@@ -1,0 +1,6 @@
+<select [(ngModel)]="sortType" (ngModelChange)="onSortChange($event)">
+  <option [ngValue]="PriceSort.None">Sort by Price</option>
+  <option [ngValue]="PriceSort.Ascending">From low to high</option>
+  <option [ngValue]="PriceSort.Descending">From high to low</option>
+</select>
+

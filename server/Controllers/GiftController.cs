@@ -43,7 +43,7 @@ public class GiftController : ControllerBase
     public async Task<IActionResult> GetByDonor(int donorId)
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
     {

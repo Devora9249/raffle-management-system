@@ -9,6 +9,7 @@ namespace server.Models
         public int DonorId { get; set; }
         public UserModel Donor { get; set; }
         public CategoryModel Category { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         
         // public int RaffleId { get; set; }

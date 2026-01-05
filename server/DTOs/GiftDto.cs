@@ -12,6 +12,8 @@ public class GiftCreateDto
     public int CategoryId { get; set; }
 
     public int DonorId { get; set; } 
+    [MaxLength(1000)]
+    public string ImageUrl { get; set; } = string.Empty;
 }
 
 public class GiftUpdateDto
@@ -23,6 +25,9 @@ public class GiftUpdateDto
     public decimal? Price { get; set; }
 
     public int? CategoryId { get; set; }
+
+    [MaxLength(1000)]
+    public string? ImageUrl { get; set;  }
 }
 public class GiftResponseDto
 {

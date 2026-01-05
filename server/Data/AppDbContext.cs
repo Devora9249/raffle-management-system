@@ -77,6 +77,7 @@ public class AppDbContext : DbContext
         //            .HasForeignKey(e => e.DonorId)
         //            .IsRequired()
         //            .OnDelete(DeleteBehavior.Restrict);
+        entity.Property(e => e.ImageUrl).HasMaxLength(1000);
          });
 
         // UserModel configuration
