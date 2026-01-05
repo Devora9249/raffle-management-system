@@ -10,9 +10,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // login(dto: LoginDto): Observable<LoginResponseDto> {
-  //   return this.http.post<LoginResponseDto>(`${this.apiUrl}/login`, dto);
-  // }
+  login(dto: LoginDto): Observable<LoginResponseDto> {
+    return this.http.post<LoginResponseDto>(`${this.apiUrl}/login`, dto);
+  }
 
   register(dto: RegisterDto): Observable<LoginResponseDto> {
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/register`, dto);
@@ -24,5 +24,9 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  logout() {
+    localStorage.removeItem('token');
   }
 }

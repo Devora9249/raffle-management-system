@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { RegisterDto } from '../../../core/models/auth-model';
-import { AuthService } from '../../../core/services/register-service';
+import { AuthService } from '../../../core/services/auth-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -47,9 +47,13 @@ export class Register {
         this.form.reset();
       },
       error: (err) => {
-        console.error('Registration failed', err);
-        alert('Registration failed. Check your input.');
+      let msg = 'Registration failed. Check your input.';
+      if (err.status === 400 && err.error?.message) {
+        msg = err.error.message;
       }
+      alert(msg);
+      console.error('Registration failed', err);
+    }
     });
   }
 
