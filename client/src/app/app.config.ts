@@ -66,22 +66,5 @@ export const appConfig: ApplicationConfig = {
         }
       }
     })
-
-    // providePrimeNG({
-    //   theme: {
-    //     preset: mainDesign,
-    //     options: {
-    //       darkModeSelector: false
-    //     }
-    //   }
-    // })
-
-    // PrimeNG (theme)
-    // providePrimeNG({
-    //   theme: {
-    //     preset: mainDesign,
-    //     options: { darkModeSelector: false }
-    //   }
-    // })
   ]
 };
