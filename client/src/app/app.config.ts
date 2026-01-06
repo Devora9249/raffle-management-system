@@ -47,12 +47,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 // ----------------------
 export const appConfig: ApplicationConfig = {
   providers: [
-<<<<<<< HEAD
     provideAnimationsAsync(),
-||||||| e99590f
-=======
     // Global error handling
->>>>>>> a366575dde4140839e812d02756c86a922a0e290
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
@@ -62,7 +58,6 @@ export const appConfig: ApplicationConfig = {
 
     // Router
     provideRouter(routes),
-<<<<<<< HEAD
     providePrimeNG({
       theme: {
         preset: mainDesign,
@@ -71,7 +66,7 @@ export const appConfig: ApplicationConfig = {
         }
       }
     })
-||||||| e99590f
+
     // providePrimeNG({
     //   theme: {
     //     preset: mainDesign,
@@ -80,7 +75,6 @@ export const appConfig: ApplicationConfig = {
     //     }
     //   }
     // })
-=======
 
     // PrimeNG (theme)
     // providePrimeNG({
@@ -89,6 +83,5 @@ export const appConfig: ApplicationConfig = {
     //     options: { darkModeSelector: false }
     //   }
     // })
->>>>>>> a366575dde4140839e812d02756c86a922a0e290
   ]
 };
