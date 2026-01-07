@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-donor-dashboard',
@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './donor-dashboard.scss',
 })
 export class DonorDashboard {
-
+@Input() totalGifts!: number;
+@Input() totalTicketsSold!: number;
+@Input() totalUniqueBuyers!: number;
+  
 }

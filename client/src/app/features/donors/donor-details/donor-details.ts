@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DonorListItem } from '../../../core/models/donor-model';
 
 @Component({
   selector: 'app-donor-details',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './donor-details.scss',
 })
 export class DonorDetails {
+  @Input() donor!: DonorListItem ;
+  @Input() donorId!: number;
+@Input() donorName!: string;
 
 }

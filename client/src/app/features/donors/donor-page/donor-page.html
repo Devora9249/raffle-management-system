@@ -1,1 +1,24 @@
-<p>donor-page works!</p>
+@if (isLoading) {
+  <div>
+    טוען נתונים...
+  </div>
+}
+
+@if (donorDashboard) {
+
+  <app-donor-details
+    [donorId]="donorDashboard.donorId"
+    [donorName]="donorDashboard.donorName">
+  </app-donor-details>
+
+  <app-donor-dashboard
+    [totalGifts]="donorDashboard.totalGifts"
+    [totalTicketsSold]="donorDashboard.totalTicketsSold"
+    [totalUniqueBuyers]="donorDashboard.totalUniqueBuyers">
+  </app-donor-dashboard>
+
+  <app-donated-gifts
+    [gifts]="donorDashboard.gifts">
+  </app-donated-gifts>
+
+}

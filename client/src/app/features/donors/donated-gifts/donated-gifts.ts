@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DonorGiftStats } from '../../../core/models/donor-model';
 
 @Component({
   selector: 'app-donated-gifts',
@@ -8,5 +9,6 @@ import { Component } from '@angular/core';
 })
 export class DonatedGifts {
 
-   
+   @Input() gifts!: DonorGiftStats[];
+
 }
