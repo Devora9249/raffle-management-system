@@ -14,10 +14,6 @@
 // import { GlobalErrorHandler } from './core/Errors/globalErrorHendler';
 
 
-
-
-
-
 // // Application Config
 
 // export const appConfig: ApplicationConfig = {
@@ -51,11 +47,7 @@
 
 import { ApplicationConfig, ErrorHandler } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-  HTTP_INTERCEPTORS
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';

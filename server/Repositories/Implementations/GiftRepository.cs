@@ -69,7 +69,11 @@ public class GiftRepository : IGiftRepository
     public async Task<GiftModel?> UpdateGiftAsync(GiftModel gift)
     {
         var existingGift = await _context.Gifts.FindAsync(gift.Id);
-        if (existingGift == null) return null;
+        if (existingGift == null)
+        {
+            return await AddGiftAsync(gift);
+        }
+        
 
         _context.Entry(existingGift).CurrentValues.SetValues(gift);
         await _context.SaveChangesAsync();

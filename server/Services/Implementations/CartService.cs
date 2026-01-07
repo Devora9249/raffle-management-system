@@ -1,5 +1,5 @@
 using server.DTOs;
-using server.Models;
+using server.Models; 
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
 
@@ -39,11 +39,16 @@ namespace server.Services.Implementations
 
         public async Task<CartItemResponseDto> UpdateQtyAsync(CartUpdateDto dto)
         {
-            if (dto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
+            if (dto.Qty <= 0)
+                throw new ArgumentException("Qty must be greater than 0");
 
             var existing = await _repo.GetByIdAsync(dto.PurchaseId);
-            if (existing == null) throw new KeyNotFoundException("Cart item not found");
-            if (existing.Status != Status.Draft) throw new ArgumentException("Only Draft items can be updated");
+
+            if (existing == null)
+                throw new KeyNotFoundException("Cart item not found");
+
+            if (existing.Status != Status.Draft)
+                throw new InvalidOperationException("Only Draft items can be updated");
 
             existing.Qty = dto.Qty;
 
@@ -54,8 +59,11 @@ namespace server.Services.Implementations
         public async Task<bool> RemoveAsync(int purchaseId)
         {
             var existing = await _repo.GetByIdAsync(purchaseId);
-            if (existing == null) return false;
-            if (existing.Status != Status.Draft) throw new ArgumentException("Only Draft items can be deleted");
+            if (existing == null)
+                throw new KeyNotFoundException("Cart item not found");
+;
+            if (existing.Status != Status.Draft)
+                throw new InvalidOperationException("Only Draft items can be deleted");
 
             return await _repo.DeleteAsync(purchaseId);
         }

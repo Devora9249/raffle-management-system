@@ -29,11 +29,11 @@ namespace server.Services.Implementations
             if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
             var purchase = new PurchaseModel
-            {
+            { 
                 UserId = createDto.UserId,
                 GiftId = createDto.GiftId,
                 Qty = createDto.Qty,
-                Status = Status.Draft,      // רכישה אמיתית = Completed
+                Status = Status.Completed,
                 PurchaseDate = DateTime.UtcNow
             };
 
