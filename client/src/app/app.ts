@@ -1,18 +1,34 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule, NgIf } from '@angular/common'; // <-- הוספנו
 import { GiftsPage } from './features/gifts/gifts-page/gifts-page';
 import { Register } from './features/auth/register/register';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './features/auth/login/login';
+import { AuthService } from './core/services/auth-service';
+import { UserResponseDto } from './core/models/auth-model';
 
 @Component({
   selector: 'app-root',
-  imports: [ RouterLink, RouterLinkActive, RouterOutlet, GiftsPage, LoginComponent, Register, ReactiveFormsModule],
   standalone: true,
+  imports: [
+    CommonModule, // <-- חובה ל-*ngIf
+    NgIf,         // <-- חובה ל-*ngIf
+    RouterLink, RouterLinkActive, RouterOutlet,
+    GiftsPage, LoginComponent, Register, ReactiveFormsModule
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrls: ['./app.scss'],
 })
-
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('client');
+  currentDonorId?: number;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.authService.getCurrentUser().subscribe((user: UserResponseDto) => {
+      this.currentDonorId = user.id;
+    });
+  }
 }

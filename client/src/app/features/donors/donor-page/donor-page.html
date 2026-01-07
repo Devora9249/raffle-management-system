@@ -1,24 +1,20 @@
-@if (isLoading) {
-  <div>
-    טוען נתונים...
-  </div>
-}
+<div *ngIf="isLoading">
+  טוען נתונים...
+</div>
 
-@if (donorDashboard) {
-
+<div *ngIf="donorDashboard as dashboard">
   <app-donor-details
-    [donorId]="donorDashboard.donorId"
-    [donorName]="donorDashboard.donorName">
+    [donorId]="dashboard.donorId"
+    [donorName]="dashboard.donorName">
   </app-donor-details>
 
   <app-donor-dashboard
-    [totalGifts]="donorDashboard.totalGifts"
-    [totalTicketsSold]="donorDashboard.totalTicketsSold"
-    [totalUniqueBuyers]="donorDashboard.totalUniqueBuyers">
+    [totalGifts]="dashboard.totalGifts"
+    [totalTicketsSold]="dashboard.totalTicketsSold"
+    [totalUniqueBuyers]="dashboard.totalUniqueBuyers">
   </app-donor-dashboard>
 
   <app-donated-gifts
-    [gifts]="donorDashboard.gifts">
+    [gifts]="dashboard.gifts">
   </app-donated-gifts>
-
-}
+</div>

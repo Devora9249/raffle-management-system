@@ -4,9 +4,10 @@ import { ButtonModule } from 'primeng/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GiftsService } from '../../../../core/services/gifts-service';
 import { GiftCreateDto } from '../../../../core/models/gift-model';
+import {CommonModule} from '@angular/common';
 @Component({
   selector: 'app-add-product-button',
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule],
+  imports: [DialogModule, ButtonModule, ReactiveFormsModule, CommonModule],
   templateUrl: './add-product-button.html',
   styleUrl: './add-product-button.scss',
 })

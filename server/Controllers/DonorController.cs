@@ -16,8 +16,7 @@ namespace server.Controllers
         {
             _donorService = donorService;
         }
-
-        [Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,Donor")]
         // GET /api/donor?search=...&city=...
         [HttpGet]
         public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(

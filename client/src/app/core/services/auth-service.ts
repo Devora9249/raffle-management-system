@@ -1,8 +1,7 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { LoginDto, RegisterDto, LoginResponseDto } from '../models/auth-model';
+import { Observable, of } from 'rxjs';
+import { LoginDto, RegisterDto, LoginResponseDto, UserResponseDto } from '../models/auth-model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -28,5 +27,18 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+  }
+
+  getCurrentUser(): Observable<UserResponseDto> {
+    // כאן מחזירים דוגמא
+    return of({
+      id: 1,
+      name: 'Yaeli',
+      email: 'yaeli@example.com',
+      phone: '',
+      city: '',
+      address: '',
+      role: 'Donor' // חייב להיות Admin | Donor | User
+    } as UserResponseDto);
   }
 }
