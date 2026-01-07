@@ -72,10 +72,17 @@ namespace server.Services.Implementations
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var p = await _repo.DeleteAsync(id);
-            if (!p)
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null)
+                throw new KeyNotFoundException("Purchase not found");  
+            
+            if (p.Status != Status.Completed)
+                throw new InvalidOperationException("Completed purchases cannot be deleted");
+            var deleted = await _repo.DeleteAsync(id);
+
+            if (!deleted)
                 throw new KeyNotFoundException("Purchase not found or could not be deleted");
-           return p;
+            return deleted;
         } 
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
