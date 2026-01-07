@@ -3,6 +3,7 @@ using server.Services.Interfaces;
 using server.DTOs;
 using server.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 
 namespace server.Controllers;
@@ -13,10 +14,12 @@ namespace server.Controllers;
 public class GiftController : ControllerBase
 {
     private readonly IGiftService _giftService;
+    private readonly ILogger<GiftController> _logger;
 
-    public GiftController(IGiftService giftService)
+    public GiftController(IGiftService giftService, ILogger<GiftController> logger)
     {
         _giftService = giftService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -43,7 +46,7 @@ public class GiftController : ControllerBase
     public async Task<IActionResult> GetByDonor(int donorId)
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
     {
