@@ -76,8 +76,6 @@ namespace server.Services.Implementations
             if (p == null)
                 throw new KeyNotFoundException("Purchase not found");  
             
-            if (p.Status != Status.Completed)
-                throw new InvalidOperationException("Completed purchases cannot be deleted");
             var deleted = await _repo.DeleteAsync(id);
 
             if (!deleted)

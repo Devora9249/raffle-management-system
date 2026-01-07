@@ -45,7 +45,7 @@ public class PurchaseRepository : IPurchaseRepository
     {
         var existing = await _context.Purchases.FindAsync(id);
         if (existing == null) return false;
-        if(existing.Status == Status.Completed) return false;
+        if (existing.Status == Status.Completed) return false;
 
         _context.Purchases.Remove(existing);
         await _context.SaveChangesAsync();
@@ -82,4 +82,14 @@ public class PurchaseRepository : IPurchaseRepository
         await _context.SaveChangesAsync();
         return cartItems.Count;
     }
+
+    public async Task<PurchaseModel?> FindDraftByUserAndGift(int userId, int giftId)
+    {
+        return await _context.Purchases
+            .FirstOrDefaultAsync(p =>
+                p.UserId == userId &&
+                p.GiftId == giftId &&
+                p.Status == Status.Draft);
+    }
+
 }

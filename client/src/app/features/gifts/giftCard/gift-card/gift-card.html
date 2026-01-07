@@ -1,9 +1,8 @@
 <div style="border-radius: 10px; border: solid, black;">
+    <img [src]="gift.description" alt="Gift Image" />
     <h2>{{ gift.description }}</h2>
     <p>Price: {{ gift.price }}</p>
-    <p>Category Name: {{ gift.categoryName }}</p>
-    <app-cart-item-qty></app-cart-item-qty>
-    <app-admin-options></app-admin-options>
-    <app-add-to-cart-button></app-add-to-cart-button>
-</div><img [src]="gift.description" alt="Gift Image" />
+    <app-cart-item-qty [count]="count" (countChange)="onCountChange($event)"></app-cart-item-qty>
+    <app-admin-options (toDelete)="onDelete()" (toEdit)="onEdit()"></app-admin-options>
+</div>
     

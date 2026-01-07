@@ -5,7 +5,7 @@
                   [sortType]="sortType"
                   [selectedCategoryId]="selectedCategoryId"
                   (created)="onGiftCreated()"></app-gifts-header>
-<app-gifts-grid [gifts]="gifts"></app-gifts-grid>
+<app-gifts-grid [gifts]="gifts" (render)="onRender()"></app-gifts-grid>
 
 
  

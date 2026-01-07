@@ -11,6 +11,7 @@ namespace server.Repositories.Interfaces
         Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId);
         Task<GiftModel> AddGiftAsync(GiftModel gift);
         Task<GiftModel?> UpdateGiftAsync(GiftModel gift);
+        Task<bool> HasPurchasesAsync(int productId);
         Task<bool> DeleteGiftAsync(int id);
 
         //בנוסף

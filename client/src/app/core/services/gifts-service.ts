@@ -33,6 +33,8 @@ getAll(sort: PriceSort): Observable<GiftResponseDto[]> {
   }
 
   delete(id: number): Observable<void> {
+    console.log("hi", id);
+    
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 

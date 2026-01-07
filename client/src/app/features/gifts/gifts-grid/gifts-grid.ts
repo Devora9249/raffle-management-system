@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GiftCard } from '../giftCard/gift-card/gift-card';
 import { GiftResponseDto } from '../../../core/models/gift-model';
 
@@ -12,4 +12,6 @@ import { GiftResponseDto } from '../../../core/models/gift-model';
 export class GiftsGrid {
   
   @Input() gifts: GiftResponseDto[] = [];
+  @Output() render = new EventEmitter<void>();
+
 }

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 
@@ -11,13 +11,12 @@ import { InputNumberModule } from 'primeng/inputnumber';
 })
 export class CartItemQty {
 
-  count: number = 1;
+  @Input() count: number = 1;
+  @Output() countChange = new EventEmitter<number>();
 
-  ngModelChange(count: number) {
+  onCountChange(count: number) {
     this.count = count;
-    // this.purService.getAll(PriceSort.None).subscribe(gifts => {
-    //     this.gifts = gifts;
-    //   });
+    this.countChange.emit(this.count);
   }
       
 

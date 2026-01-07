@@ -73,13 +73,18 @@ public class GiftRepository : IGiftRepository
         {
             return await AddGiftAsync(gift);
         }
-        
+
 
         _context.Entry(existingGift).CurrentValues.SetValues(gift);
         await _context.SaveChangesAsync();
         return existingGift;
     }
 
+    public async Task<bool> HasPurchasesAsync(int productId)
+    {
+        return await _context.Purchases
+            .AnyAsync(p => p.GiftId == productId);
+    }
     public async Task<bool> DeleteGiftAsync(int id)
     {
         var gift = await _context.Gifts.FindAsync(id);

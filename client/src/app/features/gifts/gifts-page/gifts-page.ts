@@ -85,4 +85,10 @@ export class GiftsPage {
     this.ngOnInit();
   }
 
+ 
+  onRender(): void {
+    //רינדור אחרי מחיקה ועדכון מתנה
+    this.ngOnInit();
+  }
+
 }

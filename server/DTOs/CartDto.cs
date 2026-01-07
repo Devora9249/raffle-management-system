@@ -13,6 +13,7 @@ namespace server.DTOs
     {
         [Required] public int PurchaseId { get; set; }
         [Required, Range(1, int.MaxValue)] public int Qty { get; set; }
+        
     }
 
     public class CartItemResponseDto

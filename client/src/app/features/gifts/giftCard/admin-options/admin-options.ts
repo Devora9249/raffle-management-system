@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-admin-options',
@@ -8,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class AdminOptions {
 
+  @Output() toDelete = new EventEmitter<void>();
+  @Output() toEdit = new EventEmitter<void>();
+
+
+  onDeleteClick() {
+    this.toDelete.emit();
+  }
+
+  onEditClick() {
+    this.toEdit.emit();
+  }
 }

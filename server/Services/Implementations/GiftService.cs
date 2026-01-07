@@ -48,7 +48,7 @@ public class GiftService : IGiftService
     public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
     {
         var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
-        if(gifts == null) return null;
+        if (gifts == null) return null;
 
         return gifts.Select(g => new GiftResponseDto
         {
@@ -91,7 +91,7 @@ public class GiftService : IGiftService
 
         if (dto.Description != null)
             existing.Description = dto.Description;
-    
+
         if (dto.Price.HasValue)
             existing.Price = dto.Price.Value;
 
@@ -113,12 +113,18 @@ public class GiftService : IGiftService
         };
     }
 
-    
+
+
 
 
     public async Task<bool> DeleteGiftAsync(int id)
     {
-        return await _giftRepository.DeleteGiftAsync(id);
+        if (await _giftRepository.HasPurchasesAsync(id))
+            throw new InvalidOperationException($"Cannot delete Gift {id} because it has associated purchases.");
+        var result = await _giftRepository.DeleteGiftAsync(id);
+        if (!result)
+            throw new KeyNotFoundException($"Gift {id} not found");
+        return result;
     }
 
     public async Task<IEnumerable<GiftResponseDto>> FilterByGiftName(string name)
