@@ -2,6 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { LoginDto, RegisterDto, LoginResponseDto, UserResponseDto } from '../models/auth-model';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  city?: string;
+  address?: string;
+  roles: string[];
+}
+
+const roleMap: Record<string, 'User' | 'Admin' | 'Donor'> = {
+  User: 'User',
+  Admin: 'Admin',
+  Donor: 'Donor'
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -21,7 +38,7 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
@@ -29,16 +46,33 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  getCurrentUser(): Observable<UserResponseDto> {
-    // כאן מחזירים דוגמא
-    return of({
-      id: 1,
-      name: 'Yaeli',
-      email: 'yaeli@example.com',
-      phone: '',
-      city: '',
-      address: '',
-      role: 'Donor' // חייב להיות Admin | Donor | User
-    } as UserResponseDto);
+  getCurrentUser(): Observable<UserResponseDto | null> {
+    const token = this.getToken();
+    if (!token) return of(null);
+
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      const user: UserResponseDto = {
+        id: Number(decoded._id),
+        name: decoded.name,
+        email: decoded.email,
+        phone: decoded.phone || '',
+        city: decoded.city || '',
+        address: decoded.address || '',
+        role: roleMap[decoded.roles[0]] || 'User'
+      };
+      return of(user);
+    } catch {
+      return of(null);
+    }
+  }
+
+  getCurrentUserId(): Observable<number | null> {
+    return new Observable<number | null>(observer => {
+      this.getCurrentUser().subscribe(user => {
+        observer.next(user ? user.id : null);
+        observer.complete();
+      });
+    });
   }
 }

@@ -27,8 +27,11 @@ export class App implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.authService.getCurrentUser().subscribe((user: UserResponseDto) => {
-      this.currentDonorId = user.id;
-    });
+this.authService.getCurrentUser().subscribe((user) => {
+  if (!user) return; // ✅ בדיקה אם null
+  console.log(user.name); // עכשיו בטוח שזה UserResponseDto
+  this.currentDonorId = user.id;
+});
+
   }
 }

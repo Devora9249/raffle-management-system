@@ -8,7 +8,7 @@ import { DonorListItem, DonorDashboardResponse } from '../models/donor-model';
 })
 export class DonorService {
 
-  private readonly apiUrl = 'http://localhost:5000/api/donor';
+  private readonly apiUrl = 'http://localhost:5071/api/donor';
 
   constructor(private http: HttpClient) {}
 
@@ -53,4 +53,9 @@ export class DonorService {
       `${this.apiUrl}/${donorId}/dashboard`
     );
   }
+
+  getMyDonor(): Observable<DonorListItem> {
+  return this.http.get<DonorListItem>(`${this.apiUrl}/me`);
+}
+
 }

@@ -3,10 +3,9 @@
 </div>
 
 <div *ngIf="donorDashboard as dashboard">
-  <app-donor-details
-    [donorId]="dashboard.donorId"
-    [donorName]="dashboard.donorName">
-  </app-donor-details>
+<app-donor-details *ngIf="donor" [donor]="donor"></app-donor-details>
+
+
 
   <app-donor-dashboard
     [totalGifts]="dashboard.totalGifts"
