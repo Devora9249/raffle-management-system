@@ -33,7 +33,7 @@ export class DonorPage implements OnInit {
 
   ngOnInit(): void {
     const donorId = Number(this.route.snapshot.paramMap.get('donorId'));
-
+console.log(donorId, "donorId in donor page");
     if (!donorId) {
       this.isLoading = false;
       return;

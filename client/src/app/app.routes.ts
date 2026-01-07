@@ -9,7 +9,7 @@ export const routes: Routes = [
     { path: 'gifts', component: GiftsPage },
     { path: 'register', component: Register },
     { path: 'login', component: LoginComponent },
-    { path: 'donor', component: DonorPage },
+    { path: 'donor/:donorId', component: DonorPage },
     // {
     //     path: 'cars', component: CarsWrapper,
     //     children: [

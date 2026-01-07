@@ -1,12 +1,12 @@
 <div class="my-nav">
-    <nav>
+  <nav>
     <a routerLink="register" routerLinkActive="active-link">הרשמה</a>
     <a routerLink="login" routerLinkActive="active-link">התחברות</a>
     <a routerLink="gifts" routerLinkActive="active-link">מתנות</a>
-    <a routerLink="donor" routerLinkActive="active-link">תורמים</a>
-</nav>
+    <a *ngIf="currentDonorId" [routerLink]="['/donor', currentDonorId]">צפה בתורם</a>
+  </nav>
 </div>
 
 <div class="my-outlet">
-    <router-outlet />
+  <router-outlet></router-outlet>
 </div>
