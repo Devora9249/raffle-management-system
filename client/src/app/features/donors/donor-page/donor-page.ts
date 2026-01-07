@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-
 import { DonorService } from '../../../core/services/donor-service';
-import { DonorDashboardResponse } from '../../../core/models/donor-model';
-
+import { AuthService } from '../../../core/services/auth-service';
+import { DonorListItem, DonorDashboardResponse } from '../../../core/models/donor-model';
 import { DonorDashboard } from '../donor-dashboard/donor-dashboard';
 import { DonatedGifts } from '../donated-gifts/donated-gifts';
 import { DonorDetails } from '../donor-details/donor-details';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs'; // ✅ צריך להוסיף
 
 @Component({
   selector: 'app-donor-page',
@@ -19,34 +19,28 @@ import { DonorDetails } from '../donor-details/donor-details';
     DonorDetails
   ],
   templateUrl: './donor-page.html',
-  styleUrl: './donor-page.scss'
+  styleUrls: ['./donor-page.scss']
 })
 export class DonorPage implements OnInit {
-
   donorDashboard?: DonorDashboardResponse;
+  donor?: DonorListItem;
   isLoading = true;
 
   constructor(
     private donorService: DonorService,
-    private route: ActivatedRoute
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    const donorId = Number(this.route.snapshot.paramMap.get('donorId'));
-console.log(donorId, "donorId in donor page");
-    if (!donorId) {
+  this.donorService.getMyDonor().subscribe({
+    next: donor => {
+      this.donor = donor;
       this.isLoading = false;
-      return;
+    },
+    error: err => {
+      console.error(err);
+      this.isLoading = false;
     }
-
-    this.donorService.getDonorDashboard(donorId).subscribe({
-      next: (data) => {
-        this.donorDashboard = data;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
-  }
+  });
+}
 }

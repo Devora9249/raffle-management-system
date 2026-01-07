@@ -9,7 +9,5 @@ import { DonorListItem } from '../../../core/models/donor-model';
 })
 export class DonorDetails {
   @Input() donor!: DonorListItem ;
-  @Input() donorId!: number;
-@Input() donorName!: string;
 
 }

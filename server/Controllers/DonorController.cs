@@ -16,7 +16,7 @@ namespace server.Controllers
         {
             _donorService = donorService;
         }
-[Authorize(Roles = "Admin,Donor")]
+[Authorize(Roles = "Donor")]
         // GET /api/donor?search=...&city=...
         [HttpGet]
         public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(
@@ -35,10 +35,29 @@ namespace server.Controllers
         }
 
         // -------- דשבורד לתורם --------
+[Authorize(Roles = "Donor")]
 
         // GET /api/donor/5/dashboard
         [HttpGet("{donorId}/dashboard")]
         public async Task<ActionResult<DonorDashboardResponseDto>> Dashboard(int donorId)
             => Ok(await _donorService.GetDonorDashboardAsync(donorId));
-    }
+    
+
+   [Authorize(Roles = "Donor")]
+[HttpGet("me")]
+public async Task<ActionResult<DonorListItemDto>> Me()
+{
+    var userIdClaim = User.FindFirst("id")?.Value;
+    if (userIdClaim == null)
+        return Unauthorized();
+
+    var userId = int.Parse(userIdClaim);
+
+    var donor = await _donorService.GetCurrentDonorAsync(userId);
+    if (donor == null)
+        return NotFound();
+
+    return Ok(donor);
+}
+}
 }

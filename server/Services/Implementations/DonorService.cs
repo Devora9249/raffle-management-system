@@ -119,5 +119,21 @@ namespace server.Services
                 }).ToList()
             };
         }
-    }
+    
+    public async Task<DonorListItemDto?> GetCurrentDonorAsync(int userId)
+{
+    return await _context.Users
+        .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
+        .Select(u => new DonorListItemDto
+        {
+            Id = u.Id,
+            Name = u.Name,
+            Email = u.Email,
+            Phone = u.Phone,
+            City = u.City
+        })
+        .FirstOrDefaultAsync();
+}
+
+}
 }
