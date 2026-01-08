@@ -111,7 +111,7 @@ public class WinningService : IWinningService
 
     public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
     {
-        var gifts = await _giftRepository.GetAllGiftsAsync(PriceSort.None);
+        var gifts = await _giftRepository.GetGiftsAsync(PriceSort.None);
         var rng = new Random();
 
         foreach (var gift in gifts)

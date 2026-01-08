@@ -6,7 +6,11 @@ namespace server.Repositories.Interfaces
     public interface IGiftRepository
     {
         //CRUD
-        Task<IEnumerable<GiftModel>> GetAllGiftsAsync(PriceSort sort);
+        Task<IEnumerable<GiftModel>> GetAllGiftsAsync(
+        int? categoryId,
+        int? donorId,
+        PriceSort sort);
+        Task<IEnumerable<GiftModel>> GetGiftsAsync(PriceSort sort);
         Task<GiftModel?> GetGiftByIdAsync(int id);
         Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId);
         Task<GiftModel> AddGiftAsync(GiftModel gift);

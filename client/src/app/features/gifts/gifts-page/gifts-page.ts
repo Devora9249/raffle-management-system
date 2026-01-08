@@ -16,12 +16,11 @@ import { DonorService } from '../../../core/services/donor-service';
   styleUrl: './gifts-page.scss',
 })
 export class GiftsPage {
+
   gifts: GiftResponseDto[] = [];
   categories: CategoryResponseDto[] = [];
   donors: DonorListItem[] = [];
   selectedGift: GiftResponseDto | null = null;
-
-
 
   constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService) { }
 
@@ -30,11 +29,8 @@ export class GiftsPage {
 
 
 
-
-
-
   ngOnInit(): void {
-    this.giftsService.getAll(PriceSort.None).subscribe(gifts => {
+    this.giftsService.getAll(PriceSort.None, null, null).subscribe(gifts => {
       this.gifts = gifts;
     });
 
@@ -48,40 +44,22 @@ export class GiftsPage {
 
   }
 
-  loadAscending() {
-    this.giftsService.getAll(PriceSort.Ascending)
-      .subscribe(gifts => this.gifts = gifts);
-  }
-
-  loadDescending() {
-    this.giftsService.getAll(PriceSort.Descending)
-      .subscribe(gifts => this.gifts = gifts);
-  }
-
-  loadByCategory(categoryId: number | null) {
-    this.giftsService.getGiftsByCategory(categoryId)
-      .subscribe(gifts => this.gifts = gifts);
+  loadGifts(): void {
+    this.giftsService.getAll(this.sortType, this.selectedCategoryId, null).subscribe(gifts => {
+      this.gifts = gifts;
+    });
   }
 
 
   onSortChange(sort: PriceSort) {
-    if (sort === PriceSort.Ascending) {
-      this.loadAscending();
-    } else if (sort === PriceSort.Descending) {
-      this.loadDescending();
-    } else {
-      this.ngOnInit();
-    }
+    this.sortType = sort;
+    this.loadGifts();
   }
 
 
   onCategoryChange(value: number | null): void {
     this.selectedCategoryId = value;
-    if (value === null) {
-      this.ngOnInit();
-      return;
-    }
-    this.loadByCategory(value);
+    this.loadGifts();
   }
 
   onGiftCreated(): void {

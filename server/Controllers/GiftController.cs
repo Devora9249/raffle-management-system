@@ -23,13 +23,22 @@ public class GiftController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetAll(PriceSort sort)
+    public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetAllGifts(
+    [FromQuery] PriceSort sort = PriceSort.None,
+    [FromQuery] int? categoryId = null,
+    [FromQuery] int? donorId = null)
     {
-        var gifts = await _giftService.GetAllGiftsAsync(sort);
+        var gifts = await _giftService.GetAllGiftsAsync(sort, categoryId, donorId);
         return Ok(gifts);
     }
 
 
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetAll(PriceSort sort)
+    {
+        var gifts = await _giftService.GetAllAsync(sort);
+        return Ok(gifts);
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GiftResponseDto>> GetById(int id)
@@ -47,20 +56,13 @@ public class GiftController : ControllerBase
     public async Task<IActionResult> GetByDonor(int donorId)
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
-    // [Authorize(Roles = "Admin")]
-    // [HttpPost]
-    // public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
-    // {
-    //     var gift = await _giftService.AddGiftAsync(dto);
-    //     return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
-    // }
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<GiftResponseDto>> CreateWithImage([FromForm] GiftCreateWithImageDto dto)
     {
         var gift = await _giftService.AddGiftAsync(dto);
-        Console.WriteLine("❤️",gift.ImageUrl);
+        Console.WriteLine("❤️", gift.ImageUrl);
 
         return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
     }
