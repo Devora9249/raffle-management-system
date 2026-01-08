@@ -16,7 +16,6 @@ export class GiftsGrid {
   @Output() edit = new EventEmitter<GiftResponseDto>();
 
   onEdit(gift: GiftResponseDto) {
-    console.log("22222222222");
     this.edit.emit(gift);
   }
 }

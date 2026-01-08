@@ -17,6 +17,7 @@ export class GiftsHeader {
   @Output() sortChange = new EventEmitter<PriceSort>();
   @Output() categoryChange = new EventEmitter<number | null>();
   @Output() created = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter<void>();
 
   @Input() categories: CategoryResponseDto[] = [];
   @Input() donors: DonorListItem[] = [];
@@ -37,6 +38,10 @@ export class GiftsHeader {
 
   onGiftChanged(): void {
     this.created.emit(true);
+  }
+
+  onDialogClosed(): void {
+    this.closed.emit();
   }
 
 }

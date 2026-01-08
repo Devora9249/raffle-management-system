@@ -49,7 +49,6 @@ export class GiftCard {
   }
 
   onEdit() {
-    console.log("11111111111");
     this.edit.emit(this.gift);
   }
 

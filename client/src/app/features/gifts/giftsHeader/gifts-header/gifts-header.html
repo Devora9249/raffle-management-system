@@ -1,3 +1,3 @@
 <app-sort-panel [categories]="categories" [sortType]="sortType" (sortChange)="onSortChange($event)" (categoryChange)="onCategoryChange($event)"></app-sort-panel>
-<app-gift-form-dialog [categories]="categories" [giftToEdit]="selectedGift" (created)="onGiftChanged()" [donors]="donors"></app-gift-form-dialog>
+<app-gift-form-dialog [categories]="categories" [giftToEdit]="selectedGift" (created)="onGiftChanged()" [donors]="donors" (closed)="onDialogClosed()"></app-gift-form-dialog>
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnChanges, input } from '@angular/core'; 
+import { Component, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core'; 
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -20,6 +20,8 @@ export class GiftFormDialog implements OnChanges {
 
   editMode: boolean = false;
   @Output() created = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter<void>();
+
 
   @Input() giftToEdit: GiftResponseDto | null = null;
   @Input() categories: CategoryResponseDto[] = [];
@@ -77,7 +79,9 @@ export class GiftFormDialog implements OnChanges {
   }
 
 
-  ngOnChanges() {
+  ngOnChanges(changes:SimpleChanges): void {
+    console.log("change!", changes);
+    
     if (this.giftToEdit) {
       this.setEditValidators();
 
@@ -156,5 +160,6 @@ export class GiftFormDialog implements OnChanges {
 
   close() {
     this.showDialog = false;
+    this.closed.emit();
   }
 }

@@ -6,7 +6,8 @@
                   [selectedCategoryId]="selectedCategoryId"
                   (created)="onGiftCreated()"
                   [selectedGift]="selectedGift"
-                  [donors] = "donors"></app-gifts-header>
+                  [donors] = "donors"
+                  (closed)="onDialogClosed()"></app-gifts-header>
 <app-gifts-grid [gifts]="gifts" (render)="onRender()" (edit)="onEdit($event)"></app-gifts-grid>
 
 

@@ -96,8 +96,11 @@ export class GiftsPage {
   }
 
   onEdit(gift: GiftResponseDto): void {
-    console.log("33333333333");
-    this.selectedGift = gift;
+    this.selectedGift = {...gift};
+  }
+
+  onDialogClosed(): void {
+    this.selectedGift = null;
   }
 
 }
