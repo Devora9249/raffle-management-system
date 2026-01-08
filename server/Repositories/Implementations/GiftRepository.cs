@@ -77,7 +77,13 @@ public class GiftRepository : IGiftRepository
 
         _context.Entry(existingGift).CurrentValues.SetValues(gift);
         await _context.SaveChangesAsync();
+
+        await _context.Entry(existingGift)
+            .Reference(g => g.Category)
+            .LoadAsync();
+
         return existingGift;
+
     }
 
     public async Task<bool> HasPurchasesAsync(int productId)

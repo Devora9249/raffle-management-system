@@ -24,8 +24,10 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
-            DonorId = g.DonorId
+            DonorId = g.DonorId,
+            ImageUrl = g.ImageUrl
         });
     }
 
@@ -40,8 +42,10 @@ public class GiftService : IGiftService
             Id = gift.Id,
             Description = gift.Description,
             CategoryName = gift.Category.Name,
+            CategoryId = gift.CategoryId,
             Price = gift.Price,
-            DonorId = gift.DonorId
+            DonorId = gift.DonorId,
+            ImageUrl = gift.ImageUrl
         };
     }
 
@@ -55,19 +59,50 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
-            DonorId = g.DonorId
+            DonorId = g.DonorId,
+            ImageUrl = g.ImageUrl
         });
     }
 
-    public async Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto)
+    public async Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto)
     {
+        var imageUrl = string.Empty;
+        if (dto.Image != null)
+        {
+                   // 1. ולידציה בסיסית
+        if (dto.Image == null || dto.Image.Length == 0)
+            throw new Exception("Image is required");
+
+        // 2. יצירת שם ייחודי
+        var extension = Path.GetExtension(dto.Image.FileName);
+        var fileName = $"{Guid.NewGuid()}{extension}";
+
+        // 3. נתיב פיזי
+        var folderPath = Path.Combine("wwwroot", "uploads", "gifts");
+        Directory.CreateDirectory(folderPath);
+
+        var filePath = Path.Combine(folderPath, fileName);
+
+        // 4. שמירה בפועל
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await dto.Image.CopyToAsync(stream);
+        }
+
+        // 5. יצירת URL
+        imageUrl = $"/uploads/gifts/{fileName}";
+        }
+ 
+
         var model = new GiftModel
         {
             Description = dto.Description,
             CategoryId = dto.CategoryId,
             Price = dto.Price,
-            DonorId = dto.DonorId
+            DonorId = dto.DonorId,
+            ImageUrl = imageUrl
         };
 
         var created = await _giftRepository.AddGiftAsync(model);
@@ -78,12 +113,13 @@ public class GiftService : IGiftService
             Description = created.Description,
             CategoryName = created.Category.Name,
             Price = created.Price,
-            DonorId = created.DonorId
+            DonorId = created.DonorId,
+            ImageUrl = created.ImageUrl
         };
     }
 
 
-    public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto)
+    public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateWithImageDto dto)
     {
         var existing = await _giftRepository.GetGiftByIdAsync(id);
         if (existing == null)
@@ -98,6 +134,32 @@ public class GiftService : IGiftService
         if (dto.CategoryId.HasValue)
             existing.CategoryId = dto.CategoryId.Value;
 
+        if (dto.Image != null)
+        {
+            // 1. ולידציה בסיסית
+            if (dto.Image == null || dto.Image.Length == 0)
+                throw new Exception("Image is required");
+
+            // 2. יצירת שם ייחודי
+            var extension = Path.GetExtension(dto.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+
+            // 3. נתיב פיזי
+            var folderPath = Path.Combine("wwwroot", "uploads", "gifts");
+            Directory.CreateDirectory(folderPath);
+
+            var filePath = Path.Combine(folderPath, fileName);
+
+            // 4. שמירה בפועל
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.Image.CopyToAsync(stream);
+            }
+
+            // 5. יצירת URL
+            existing.ImageUrl = $"/uploads/gifts/{fileName}";
+        } 
+
         var updated = await _giftRepository.UpdateGiftAsync(existing);
 
         if (updated == null)
@@ -108,13 +170,11 @@ public class GiftService : IGiftService
             Id = updated.Id,
             Description = updated.Description,
             CategoryName = updated.Category.Name,
+            CategoryId = updated.CategoryId,
             Price = updated.Price,
             DonorId = updated.DonorId
         };
     }
-
-
-
 
 
     public async Task<bool> DeleteGiftAsync(int id)
@@ -136,6 +196,7 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -150,6 +211,7 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -163,6 +225,7 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });

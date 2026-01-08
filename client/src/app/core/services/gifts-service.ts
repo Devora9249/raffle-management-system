@@ -19,15 +19,15 @@ getAll(sort: PriceSort): Observable<GiftResponseDto[]> {
 
   getById(id: number): Observable<GiftResponseDto> {
     return this.http
-      .get<GiftResponseDto>(`${this.baseUrl}/${id}`)
+      .get<GiftResponseDto>(`${this.baseUrl}/${id}`) 
   }
 
-  create(dto: GiftCreateDto): Observable<GiftResponseDto> {
+  create(data: FormData): Observable<GiftResponseDto> {
     return this.http
-      .post<GiftResponseDto>(this.baseUrl, dto)
+      .post<GiftResponseDto>(this.baseUrl, data)
   }
 
-  update(id: number, dto: GiftUpdateDto): Observable<GiftResponseDto> {
+  update(id: number, dto: FormData): Observable<GiftResponseDto> {
     return this.http
       .put<GiftResponseDto>(`${this.baseUrl}/${id}`, dto)
   }

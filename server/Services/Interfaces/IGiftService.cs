@@ -10,8 +10,8 @@ namespace server.Services.Interfaces
         Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
         Task<GiftResponseDto?> GetGiftByIdAsync(int id);
         Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId);
-        Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto);
-        Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto);
+        Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto);
+        Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateWithImageDto dto);
         Task<bool> DeleteGiftAsync(int id);
 
         //בנוסף

@@ -4,8 +4,10 @@
                   (categoryChange)="onCategoryChange($event)"
                   [sortType]="sortType"
                   [selectedCategoryId]="selectedCategoryId"
-                  (created)="onGiftCreated()"></app-gifts-header>
-<app-gifts-grid [gifts]="gifts" (render)="onRender()"></app-gifts-grid>
+                  (created)="onGiftCreated()"
+                  [selectedGift]="selectedGift"
+                  [donors] = "donors"></app-gifts-header>
+<app-gifts-grid [gifts]="gifts" (render)="onRender()" (edit)="onEdit($event)"></app-gifts-grid>
 
 
  

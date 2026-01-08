@@ -6,7 +6,6 @@ import { LoginDto } from '../../../core/models/auth-model';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],

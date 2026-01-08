@@ -4,7 +4,9 @@ export interface GiftResponseDto {
   description: string;
   price: number;
   categoryName: string;
+  categoryId: number;
   donorId: number;
+  imageUrl: string;
 }
 
 export interface GiftCreateDto {
@@ -21,6 +23,7 @@ export interface GiftUpdateDto {
   categoryId?: number;
   imageUrl?: string;
 }
+
 
  export enum PriceSort {
   None = 'None',

@@ -1,0 +1,88 @@
+<!-- כפתור פתיחת הדיאלוג -->
+
+<p-button label="הוספת מתנה" icon="pi pi-plus" (onClick)="open()">
+</p-button>
+
+<!-- דיאלוג -->
+<p-dialog header="{{ editMode ? 'עריכת מתנה' : 'הוספת מתנה' }}" [(visible)]="showDialog" [modal]="true"
+  [closable]="true" [style]="{ width: '420px' }" (onHide)="resetForm()">
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="add-gift-form">
+
+    <!-- תיאור -->
+    <div class="field">
+      <label>תיאור</label>
+      <textarea pInputTextarea rows="3" formControlName="description">
+      </textarea>
+    </div>
+
+    <!-- מחיר -->
+    <div class="field">
+      <label>מחיר *</label>
+      <input type="number" pInputText formControlName="price">
+
+      <small class="error" *ngIf="form.get('price')?.touched && form.get('price')?.invalid">
+        <span *ngIf="form.get('price')?.errors?.['required']">
+          חובה להזין מחיר
+        </span>
+        <span *ngIf="form.get('price')?.errors?.['min']">
+          המחיר חייב להיות גדול מ־0
+        </span>
+      </small>
+    </div>
+
+    <!-- קטגוריה -->
+    <div class="field">
+      <label>קטגוריה *</label>
+      <select formControlName="categoryId">
+        <option [ngValue]="null">All Categories</option>
+        @for( category of categories; track category.id ){
+        <option [ngValue]="category.id">{{category.name}}</option>}
+      </select>
+
+      <small class="error" *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.invalid">
+        חובה להזין קטגוריה
+      </small>
+    </div>
+
+
+    <!-- תורם -->
+        <div class="field">
+      <label>תורם *</label>
+      <select formControlName="donorId">
+        <option [ngValue]="null">All Donors</option>
+        @for( donor of donors; track donor.id ){
+        <option [ngValue]="donor.id">{{donor.name}}</option>}
+      </select>
+
+      <small class="error" *ngIf="form.get('donorId')?.touched && form.get('donorId')?.invalid">
+        חובה להזין תורם
+      </small>
+    </div>
+
+    <!-- תמונה -->
+    <div class="field">
+      <label>תמונה *</label>
+      <input type="file" accept="image/*" (change)="onFileChange($event)">
+
+      <small class="error" *ngIf="form.get('image')?.touched && form.get('image')?.invalid">
+        חובה לבחור תמונה
+      </small>
+    </div>
+
+    <!-- תצוגה מקדימה -->
+    <div class="preview" *ngIf="previewUrl">
+      <img [src]="previewUrl" alt="תצוגה מקדימה">
+    </div>
+
+    <!-- כפתורים -->
+    <div class="actions">
+      <p-button type="submit" label="שמור" [disabled]="form.invalid">
+      </p-button>
+
+      <p-button type="button" label="ביטול" severity="secondary" (onClick)="close()">
+      </p-button>
+    </div>
+
+  </form>
+</p-dialog>

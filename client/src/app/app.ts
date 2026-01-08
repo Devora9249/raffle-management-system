@@ -10,7 +10,6 @@ import { UserResponseDto } from './core/models/auth-model';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     CommonModule, // <-- חובה ל-*ngIf
     NgIf,         // <-- חובה ל-*ngIf

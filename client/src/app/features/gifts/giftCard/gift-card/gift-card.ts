@@ -20,6 +20,7 @@ export class GiftCard {
   @Input() count!: number;
 
   @Output() render = new EventEmitter<boolean>();
+  @Output() edit = new EventEmitter<GiftResponseDto>();
 
 
 
@@ -28,7 +29,6 @@ export class GiftCard {
     this.cartService.updateQty({ userId: 18, giftId: this.gift.id, qty: this.count })
       .subscribe({
         next: cartItem => {
-          console.log('Cart updated', cartItem);
         }
       });
 
@@ -38,7 +38,6 @@ export class GiftCard {
 
     this.giftsService.delete(this.gift.id).subscribe({
       next: gift => {
-        console.log('Gift to delete:', gift);
         alert('Gift deleted successfully!');
         this.render.emit(true);
       },
@@ -48,7 +47,16 @@ export class GiftCard {
       }
     });
   }
+
   onEdit() {
+    console.log("11111111111");
+    this.edit.emit(this.gift);
+  }
+
+  get imageSrc(): string {
     
+    return this.gift.imageUrl
+      ? `http://localhost:5071${this.gift.imageUrl}`
+      : 'http://localhost:5071/uploads/gifts/placeholder.jpg';
   }
 }

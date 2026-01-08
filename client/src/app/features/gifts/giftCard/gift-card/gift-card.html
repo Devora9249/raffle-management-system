@@ -1,5 +1,5 @@
 <div style="border-radius: 10px; border: solid, black;">
-    <img [src]="gift.description" alt="Gift Image" />
+    <img style="width: 100px; height: 100px;" [src]="imageSrc" alt="Gift Image" />
     <h2>{{ gift.description }}</h2>
     <p>Price: {{ gift.price }}</p>
     <app-cart-item-qty [count]="count" (countChange)="onCountChange($event)"></app-cart-item-qty>

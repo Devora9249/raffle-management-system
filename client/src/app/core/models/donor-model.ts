@@ -26,3 +26,5 @@ export interface DonorGiftStats {
 
   hasWinning: boolean;
 }
+
+

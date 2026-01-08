@@ -12,6 +12,7 @@ export class AdminOptions {
   @Output() toEdit = new EventEmitter<void>();
 
 
+
   onDeleteClick() {
     this.toDelete.emit();
   }

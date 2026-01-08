@@ -11,7 +11,6 @@ import { of } from 'rxjs'; // ✅ צריך להוסיף
 
 @Component({
   selector: 'app-donor-page',
-  standalone: true,
   imports: [
     CommonModule,
     DonorDashboard,

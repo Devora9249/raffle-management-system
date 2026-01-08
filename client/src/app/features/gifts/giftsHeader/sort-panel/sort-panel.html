@@ -4,3 +4,9 @@
   <option [ngValue]="PriceSort.Descending">From high to low</option>
 </select>
 
+<select [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategoryChange($event)">
+  <option [ngValue]="null">All Categories</option>
+  @for( category of categories; track category.id ){
+  <option [ngValue]="category.id">{{category.name}}</option>
+}
+</select>

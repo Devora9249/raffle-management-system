@@ -23,12 +23,13 @@ public class GiftController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<GiftResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetAll(PriceSort sort)
     {
         var gifts = await _giftService.GetAllGiftsAsync(sort);
         return Ok(gifts);
     }
+
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GiftResponseDto>> GetById(int id)
@@ -46,17 +47,27 @@ public class GiftController : ControllerBase
     public async Task<IActionResult> GetByDonor(int donorId)
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
+    // [Authorize(Roles = "Admin")]
+    // [HttpPost]
+    // public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
+    // {
+    //     var gift = await _giftService.AddGiftAsync(dto);
+    //     return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
+    // }
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<ActionResult<GiftResponseDto>> Create([FromBody] GiftCreateDto dto)
+    public async Task<ActionResult<GiftResponseDto>> CreateWithImage([FromForm] GiftCreateWithImageDto dto)
     {
         var gift = await _giftService.AddGiftAsync(dto);
+        Console.WriteLine("❤️",gift.ImageUrl);
+
         return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
     }
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromBody] GiftUpdateDto dto)
+    public async Task<ActionResult<GiftResponseDto>> Update(int id, [FromForm] GiftUpdateWithImageDto dto)
     {
         var gift = await _giftService.UpdateGiftAsync(id, dto);
         return Ok(gift);

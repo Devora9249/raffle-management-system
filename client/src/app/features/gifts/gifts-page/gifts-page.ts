@@ -6,19 +6,24 @@ import { GiftsHeader } from '../giftsHeader/gifts-header/gifts-header';
 import { GiftResponseDto, PriceSort } from '../../../core/models/gift-model';
 import { CategoriesService } from '../../../core/services/categories-service';
 import { CategoryResponseDto } from '../../../core/models/category-model';
+import { DonorListItem } from '../../../core/models/donor-model';
+import { DonorService } from '../../../core/services/donor-service';
 
 @Component({
   selector: 'app-gifts-page',
   imports: [GiftCard, GiftsGrid, GiftsHeader],
   templateUrl: './gifts-page.html',
   styleUrl: './gifts-page.scss',
-  standalone: true,
 })
 export class GiftsPage {
   gifts: GiftResponseDto[] = [];
   categories: CategoryResponseDto[] = [];
+  donors: DonorListItem[] = [];
+  selectedGift: GiftResponseDto | null = null;
 
-  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService) { }
+
+
+  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService) { }
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
@@ -34,9 +39,12 @@ export class GiftsPage {
     });
 
     this.categoriesService.getAll().subscribe(cats => {
-    this.categories = cats;
-  });
-  console.log(this.categories, "categories");
+      this.categories = cats;
+    });
+
+    this.donorService.getAll().subscribe(donors => {
+      this.donors = donors;
+    });
 
   }
 
@@ -55,10 +63,8 @@ export class GiftsPage {
       .subscribe(gifts => this.gifts = gifts);
   }
 
-  // @Output() sortChange = new EventEmitter<PriceSort>();
 
   onSortChange(sort: PriceSort) {
-    console.log('sort change:', sort);
     if (sort === PriceSort.Ascending) {
       this.loadAscending();
     } else if (sort === PriceSort.Descending) {
@@ -68,7 +74,6 @@ export class GiftsPage {
     }
   }
 
-  // @Output() categoryChange = new EventEmitter<number | null>();
 
   onCategoryChange(value: number | null): void {
     this.selectedCategoryId = value;
@@ -77,7 +82,6 @@ export class GiftsPage {
       return;
     }
     this.loadByCategory(value);
-    console.log('selected category id in gifts page:', value);
   }
 
   onGiftCreated(): void {
@@ -85,10 +89,15 @@ export class GiftsPage {
     this.ngOnInit();
   }
 
- 
+
   onRender(): void {
     //רינדור אחרי מחיקה ועדכון מתנה
     this.ngOnInit();
+  }
+
+  onEdit(gift: GiftResponseDto): void {
+    console.log("33333333333");
+    this.selectedGift = gift;
   }
 
 }

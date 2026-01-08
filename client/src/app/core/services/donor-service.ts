@@ -27,7 +27,14 @@ export class DonorService {
       params = params.set('city', city);
     }
 
-    return this.http.get<DonorListItem[]>(this.apiUrl, { params });
+    return  this.http.get<DonorListItem[]>(this.apiUrl, { params });
+    
+  }
+
+  getAll(): Observable<DonorListItem[]> {
+
+    return  this.http.get<DonorListItem[]>(this.apiUrl);
+    
   }
 
   /**
