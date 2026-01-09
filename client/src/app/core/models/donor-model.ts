@@ -27,4 +27,10 @@ export interface DonorGiftStats {
   hasWinning: boolean;
 }
 
+export enum RoleEnum {
+  User = 'User',
+  Donor = 'Donor',
+  Admin = 'Admin'
+}
+
 

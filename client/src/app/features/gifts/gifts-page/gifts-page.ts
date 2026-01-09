@@ -38,7 +38,7 @@ export class GiftsPage {
       this.categories = cats;
     });
 
-    this.donorService.getAll().subscribe(donors => {
+    this.donorService.getDonors().subscribe(donors => {
       this.donors = donors;
     });
 

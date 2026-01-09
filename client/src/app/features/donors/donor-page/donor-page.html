@@ -1,4 +1,4 @@
-<div *ngIf="isLoading">
+<!-- <div *ngIf="isLoading">
   טוען נתונים...
 </div>
 
@@ -16,4 +16,25 @@
   <app-donated-gifts
     [gifts]="dashboard.gifts">
   </app-donated-gifts>
-</div>
+</div> -->
+
+
+
+<!-- הכנסתי את הקוד שלך להערה, אפילו לא בדקתי אותו, רק רציתי לראות שחוזרים נתונים והם מוצגים -->
+@if(isLoading){
+<h1>is loading...</h1>
+}
+
+@if (dashboard && details) {
+
+<h1>Donor Dashboard</h1>
+<h2>{{dashboard.totalGifts}}</h2>
+<h2>{{dashboard.totalTicketsSold}}</h2>
+<h2>{{dashboard.totalUniqueBuyers}}</h2>
+
+<h1>donor details</h1>
+<h2>{{details.name}}</h2>
+<h2>{{details.email}}</h2>
+<h2>{{details.phone}}</h2>
+<h2>{{details.city}}</h2>
+}

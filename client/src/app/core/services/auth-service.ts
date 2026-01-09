@@ -75,4 +75,30 @@ export class AuthService {
       });
     });
   }
+
+    getRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const decoded = jwtDecode<JwtPayload>(token) as any;
+
+      return (
+    decoded.roles ??
+    decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
+    null
+  );
+  }
+
+  // isDonor(): Observable<boolean> {
+  //   return new Observable<boolean>(observer => {
+  //     this.getCurrentUser().subscribe(user => {
+  //       observer.next(user ? user.role === 'Donor' : false);
+  //       observer.complete();
+  //     });
+  //   });
+  // }
+
+    isDonor(): boolean {
+      return this.getRole() === 'Donor';
+  }
 }

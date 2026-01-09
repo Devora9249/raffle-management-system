@@ -21,20 +21,32 @@ import { of } from 'rxjs'; // ✅ צריך להוסיף
   styleUrls: ['./donor-page.scss']
 })
 export class DonorPage implements OnInit {
-  donorDashboard?: DonorDashboardResponse;
-  donor?: DonorListItem;
+  dashboard?: DonorDashboardResponse;
+  details?: DonorListItem;
   isLoading = true;
 
-  constructor(
-    private donorService: DonorService,
-    private authService: AuthService
-  ) {}
+  constructor( private donorService: DonorService,  ) {}
 
   ngOnInit(): void {
-  this.donorService.getMyDonor().subscribe({
-    next: donor => {
-      this.donor = donor;
+
+  this.donorService.getMyDashboard().subscribe({
+    next: dashboard => {
+      this.dashboard = dashboard;
       this.isLoading = false;
+      console.log(dashboard, "dashboard");
+    },
+    error: err => {
+      console.error(err);
+      this.isLoading = false;
+    }
+  });
+
+  this.donorService.getMyDetails().subscribe({
+    next: details => {
+      this.details = details;
+      this.isLoading = false;
+      console.log(details, "details");
+
     },
     error: err => {
       console.error(err);

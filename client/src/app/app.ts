@@ -11,8 +11,8 @@ import { UserResponseDto } from './core/models/auth-model';
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule, // <-- חובה ל-*ngIf
-    NgIf,         // <-- חובה ל-*ngIf
+    CommonModule, 
+    NgIf,         
     RouterLink, RouterLinkActive, RouterOutlet,
     GiftsPage, LoginComponent, Register, ReactiveFormsModule
   ],
@@ -22,15 +22,19 @@ import { UserResponseDto } from './core/models/auth-model';
 export class App implements OnInit {
   protected readonly title = signal('client');
   currentDonorId?: number;
+  // isDonor: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-this.authService.getCurrentUser().subscribe((user) => {
-  if (!user) return; // ✅ בדיקה אם null
-  console.log(user.name); // עכשיו בטוח שזה UserResponseDto
-  this.currentDonorId = user.id;
-});
+    this.authService.getCurrentUser().subscribe((user) => {
+      if (!user) return; // ✅ בדיקה אם null
+      console.log(user.name); // עכשיו בטוח שזה UserResponseDto
+      this.currentDonorId = user.id;
+    });
+  }
 
+  get isDonor(): boolean {
+    return this.authService.isDonor();
   }
 }

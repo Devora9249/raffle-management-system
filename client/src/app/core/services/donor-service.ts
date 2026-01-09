@@ -1,68 +1,58 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DonorListItem, DonorDashboardResponse } from '../models/donor-model';
+import { DonorListItem, DonorDashboardResponse, RoleEnum } from '../models/donor-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DonorService {
 
-  private readonly apiUrl = 'http://localhost:5071/api/donor';
+  private readonly baseUrl = 'http://localhost:5071/api/Donor';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * GET /api/donor?search=&city=
-   * Admin בלבד
-   */
+  // ======================
+  // Admin
+  // ======================
+
+  /** GET api/Donor?search=&city= */
   getDonors(search?: string, city?: string): Observable<DonorListItem[]> {
     let params = new HttpParams();
 
-    if (search) {
+    if (search)
       params = params.set('search', search);
-    }
 
-    if (city) {
+    if (city)
       params = params.set('city', city);
-    }
 
-    return  this.http.get<DonorListItem[]>(this.apiUrl, { params });
-    
+    return this.http.get<DonorListItem[]>(this.baseUrl, { params });
   }
 
-  getAll(): Observable<DonorListItem[]> {
-
-    return  this.http.get<DonorListItem[]>(this.apiUrl);
-    
-  }
-
-  /**
-   * PATCH /api/donor/role/{userId}?role=Donor
-   * Admin בלבד
-   */
-  setUserRole(userId: number, role: string): Observable<void> {
-    const params = new HttpParams().set('role', role);
-
+  /** PATCH api/Donor/role/{userId}?role= */
+  setUserRole(userId: number, role: RoleEnum): Observable<void> {
     return this.http.patch<void>(
-      `${this.apiUrl}/role/${userId}`,
+      `${this.baseUrl}/role/${userId}`,
       null,
-      { params }
+      { params: { role } }
     );
   }
 
-  /**
-   * GET /api/donor/{donorId}/dashboard
-   * דשבורד לתורם
-   */
-  getDonorDashboard(donorId: number): Observable<DonorDashboardResponse> {
+  // ======================
+  // Donor
+  // ======================
+
+  /** GET api/Donor/dashboard */
+  getMyDashboard(): Observable<DonorDashboardResponse> {
     return this.http.get<DonorDashboardResponse>(
-      `${this.apiUrl}/${donorId}/dashboard`
+      `${this.baseUrl}/dashboard`
     );
   }
 
-  getMyDonor(): Observable<DonorListItem> {
-  return this.http.get<DonorListItem>(`${this.apiUrl}/me`);
-}
-
+  /** GET api/Donor/details */
+  getMyDetails(): Observable<DonorListItem> {
+    return this.http.get<DonorListItem>(
+      `${this.baseUrl}/details`
+    );
+  }
 }
