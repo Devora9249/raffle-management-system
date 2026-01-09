@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Donors;
@@ -65,7 +66,6 @@ namespace server.Services
         {
             var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);
             if (donor == null) throw new KeyNotFoundException("Donor user not found");
-            if (donor.Role != RoleEnum.Donor) throw new InvalidOperationException("User is not a Donor");
 
             // 1) מתנות של התורם
             var gifts = await _context.Gifts
@@ -119,21 +119,21 @@ namespace server.Services
                 }).ToList()
             };
         }
-    
-    public async Task<DonorListItemDto?> GetCurrentDonorAsync(int userId)
-{
-    return await _context.Users
-        .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
-        .Select(u => new DonorListItemDto
-        {
-            Id = u.Id,
-            Name = u.Name,
-            Email = u.Email,
-            Phone = u.Phone,
-            City = u.City
-        })
-        .FirstOrDefaultAsync();
-}
 
-}
+        public async Task<DonorListItemDto?> GetDonorDetailsAsync(int userId)
+        {
+            return await _context.Users
+                .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
+                .Select(u => new DonorListItemDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    City = u.City
+                })
+                .FirstOrDefaultAsync();
+        }
+
+    }
 }

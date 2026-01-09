@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Donors;
@@ -11,14 +12,15 @@ namespace server.Controllers
     public class DonorController : ControllerBase
     {
         private readonly IDonorService _donorService;
+        private readonly IUserService _userService;
 
-        public DonorController(IDonorService donorService)
+        public DonorController(IDonorService donorService, IUserService userService)
         {
             _donorService = donorService;
+            _userService = userService;
         }
-        [Authorize(Roles = "Admin")]
 
-        // GET /api/donor?search=...&city=...
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(
                             [FromQuery] string? search,
@@ -26,39 +28,37 @@ namespace server.Controllers
                             => Ok(await _donorService.GetDonorsAsync(search, city));
 
         [Authorize(Roles = "Admin")]
-        // PATCH /api/donor/role/5?role=Donor
         [HttpPatch("role/{userId}")]
         public async Task<IActionResult> SetRole(int userId, [FromQuery] RoleEnum role)
         {
             await _donorService.SetUserRoleAsync(userId, role);
             return NoContent();
-
         }
 
-        // -------- דשבורד לתורם --------
         [Authorize(Roles = "Donor")]
-
-        // GET /api/donor/5/dashboard
-        [HttpGet("{donorId}/dashboard")]
-        public async Task<ActionResult<DonorDashboardResponseDto>> Dashboard(int donorId)
-                    => Ok(await _donorService.GetDonorDashboardAsync(donorId));
-
-
-        [Authorize(Roles = "Donor")]
-        [HttpGet("me")]
-        public async Task<ActionResult<DonorListItemDto>> Me()
+        [HttpGet("dashboard")]
+        public async Task<ActionResult<DonorDashboardResponseDto>> GetDonorDashboard()
         {
-            var userIdClaim = User.FindFirst("id")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
             var userId = int.Parse(userIdClaim);
 
-            var donor = await _donorService.GetCurrentDonorAsync(userId);
-            if (donor == null)
-                return NotFound();
+            return await _donorService.GetDonorDashboardAsync(userId);
+        }
 
-            return Ok(donor);
+        [Authorize(Roles = "Donor")]
+        [HttpGet("details")]
+        public async Task<ActionResult<DonorListItemDto?>> GetDonorDetails()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            var userId = int.Parse(userIdClaim);
+
+            return await _donorService.GetDonorDetailsAsync(userId);
         }
     }
 }
