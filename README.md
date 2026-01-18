@@ -35,20 +35,30 @@ It focuses on clean architecture, clear separation of concerns, and maintainable
 - Separation between Frontend and Backend
 - Scalable and maintainable structure
 
-### Prerequisites
+## Authentication Flow
+- Users authenticate via a login endpoint
+- Upon successful authentication, the server issues a JWT token
+- The token is stored on the client side
+- Protected API endpoints validate the token
+- Access is controlled using role-based authorization (Admin, Donor, User)
+
+## Prerequisites
 - Node.js
 - Angular CLI
 - .NET SDK
 - SQL Server
 
 ### Run Frontend
-- cd client
-- npm install
-- ng serve
-
+```text
+cd client
+npm install
+ng serve
+```
 
 ### Run Backend
-- cd server
-- dotnet restore
-- dotnet run
+```text
+cd server
+dotnet restore
+dotnet run
+```
 
