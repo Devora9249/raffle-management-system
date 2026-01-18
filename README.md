@@ -42,13 +42,13 @@ It focuses on clean architecture, clear separation of concerns, and maintainable
 - SQL Server
 
 ### Run Frontend
-cd client
-npm install
-ng serve
+- cd client
+- npm install
+- ng serve
 
 
 ### Run Backend
-cd server
-dotnet restore
-dotnet run
+- cd server
+- dotnet restore
+- dotnet run
 
