@@ -21,8 +21,11 @@ export class Nav implements OnInit, OnDestroy {
   userMenuItems: MenuItem[] = [];
 
   isLoggedIn = false;
+  isAdmin = false;   
+isDonor = false; 
 
   private authSub!: Subscription; 
+  private roleSub!: Subscription;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -32,30 +35,59 @@ export class Nav implements OnInit, OnDestroy {
     //  מאזינים לשינויים במצב התחברות
     this.authSub = this.authService.loggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
+      if (isLoggedIn) {
+      this.subscribeToRoles();   
+    } else {
+      this.isAdmin = false;      
+      this.isDonor = false;      
+      this.buildMainMenu();      
+    }
+
       this.buildUserMenu();
     });
   }
 
-  ngOnDestroy(): void { 
-    this.authSub?.unsubscribe();
-  }
+ngOnDestroy(): void {
+  this.authSub?.unsubscribe();
+  this.roleSub?.unsubscribe();
+}
+
 
 //     MAIN MENU
 
-  private buildMainMenu(): void {
-    this.menuItems = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: '/'
-      },
-      {
-        label: 'Gifts',
-        icon: 'pi pi-gift',
-        routerLink: '/gifts'
-      }
-    ];
+private buildMainMenu(): void {
+  const items: MenuItem[] = [
+    {
+      label: 'Home',
+      icon: 'pi pi-home',
+      routerLink: '/'
+    },
+    {
+      label: 'Gifts',
+      icon: 'pi pi-gift',
+      routerLink: '/gifts'
+    }
+  ];
+
+  if (this.isLoggedIn && this.isAdmin) {
+    items.push({
+      label: 'Admin',
+      icon: 'pi pi-cog',
+      routerLink: '/admin'
+    });
   }
+
+  if (this.isLoggedIn && this.isDonor) {
+    items.push({
+      label: 'Donor',
+      icon: 'pi pi-user',
+      routerLink: '/donor'
+    });
+  }
+
+  this.menuItems = items;
+}
+
 
 //     USER MENU
 
@@ -88,4 +120,27 @@ export class Nav implements OnInit, OnDestroy {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  private subscribeToRoles(): void {
+  this.roleSub?.unsubscribe();
+
+  this.roleSub = new Subscription();
+
+
+    
+  this.roleSub.add(
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+      this.buildMainMenu();
+    })
+  );
+
+  this.roleSub.add(
+    this.authService.isDonor$.subscribe(isDonor => {
+      this.isDonor = isDonor;
+      this.buildMainMenu();
+    })
+  );
+}
+
 }

@@ -48,7 +48,9 @@ export class GiftsPage {
       this.donors = donors;
     });
 
-  this.isAdmin = this.authService.isAdmin();
+  this.authService.isAdmin$.subscribe(isAdmin => {
+    this.isAdmin = isAdmin;
+  });
     
   }
 

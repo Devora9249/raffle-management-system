@@ -119,7 +119,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs'; 
+import { Observable, of, BehaviorSubject, map } from 'rxjs'; 
 import { LoginDto, RegisterDto, LoginResponseDto, UserResponseDto } from '../models/auth-model';
 import { jwtDecode } from 'jwt-decode';
 
@@ -200,15 +200,12 @@ export class AuthService {
       return of(null);
     }
   }
+getCurrentUserId(): Observable<number | null> {
+  return this.getCurrentUser().pipe(
+    map(user => user ? user.id : null)
+  );
+}
 
-  getCurrentUserId(): Observable<number | null> {
-    return new Observable<number | null>(observer => {
-      this.getCurrentUser().subscribe(user => {
-        observer.next(user ? user.id : null);
-        observer.complete();
-      });
-    });
-  }
 
   /* =======================
      ROLES
@@ -227,18 +224,20 @@ export class AuthService {
     );
   }
 
-  isDonor(): boolean {
-    return this.getRole() === 'Donor';
-  }
+  isDonor$ = this.loggedIn$.pipe(
+  map(() => this.getRole() === 'Donor')
+);
 
-  isAdmin(): boolean {
-    return this.getRole() === 'Admin';
-  }
+ isAdmin$ = this.loggedIn$.pipe(
+  map(() => this.getRole() === 'Admin')
+);
+
+
 
 //     AUTH STATE
 
   isLoggedIn(): boolean {
-    return this.isTokenValid(); 
+    return this.loggedInSubject.value;
   }
 
   private isTokenValid(): boolean {

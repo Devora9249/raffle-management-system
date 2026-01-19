@@ -35,7 +35,7 @@ export class App implements OnInit {
     });
   }
 
-  get isDonor(): boolean {
-    return this.authService.isDonor();
-  }
+  // get isDonor(): boolean {
+  //   return this.authService.isDonor();
+  // }
 }
