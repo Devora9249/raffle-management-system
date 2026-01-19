@@ -18,33 +18,21 @@
 
     <!-- כמות -->
     <div class="product-qty">
-      <app-cart-item-qty
-        class="qty-wrapper"
-        [count]="count"
-        (countChange)="onCountChange($event)">
+      <app-cart-item-qty class="qty-wrapper" [count]="count" (countChange)="onCountChange($event)">
       </app-cart-item-qty>
     </div>
   </div>
 
   <!-- פעולות אדמין -->
+  @if(isAdmin){
   <ng-template pTemplate="footer">
     <div class="product-actions">
-      <p-button
-        icon="pi pi-pencil"
-        severity="secondary"
-        rounded
-        text
-        (onClick)="onEdit()">
+      <p-button icon="pi pi-pencil" severity="secondary" rounded text (onClick)="onEdit()">
       </p-button>
- 
-      <p-button
-        icon="pi pi-trash"
-        severity="danger"
-        rounded
-        text
-        (onClick)="onDelete()">
+
+      <p-button icon="pi pi-trash" severity="danger" rounded text (onClick)="onDelete()">
       </p-button>
     </div>
   </ng-template>
-
+  }
 </p-card>

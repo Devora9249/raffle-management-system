@@ -27,6 +27,7 @@ export class GiftsHeader {
   @Input() sortType: PriceSort = PriceSort.None;
   @Input() selectedCategoryId: number | null = null;
   @Input() selectedGift: GiftResponseDto | null = null;
+  @Input() isAdmin: boolean = false;
 
   onSortChange(sort: PriceSort) {
     this.sortType = sort;

@@ -18,6 +18,7 @@ export class GiftCard {
 
   @Input() gift!: GiftResponseDto;
   @Input() count!: number;
+  @Input() isAdmin: boolean = false;
 
   @Output() render = new EventEmitter<boolean>();
   @Output() edit = new EventEmitter<GiftResponseDto>();

@@ -9,6 +9,7 @@ import { CategoryResponseDto } from '../../../core/models/category-model';
 import { DonorListItem } from '../../../core/models/donor-model';
 import { DonorService } from '../../../core/services/donor-service';
 import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-gifts-page',
@@ -22,8 +23,9 @@ export class GiftsPage {
   categories: CategoryResponseDto[] = [];
   donors: DonorListItem[] = [];
   selectedGift: GiftResponseDto | null = null;
+  isAdmin: boolean = false;
 
-  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService) { }
+  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService) { }
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
@@ -46,6 +48,8 @@ export class GiftsPage {
       this.donors = donors;
     });
 
+  this.isAdmin = this.authService.isAdmin();
+    
   }
 
   loadGifts(): void {

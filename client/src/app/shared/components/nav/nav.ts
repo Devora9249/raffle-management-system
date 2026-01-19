@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // ⭐
+import { Component, OnInit, OnDestroy } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
@@ -6,7 +6,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../core/services/auth-service';
-import { Subscription } from 'rxjs'; // ⭐
+import { Subscription } from 'rxjs'; 
 
 @Component({
   selector: 'app-nav',
@@ -15,34 +15,32 @@ import { Subscription } from 'rxjs'; // ⭐
   templateUrl: './nav.html',
   styleUrl: './nav.scss',
 })
-export class Nav implements OnInit, OnDestroy { // ⭐
+export class Nav implements OnInit, OnDestroy { 
 
   menuItems: MenuItem[] = [];
   userMenuItems: MenuItem[] = [];
 
   isLoggedIn = false;
 
-  private authSub!: Subscription; // ⭐
+  private authSub!: Subscription; 
 
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.buildMainMenu();
 
-    // ⭐ מאזינים לשינויים במצב התחברות
+    //  מאזינים לשינויים במצב התחברות
     this.authSub = this.authService.loggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
       this.buildUserMenu();
     });
   }
 
-  ngOnDestroy(): void { // ⭐ ניקוי subscription
+  ngOnDestroy(): void { 
     this.authSub?.unsubscribe();
   }
 
-  /* =======================
-     MAIN MENU
-     ======================= */
+//     MAIN MENU
 
   private buildMainMenu(): void {
     this.menuItems = [
@@ -59,9 +57,7 @@ export class Nav implements OnInit, OnDestroy { // ⭐
     ];
   }
 
-  /* =======================
-     USER MENU
-     ======================= */
+//     USER MENU
 
   private buildUserMenu(): void {
     this.userMenuItems = this.isLoggedIn
@@ -86,12 +82,10 @@ export class Nav implements OnInit, OnDestroy { // ⭐
         ];
   }
 
-  /* =======================
-     ACTIONS
-     ======================= */
+    // ACTIONS
 
   private logout(): void {
-    this.authService.logout(); // ⭐ זה כבר מעדכן את loggedIn$
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

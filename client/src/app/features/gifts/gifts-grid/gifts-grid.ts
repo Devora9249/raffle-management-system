@@ -12,6 +12,8 @@ import { GiftResponseDto } from '../../../core/models/gift-model';
 export class GiftsGrid {
   
   @Input() gifts: GiftResponseDto[] = [];
+  @Input() isAdmin: boolean = false;
+  
   @Output() render = new EventEmitter<void>();
   @Output() edit = new EventEmitter<GiftResponseDto>();
 

@@ -11,10 +11,12 @@
     (categoryChange)="categoryChange.emit($event)">
   </app-sort-panel>
 
+  @if(isAdmin){
   <p-button 
     label="הוספת מתנה"
     icon="pi pi-plus"
     severity="primary"
     (onClick)="addGift.emit()">
   </p-button>
+  }
 </div>

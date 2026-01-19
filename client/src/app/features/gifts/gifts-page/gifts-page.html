@@ -10,13 +10,15 @@
   (sortChange)="onSortChange($event)"
   (categoryChange)="onCategoryChange($event)"
   (addGift)="onClickAddGift()"
-  (closed)="onDialogClosed()">
+  (closed)="onDialogClosed()"
+  [isAdmin]="isAdmin">
 </app-gifts-header>
 
 <app-gifts-grid
   [gifts]="gifts"
   (render)="onRender()"
-  (edit)="onEdit($event)">
+  (edit)="onEdit($event)"
+  [isAdmin]="isAdmin">
 </app-gifts-grid>
 
 <app-gift-form-dialog

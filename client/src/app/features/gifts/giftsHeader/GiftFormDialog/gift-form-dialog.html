@@ -89,8 +89,6 @@
 
   </form>
 </p-dialog> -->
-
-
 <p-dialog
   header="{{ editMode ? 'עריכת מתנה' : 'הוספת מתנה' }}"
   [(visible)]="showDialog"
@@ -98,18 +96,28 @@
   [closable]="true"
   [style]="{ width: '420px' }">
 
-  <form [formGroup]="form" (ngSubmit)="save()" class="add-gift-form">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="save()"
+    class="add-gift-form">
 
     <!-- תיאור -->
     <div class="field">
       <label>תיאור</label>
-      <textarea pInputTextarea rows="3" formControlName="description"></textarea>
+      <textarea
+        pInputTextarea
+        rows="3"
+        formControlName="description">
+      </textarea>
     </div>
 
     <!-- מחיר -->
     <div class="field">
       <label>מחיר *</label>
-      <input type="number" pInputText formControlName="price">
+      <input
+        pInputText
+        type="number"
+        formControlName="price" />
     </div>
 
     <!-- קטגוריה -->
@@ -120,36 +128,57 @@
         [options]="categories"
         optionLabel="name"
         optionValue="id"
-        placeholder="בחרי קטגוריה">
+        placeholder="בחרי קטגוריה"
+        class="w-full">
       </p-select>
     </div>
 
     <!-- תורם -->
     <div class="field">
       <label>תורם *</label>
-      <select formControlName="donorId">
-        <option [ngValue]="null">בחרי תורם</option>
-        @for (donor of donors; track donor.id) {
-          <option [ngValue]="donor.id">{{ donor.name }}</option>
-        }
-      </select>
+      <p-select
+        formControlName="donorId"
+        [options]="donors"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="בחרי תורם"
+        class="w-full">
+      </p-select>
     </div>
 
     <!-- תמונה -->
     <div class="field">
-      <label>תמונה *</label>
-      <input type="file" accept="image/*" (change)="onFileChange($event)">
+      <label>תמונה</label>
+      <p-fileUpload
+        mode="basic"
+        name="image"
+        accept="image/*"
+        chooseLabel="בחרי תמונה"
+        [auto]="false"
+        [customUpload]="true"
+        (onSelect)="onFileChange($event)">
+      </p-fileUpload>
     </div>
 
     <!-- תצוגה מקדימה -->
     <div class="preview" *ngIf="previewUrl">
-      <img [src]="previewUrl" alt="preview">
+      <img [src]="previewUrl" alt="preview" />
     </div>
 
     <!-- כפתורים -->
     <div class="actions">
-      <p-button type="submit" label="שמור" [disabled]="form.invalid"></p-button>
-      <p-button type="button" label="ביטול" severity="secondary" (onClick)="close()"></p-button>
+      <p-button
+        type="submit"
+        label="שמור"
+        [disabled]="form.invalid">
+      </p-button>
+
+      <p-button
+        type="button"
+        label="ביטול"
+        severity="secondary"
+        (onClick)="close()">
+      </p-button>
     </div>
 
   </form>

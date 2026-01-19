@@ -119,7 +119,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs'; // ⭐
+import { Observable, of, BehaviorSubject } from 'rxjs'; 
 import { LoginDto, RegisterDto, LoginResponseDto, UserResponseDto } from '../models/auth-model';
 import { jwtDecode } from 'jwt-decode';
 
@@ -131,7 +131,7 @@ interface JwtPayload {
   city?: string;
   address?: string;
   roles: string[];
-  exp: number; // ⭐ חובה לבדיקת תוקף
+  exp: number; 
 }
 
 const roleMap: Record<string, 'User' | 'Admin' | 'Donor'> = {
@@ -144,15 +144,13 @@ const roleMap: Record<string, 'User' | 'Admin' | 'Donor'> = {
 export class AuthService {
   private apiUrl = 'http://localhost:5071/api/auth';
 
-  // ⭐ STATE ריאקטיבי של התחברות
+  // סטייט ריאקטיבי של התחברות
   private loggedInSubject = new BehaviorSubject<boolean>(this.isTokenValid());
   loggedIn$ = this.loggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  /* =======================
-     AUTH API
-     ======================= */
+//     AUTH API
 
   login(dto: LoginDto): Observable<LoginResponseDto> {
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/login`, dto);
@@ -162,13 +160,11 @@ export class AuthService {
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/register`, dto);
   }
 
-  /* =======================
-     TOKEN HANDLING
-     ======================= */
+//     TOKEN HANDLING
 
   saveToken(token: string): void {
     localStorage.setItem('token', token);
-    this.loggedInSubject.next(true); // ⭐ מודיע לכל האפליקציה
+    this.loggedInSubject.next(true); //  מודיע לכל האפליקציה
   }
 
   getToken(): string | null {
@@ -177,15 +173,13 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    this.loggedInSubject.next(false); // ⭐ מודיע לכל האפליקציה
+    this.loggedInSubject.next(false); //  מודיע לכל האפליקציה
   }
 
-  /* =======================
-     USER INFO
-     ======================= */
+  //     USER INFO
 
   getCurrentUser(): Observable<UserResponseDto | null> {
-    if (!this.isTokenValid()) return of(null); // ⭐ בדיקה מוקדמת
+    if (!this.isTokenValid()) return of(null); //  בדיקה מוקדמת
 
     const token = this.getToken();
     if (!token) return of(null);
@@ -222,7 +216,7 @@ export class AuthService {
 
   getRole(): string | null {
     const token = this.getToken();
-    if (!token || !this.isTokenValid()) return null; // ⭐
+    if (!token || !this.isTokenValid()) return null; 
 
     const decoded = jwtDecode<JwtPayload>(token) as any;
 
@@ -237,12 +231,14 @@ export class AuthService {
     return this.getRole() === 'Donor';
   }
 
-  /* =======================
-     AUTH STATE
-     ======================= */
+  isAdmin(): boolean {
+    return this.getRole() === 'Admin';
+  }
+
+//     AUTH STATE
 
   isLoggedIn(): boolean {
-    return this.isTokenValid(); // ⭐ מקור אמת יחיד
+    return this.isTokenValid(); 
   }
 
   private isTokenValid(): boolean {
@@ -252,7 +248,7 @@ export class AuthService {
     try {
       const decoded = jwtDecode<JwtPayload>(token);
       const now = Math.floor(Date.now() / 1000);
-      return decoded.exp > now; // ⭐ בדיקת תוקף אמיתית
+      return decoded.exp > now; 
     } catch {
       return false;
     }
