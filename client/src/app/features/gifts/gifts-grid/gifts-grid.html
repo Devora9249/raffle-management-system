@@ -2,7 +2,6 @@
     <app-gift-card [gift]="gift" (render)="render.emit()" (edit)="onEdit($event)"></app-gift-card>
 } -->
 
-
 <div class="gifts-grid">
   @for (gift of gifts; track gift.id) {
     <app-gift-card

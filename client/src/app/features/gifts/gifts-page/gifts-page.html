@@ -1,19 +1,6 @@
-<!-- <h1>gifts-page</h1>
-<app-gifts-header [categories]="categories"
-                  (sortChange)="onSortChange($event)"
-                  (categoryChange)="onCategoryChange($event)"
-                  [sortType]="sortType"
-                  [selectedCategoryId]="selectedCategoryId"
-                  (created)="onGiftCreated()"
-                  [selectedGift]="selectedGift"
-                  [donors] = "donors"
-                  (closed)="onDialogClosed()"></app-gifts-header>
-<app-gifts-grid [gifts]="gifts" (render)="onRender()" (edit)="onEdit($event)"></app-gifts-grid>
 
+<div class="gifts-page">
 
- 
-
-     -->
 <app-gifts-header
   [categories]="categories"
   [sortType]="sortType"
@@ -39,3 +26,4 @@
   (created)="onGiftCreated()"
   (closed)="onDialogClosed()">
 </app-gift-form-dialog>
+</div>

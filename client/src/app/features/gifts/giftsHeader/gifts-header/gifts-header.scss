@@ -1,0 +1,17 @@
+.gifts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;           
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* מובייל */
+@media (max-width: 768px) {
+  .gifts-header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
