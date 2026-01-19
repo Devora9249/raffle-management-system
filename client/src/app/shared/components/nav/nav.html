@@ -1,18 +1,14 @@
-<p-menubar class="main-nav">
-  <!-- צד שמאל: לוגו -->
+<p-menubar
+  class="main-nav"
+  [model]="menuItems">
+
+  <!-- לוגו -->
   <ng-template pTemplate="start">
     <img src="assets/logo.png" alt="logo" height="40" />
   </ng-template>
 
-  <!-- תפריט מרכזי -->
-  <ng-template pTemplate="menu">
-    <a pButton label="Home" routerLink="/" class="p-button-text"></a>
-    <a pButton label="Gifts" routerLink="/gifts" class="p-button-text"></a>
-  </ng-template>
-
-  <!-- צד ימין: אייקונים -->
+  <!-- צד ימין -->
   <ng-template pTemplate="end">
-    <!-- עגלה -->
     <button
       pButton
       icon="pi pi-shopping-cart"
@@ -20,7 +16,6 @@
       routerLink="/cart">
     </button>
 
-    <!-- משתמש -->
     <button
       pButton
       icon="pi pi-user"
@@ -28,7 +23,7 @@
       (click)="userMenu.toggle($event)">
     </button>
 
-    <!-- תפריט נפתח -->
     <p-menu #userMenu [popup]="true" [model]="userMenuItems"></p-menu>
   </ng-template>
+
 </p-menubar>

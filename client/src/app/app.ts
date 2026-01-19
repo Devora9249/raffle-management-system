@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './features/auth/login/login';
 import { AuthService } from './core/services/auth-service';
 import { UserResponseDto } from './core/models/auth-model';
+import { Nav } from './shared/components/nav/nav';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { UserResponseDto } from './core/models/auth-model';
     CommonModule, 
     NgIf,         
     RouterLink, RouterLinkActive, RouterOutlet,
-    GiftsPage, LoginComponent, Register, ReactiveFormsModule
+    GiftsPage, LoginComponent, Register, ReactiveFormsModule, Nav,
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
