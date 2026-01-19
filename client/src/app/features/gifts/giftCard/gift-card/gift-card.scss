@@ -1,0 +1,61 @@
+.product-card {
+  width: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* תמונה */
+.product-image-wrapper {
+  height: 180px;
+  padding: 12px;
+  background: var(--p-surface-100);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* תוכן */
+.product-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* שם + מחיר */
+.product-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-price {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--p-text-secondary-color);
+}
+
+/* כמות */
+.product-qty {
+  display: flex;
+  justify-content: center;
+}
+
+/* פעולות */
+.product-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}

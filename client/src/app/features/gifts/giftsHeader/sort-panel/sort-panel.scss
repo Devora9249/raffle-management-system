@@ -1,0 +1,67 @@
+// /* ===== Filter Bar ===== */
+
+// .filters-bar {
+//   display: flex;
+//   gap: 12px;
+//   align-items: center;
+//   padding: 10px 14px;
+//   background-color: #F4F5F7;
+//   border-radius: 14px;
+//   margin-bottom: 20px;
+// }
+
+// /* ===== Select בסיס ===== */
+
+// .filters-bar .p-select {
+//   min-width: 180px;
+//   height: 38px;
+//   background-color: #FFFFFF;      /* ✅ רקע אמיתי */
+//   border: 1px solid #DDD;
+//   border-radius: 10px;
+//   transition: all 0.15s ease;
+// }
+
+// /* הטקסט הפנימי */
+// .filters-bar .p-select-label {
+//   display: flex;                  /* ✅ יישור אנכי */
+//   align-items: center;            /* ✅ */
+//   height: 100%;
+//   padding-inline: 12px;
+//   font-size: 14px;
+//   font-weight: 500;
+//   color: #333;
+//   background-color: transparent;  /* לא שקוף על הרכיב עצמו */
+// }
+
+// /* חץ */
+// .filters-bar .p-select-trigger {
+//   display: flex;
+//   align-items: center;
+//   padding-inline-end: 10px;
+//   color: #999;
+// }
+
+// /* Hover */
+// .filters-bar .p-select:hover {
+//   border-color: #FF3F72;
+// }
+
+// /* Focus / פתוח */
+// .filters-bar .p-select.p-focus,
+// .filters-bar .p-select.p-overlay-open {
+//   border-color: #FF3F72;
+//   box-shadow: 0 0 0 2px rgba(255, 63, 114, 0.15);
+// }
+
+// /* Dropdown */
+// .p-select-overlay {
+//   background-color: #FFFFFF;
+//   border-radius: 12px;
+//   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+// }
+
+// :host ::ng-deep .p-dropdown {
+//   background-color: #FFFFFF !important;
+//   display: flex;
+//   align-items: center;
+// }

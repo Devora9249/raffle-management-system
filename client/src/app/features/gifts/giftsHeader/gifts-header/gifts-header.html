@@ -1,3 +1,20 @@
-<app-sort-panel [categories]="categories" [sortType]="sortType" (sortChange)="onSortChange($event)" (categoryChange)="onCategoryChange($event)"></app-sort-panel>
-<app-gift-form-dialog [categories]="categories" [giftToEdit]="selectedGift" (created)="onGiftChanged()" [donors]="donors" (closed)="onDialogClosed()"></app-gift-form-dialog>
+<!-- <app-sort-panel [categories]="categories" [sortType]="sortType" (sortChange)="onSortChange($event)"
+    (categoryChange)="onCategoryChange($event)"></app-sort-panel>
+<app-gift-form-dialog [categories]="categories" [giftToEdit]="selectedGift" (created)="onGiftChanged()"
+    [donors]="donors" (closed)="onDialogClosed()"></app-gift-form-dialog> -->
 
+    <div class="gifts-header">
+  <app-sort-panel
+    [categories]="categories"
+    [sortType]="sortType"
+    (sortChange)="sortChange.emit($event)"
+    (categoryChange)="categoryChange.emit($event)">
+  </app-sort-panel>
+
+  <p-button 
+    label="הוספת מתנה"
+    icon="pi pi-plus"
+    severity="primary"
+    (onClick)="addGift.emit()">
+  </p-button>
+</div>

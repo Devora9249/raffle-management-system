@@ -20,4 +20,4 @@ export class AdminOptions {
   onEditClick() {
     this.toEdit.emit();
   }
-}
+} 

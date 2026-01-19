@@ -1,0 +1,60 @@
+:host {
+  display: inline-flex;
+}
+
+/* wrapper קובע גבול */
+.qty-wrapper {
+  max-width: 104px;
+  width: 104px;
+}
+
+/* PrimeNG inner */
+:host ::ng-deep .p-inputnumber {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* input */
+:host ::ng-deep .p-inputnumber-input {
+  width: 36px;
+  min-width: 36px;
+  text-align: center;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+/* buttons */
+:host ::ng-deep .p-inputnumber-button {
+  width: 32px;
+  min-width: 32px;
+}
+:host {
+  display: inline-flex;
+}
+
+/* wrapper קובע גבול */
+.qty-wrapper {
+  max-width: 104px;
+  width: 104px;
+}
+
+/* PrimeNG inner */
+:host ::ng-deep .p-inputnumber {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* input */
+:host ::ng-deep .p-inputnumber-input {
+  width: 36px;
+  min-width: 36px;
+  text-align: center;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+/* buttons */
+:host ::ng-deep .p-inputnumber-button {
+  width: 32px;
+  min-width: 32px;
+}

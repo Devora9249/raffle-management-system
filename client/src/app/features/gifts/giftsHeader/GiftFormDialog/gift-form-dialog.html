@@ -1,22 +1,23 @@
 <!-- כפתור פתיחת הדיאלוג -->
 
-<p-button label="הוספת מתנה" icon="pi pi-plus" (onClick)="open()">
-</p-button>
+<!-- <p-button class="button1" label="הוספת מתנה" icon="pi pi-plus" [raised]="true" (onClick)="open()">
+</p-button> -->
 
 <!-- דיאלוג -->
+<!--
 <p-dialog header="{{ editMode ? 'עריכת מתנה' : 'הוספת מתנה' }}" [(visible)]="showDialog" [modal]="true"
-  [closable]="true" [style]="{ width: '420px' }" (onHide)="resetForm()">
+  [closable]="true" [style]="{ width: '420px' }" >
 
   <form [formGroup]="form" (ngSubmit)="save()" class="add-gift-form">
 
-    <!-- תיאור -->
+    <!-- תיאור 
     <div class="field">
       <label>תיאור</label>
       <textarea pInputTextarea rows="3" formControlName="description">
       </textarea>
-    </div>
+    </div> 
 
-    <!-- מחיר -->
+    <!-- מחיר 
     <div class="field">
       <label>מחיר *</label>
       <input type="number" pInputText formControlName="price">
@@ -31,14 +32,15 @@
       </small>
     </div>
 
-    <!-- קטגוריה -->
+
+    <!-- קטגוריה 
+
     <div class="field">
       <label>קטגוריה *</label>
-      <select formControlName="categoryId">
-        <option [ngValue]="null">All Categories</option>
-        @for( category of categories; track category.id ){
-        <option [ngValue]="category.id">{{category.name}}</option>}
-      </select>
+
+      <p-select formControlName="categoryId" [options]="categories" optionLabel="name" optionValue="id"
+        placeholder="בחרי קטגוריה" class="w-full">
+      </p-select>
 
       <small class="error" *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.invalid">
         חובה להזין קטגוריה
@@ -46,8 +48,9 @@
     </div>
 
 
-    <!-- תורם -->
-        <div class="field">
+
+    <!-- תורם 
+    <div class="field">
       <label>תורם *</label>
       <select formControlName="donorId">
         <option [ngValue]="null">All Donors</option>
@@ -60,7 +63,7 @@
       </small>
     </div>
 
-    <!-- תמונה -->
+    <!-- תמונה 
     <div class="field">
       <label>תמונה *</label>
       <input type="file" accept="image/*" (change)="onFileChange($event)">
@@ -70,18 +73,83 @@
       </small>
     </div>
 
-    <!-- תצוגה מקדימה -->
+    <!-- תצוגה מקדימה 
     <div class="preview" *ngIf="previewUrl">
       <img [src]="previewUrl" alt="תצוגה מקדימה">
     </div>
 
-    <!-- כפתורים -->
+    <!-- כפתורים 
     <div class="actions">
       <p-button type="submit" label="שמור" [disabled]="form.invalid">
       </p-button>
 
       <p-button type="button" label="ביטול" severity="secondary" (onClick)="close()">
       </p-button>
+    </div>
+
+  </form>
+</p-dialog> -->
+
+
+<p-dialog
+  header="{{ editMode ? 'עריכת מתנה' : 'הוספת מתנה' }}"
+  [(visible)]="showDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '420px' }">
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="add-gift-form">
+
+    <!-- תיאור -->
+    <div class="field">
+      <label>תיאור</label>
+      <textarea pInputTextarea rows="3" formControlName="description"></textarea>
+    </div>
+
+    <!-- מחיר -->
+    <div class="field">
+      <label>מחיר *</label>
+      <input type="number" pInputText formControlName="price">
+    </div>
+
+    <!-- קטגוריה -->
+    <div class="field">
+      <label>קטגוריה *</label>
+      <p-select
+        formControlName="categoryId"
+        [options]="categories"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="בחרי קטגוריה">
+      </p-select>
+    </div>
+
+    <!-- תורם -->
+    <div class="field">
+      <label>תורם *</label>
+      <select formControlName="donorId">
+        <option [ngValue]="null">בחרי תורם</option>
+        @for (donor of donors; track donor.id) {
+          <option [ngValue]="donor.id">{{ donor.name }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- תמונה -->
+    <div class="field">
+      <label>תמונה *</label>
+      <input type="file" accept="image/*" (change)="onFileChange($event)">
+    </div>
+
+    <!-- תצוגה מקדימה -->
+    <div class="preview" *ngIf="previewUrl">
+      <img [src]="previewUrl" alt="preview">
+    </div>
+
+    <!-- כפתורים -->
+    <div class="actions">
+      <p-button type="submit" label="שמור" [disabled]="form.invalid"></p-button>
+      <p-button type="button" label="ביטול" severity="secondary" (onClick)="close()"></p-button>
     </div>
 
   </form>

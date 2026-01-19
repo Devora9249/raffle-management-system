@@ -1,4 +1,4 @@
-import { Component, EventEmitter, output, Output } from '@angular/core';
+import { Component, EventEmitter, output, Output, ViewChild } from '@angular/core';
 import { GiftsService } from '../../../core/services/gifts-service';
 import { GiftCard } from '../giftCard/gift-card/gift-card';
 import { GiftsGrid } from '../gifts-grid/gifts-grid';
@@ -8,10 +8,11 @@ import { CategoriesService } from '../../../core/services/categories-service';
 import { CategoryResponseDto } from '../../../core/models/category-model';
 import { DonorListItem } from '../../../core/models/donor-model';
 import { DonorService } from '../../../core/services/donor-service';
+import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
 
 @Component({
   selector: 'app-gifts-page',
-  imports: [GiftCard, GiftsGrid, GiftsHeader],
+  imports: [GiftCard, GiftsGrid, GiftsHeader, GiftFormDialog],
   templateUrl: './gifts-page.html',
   styleUrl: './gifts-page.scss',
 })
@@ -26,6 +27,9 @@ export class GiftsPage {
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
+  
+  @ViewChild(GiftFormDialog) giftDialog!: GiftFormDialog;
+
 
 
 
@@ -81,4 +85,9 @@ export class GiftsPage {
     this.selectedGift = null;
   }
 
+  onClickAddGift(): void {
+    this.selectedGift = null;
+    this.giftDialog.open();
+    console.log("clicked!");
+  }
 }

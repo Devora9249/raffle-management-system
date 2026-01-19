@@ -5,10 +5,11 @@ import { GiftResponseDto, PriceSort } from '../../../../core/models/gift-model';
 import { CategoryResponseDto } from '../../../../core/models/category-model';
 import { FormsModule } from '@angular/forms';
 import { DonorListItem } from '../../../../core/models/donor-model';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-gifts-header',
-  imports: [SortPanel, FormsModule, GiftFormDialog],
+  imports: [SortPanel, FormsModule, GiftFormDialog, ButtonModule],
   templateUrl: './gifts-header.html',
   styleUrl: './gifts-header.scss',
 })
@@ -18,6 +19,8 @@ export class GiftsHeader {
   @Output() categoryChange = new EventEmitter<number | null>();
   @Output() created = new EventEmitter<boolean>();
   @Output() closed = new EventEmitter<void>();
+  @Output() addGift = new EventEmitter<void>();
+
 
   @Input() categories: CategoryResponseDto[] = [];
   @Input() donors: DonorListItem[] = [];
