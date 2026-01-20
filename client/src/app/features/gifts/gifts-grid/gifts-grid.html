@@ -4,12 +4,13 @@
 
 <div class="gifts-grid">
   @for (gift of gifts; track gift.id) {
-    <app-gift-card
-      class="gift-card-item"
-      [gift]="gift"
-      (render)="render.emit()"
-      (edit)="onEdit($event)"
-      [isAdmin]="isAdmin">
-    </app-gift-card>
+  <app-gift-card class="gift-card-item" 
+    [qty]="getQty(gift.id)"
+    [gift]="gift"
+    (render)="render.emit()"
+    (edit)="onEdit($event)"
+    [isAdmin]="isAdmin"
+    [purchaseId]="getPurchaseId(gift.id)">
+  </app-gift-card>
   }
 </div>

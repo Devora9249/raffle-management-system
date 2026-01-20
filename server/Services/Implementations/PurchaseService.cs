@@ -48,7 +48,7 @@ namespace server.Services.Implementations
                 throw new KeyNotFoundException("Purchase not found");
 
             // 2️⃣ חוקים עסקיים
-            if (dto.Qty.HasValue && dto.Qty.Value <= 0)
+            if (dto.Qty.HasValue && dto.Qty.Value < 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
             // 3️⃣ עדכון שדות

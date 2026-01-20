@@ -26,7 +26,7 @@ export interface CartItemResponseDto {
   purchaseId: number;
   giftId: number;
   qty: number;
-  addedAt: string; // ISO date string
+  addedAt: string; 
 }
 
 // -----------

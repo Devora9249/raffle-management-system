@@ -119,20 +119,18 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject, map } from 'rxjs'; 
+import { Observable, of, BehaviorSubject, map } from 'rxjs';
 import { LoginDto, RegisterDto, LoginResponseDto, UserResponseDto } from '../models/auth-model';
 import { jwtDecode } from 'jwt-decode';
 
-interface JwtPayload {
-  _id: string;
-  name: string;
+export interface JwtPayload {
+  sub: string;
   email: string;
-  phone?: string;
-  city?: string;
-  address?: string;
-  roles: string[];
-  exp: number; 
+  exp: number;
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'?: string;
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string;
 }
+
 
 const roleMap: Record<string, 'User' | 'Admin' | 'Donor'> = {
   User: 'User',
@@ -148,9 +146,9 @@ export class AuthService {
   private loggedInSubject = new BehaviorSubject<boolean>(this.isTokenValid());
   loggedIn$ = this.loggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-//     AUTH API
+  //     AUTH API
 
   login(dto: LoginDto): Observable<LoginResponseDto> {
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/login`, dto);
@@ -160,7 +158,7 @@ export class AuthService {
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/register`, dto);
   }
 
-//     TOKEN HANDLING
+  //     TOKEN HANDLING
 
   saveToken(token: string): void {
     localStorage.setItem('token', token);
@@ -186,25 +184,27 @@ export class AuthService {
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);
+      const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       const user: UserResponseDto = {
-        id: Number(decoded._id),
-        name: decoded.name,
+        id: Number(decoded.sub),
+        name: '',
         email: decoded.email,
-        phone: decoded.phone || '',
-        city: decoded.city || '',
-        address: decoded.address || '',
-        role: roleMap[decoded.roles[0]] || 'User'
+        phone:'',
+        city: '',
+        address: '',
+        role: role ? roleMap[role] || 'User' : 'User'
       };
       return of(user);
     } catch {
       return of(null);
     }
   }
-getCurrentUserId(): Observable<number | null> {
-  return this.getCurrentUser().pipe(
-    map(user => user ? user.id : null)
-  );
-}
+
+  getCurrentUserId(): Observable<number | null> {
+    return this.getCurrentUser().pipe(
+      map(user => user ? user.id : null)
+    );
+  }
 
 
   /* =======================
@@ -213,9 +213,10 @@ getCurrentUserId(): Observable<number | null> {
 
   getRole(): string | null {
     const token = this.getToken();
-    if (!token || !this.isTokenValid()) return null; 
+    if (!token || !this.isTokenValid()) return null;
 
     const decoded = jwtDecode<JwtPayload>(token) as any;
+
 
     return (
       decoded.roles ??
@@ -225,29 +226,31 @@ getCurrentUserId(): Observable<number | null> {
   }
 
   isDonor$ = this.loggedIn$.pipe(
-  map(() => this.getRole() === 'Donor')
-);
+    map(() => this.getRole() === 'Donor')
+  );
 
- isAdmin$ = this.loggedIn$.pipe(
-  map(() => this.getRole() === 'Admin')
-);
+  isAdmin$ = this.loggedIn$.pipe(
+    map(() => this.getRole() === 'Admin')
+  );
 
 
 
-//     AUTH STATE
+  //     AUTH STATE
 
   isLoggedIn(): boolean {
     return this.loggedInSubject.value;
   }
 
   private isTokenValid(): boolean {
+
     const token = this.getToken();
+
     if (!token) return false;
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);
       const now = Math.floor(Date.now() / 1000);
-      return decoded.exp > now; 
+      return decoded.exp > now;
     } catch {
       return false;
     }

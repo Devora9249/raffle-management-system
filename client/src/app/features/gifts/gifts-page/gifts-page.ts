@@ -10,6 +10,8 @@ import { DonorListItem } from '../../../core/models/donor-model';
 import { DonorService } from '../../../core/services/donor-service';
 import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
 import { AuthService } from '../../../core/services/auth-service';
+import { CartItemResponseDto } from '../../../core/models/purchase-model';
+import { CartService } from '../../../core/services/cart-service';
 
 @Component({
   selector: 'app-gifts-page',
@@ -24,12 +26,15 @@ export class GiftsPage {
   donors: DonorListItem[] = [];
   selectedGift: GiftResponseDto | null = null;
   isAdmin: boolean = false;
+  cartItems: CartItemResponseDto[] = [];
+  userId: number | null = null;
 
-  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService) { }
+
+  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService) { }
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
-  
+
   @ViewChild(GiftFormDialog) giftDialog!: GiftFormDialog;
 
 
@@ -48,10 +53,22 @@ export class GiftsPage {
       this.donors = donors;
     });
 
-  this.authService.isAdmin$.subscribe(isAdmin => {
-    this.isAdmin = isAdmin;
-  });
-    
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+    });
+
+    this.authService.getCurrentUserId().subscribe(userId => {
+      if (!userId) return;
+      this.userId = userId;
+      this.cartService.getCart(this.userId).subscribe(items => {
+        this.cartItems = items;
+      });
+    });
+
+  }
+
+  getPurchaseId(giftId: number): number | null {
+    return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
   }
 
   loadGifts(): void {
@@ -84,7 +101,7 @@ export class GiftsPage {
   }
 
   onEdit(gift: GiftResponseDto): void {
-    this.selectedGift = {...gift};
+    this.selectedGift = { ...gift };
   }
 
   onDialogClosed(): void {

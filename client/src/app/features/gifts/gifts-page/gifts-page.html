@@ -18,9 +18,10 @@
   [gifts]="gifts"
   (render)="onRender()"
   (edit)="onEdit($event)"
-  [isAdmin]="isAdmin">
+  [isAdmin]="isAdmin"
+  [cartItems]="cartItems">
 </app-gifts-grid>
-
+ 
 <app-gift-form-dialog
   [categories]="categories"
   [giftToEdit]="selectedGift"

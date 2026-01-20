@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { CartService } from '../../../../core/services/cart-service';
 import { GiftsService } from '../../../../core/services/gifts-service';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-gift-card',
@@ -14,11 +15,14 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './gift-card.scss',
 })
 export class GiftCard {
-  constructor(private cartService: CartService, private giftsService: GiftsService) { }
+  constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService) { }
 
   @Input() gift!: GiftResponseDto;
-  @Input() count!: number;
+  // @Input() count!: number;
   @Input() isAdmin: boolean = false;
+  @Input() purchaseId: number | null = null;
+  @Input() qty!: number;
+
 
   @Output() render = new EventEmitter<boolean>();
   @Output() edit = new EventEmitter<GiftResponseDto>();
@@ -26,13 +30,29 @@ export class GiftCard {
 
 
   onCountChange(count: number) {
-    this.count = count;
-    this.cartService.updateQty({ userId: 18, giftId: this.gift.id, qty: this.count })
-      .subscribe({
-        next: cartItem => {
-        }
-      });
+    if (!this.gift?.id) return;
 
+
+    this.authService.getCurrentUserId().subscribe(userId => {
+      console.log("userId", userId);
+      if (!userId) { alert('User not logged in'); return; }
+      console.log('purchaseID', this.purchaseId);
+
+      if (count === 0 && this.purchaseId) {
+
+        this.cartService.remove(this.purchaseId).subscribe();
+        this.render.emit(true);
+        return;
+      }
+
+      this.cartService.updateQty({
+        userId,
+        giftId: this.gift.id,
+        qty: count
+      }).subscribe(() => {
+        this.render.emit(true); // בקשה לרינדור מחדש
+      });
+    });
   }
 
   onDelete() {
