@@ -8,6 +8,7 @@ import { LoginComponent } from './features/auth/login/login';
 import { AuthService } from './core/services/auth-service';
 import { UserResponseDto } from './core/models/auth-model';
 import { Nav } from './shared/components/nav/nav';
+import { CartPage } from './features/cart/cart-page/cart-page';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { Nav } from './shared/components/nav/nav';
     NgIf,         
     RouterLink, RouterLinkActive, RouterOutlet,
     GiftsPage, LoginComponent, Register, ReactiveFormsModule, Nav,
+    CartPage
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
@@ -29,8 +31,8 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.authService.getCurrentUser().subscribe((user) => {
-      if (!user) return; // ✅ בדיקה אם null
-      console.log(user.name); // עכשיו בטוח שזה UserResponseDto
+      if (!user) return; 
+      console.log(user.name);
       this.currentDonorId = user.id;
     });
   }

@@ -7,6 +7,7 @@ import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../core/services/auth-service';
 import { Subscription } from 'rxjs'; 
+import { CartDrawerService } from '../../../core/services/CartDrawerService ';
 
 @Component({
   selector: 'app-nav',
@@ -27,7 +28,7 @@ isDonor = false;
   private authSub!: Subscription; 
   private roleSub!: Subscription;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private cartDrawerService: CartDrawerService) {}
 
   ngOnInit(): void {
     this.buildMainMenu();
@@ -141,6 +142,10 @@ private buildMainMenu(): void {
       this.buildMainMenu();
     })
   );
+}
+
+openCart(): void {
+  this.cartDrawerService.open();
 }
 
 }
