@@ -12,10 +12,12 @@ import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
 import { AuthService } from '../../../core/services/auth-service';
 import { CartItemResponseDto } from '../../../core/models/purchase-model';
 import { CartService } from '../../../core/services/cart-service';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-gifts-page',
-  imports: [GiftCard, GiftsGrid, GiftsHeader, GiftFormDialog],
+  imports: [GiftCard, GiftsGrid, GiftsHeader, GiftFormDialog, AsyncPipe],
   templateUrl: './gifts-page.html',
   styleUrl: './gifts-page.scss',
 })
@@ -26,10 +28,9 @@ export class GiftsPage {
   donors: DonorListItem[] = [];
   selectedGift: GiftResponseDto | null = null;
   isAdmin: boolean = false;
-  cartItems: CartItemResponseDto[] = [];
+  // cartItems: CartItemResponseDto[] = [];
   userId: number | null = null;
-
-
+  cartItems$!: Observable<CartItemResponseDto[]>;
   constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService) { }
 
   sortType: PriceSort = PriceSort.None;
@@ -41,6 +42,8 @@ export class GiftsPage {
 
 
   ngOnInit(): void {
+    this.cartItems$ = this.cartService.cart$; // ✅ כאן זה כבר בטוח
+
     this.giftsService.getAll(PriceSort.None, null, null).subscribe(gifts => {
       this.gifts = gifts;
     });
@@ -60,16 +63,14 @@ export class GiftsPage {
     this.authService.getCurrentUserId().subscribe(userId => {
       if (!userId) return;
       this.userId = userId;
-      this.cartService.getCart(this.userId).subscribe(items => {
-        this.cartItems = items;
-      });
+      this.cartService.loadCart(this.userId).subscribe();
     });
 
   }
 
-  getPurchaseId(giftId: number): number | null {
-    return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
-  }
+  // getPurchaseId(giftId: number): number | null {
+  //   return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
+  // }
 
   loadGifts(): void {
     this.giftsService.getAll(this.sortType, this.selectedCategoryId, null).subscribe(gifts => {

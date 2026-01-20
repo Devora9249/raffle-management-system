@@ -24,7 +24,7 @@ export class GiftsGrid {
   }
 
   getPurchaseId(giftId: number): number | null {
-    console.log("cartItems", this.cartItems);
+    // console.log("cartItems", this.cartItems);
     return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
   }
 

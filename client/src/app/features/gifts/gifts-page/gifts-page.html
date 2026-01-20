@@ -19,7 +19,7 @@
   (render)="onRender()"
   (edit)="onEdit($event)"
   [isAdmin]="isAdmin"
-  [cartItems]="cartItems">
+  [cartItems]="(cartItems$ | async) ?? []">
 </app-gifts-grid>
  
 <app-gift-form-dialog

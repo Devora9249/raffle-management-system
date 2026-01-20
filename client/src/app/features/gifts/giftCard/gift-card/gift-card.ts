@@ -7,6 +7,7 @@ import { CartService } from '../../../../core/services/cart-service';
 import { GiftsService } from '../../../../core/services/gifts-service';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../../core/services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gift-card',
@@ -15,16 +16,16 @@ import { AuthService } from '../../../../core/services/auth-service';
   styleUrl: './gift-card.scss',
 })
 export class GiftCard {
-  constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService) { }
+  constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService, private router: Router) { }
 
   @Input() gift!: GiftResponseDto;
   // @Input() count!: number;
   @Input() isAdmin: boolean = false;
   @Input() purchaseId: number | null = null;
-  @Input() qty!: number;
+  @Input() qty: number=0;
 
 
-  @Output() render = new EventEmitter<boolean>();
+  // @Output() render = new EventEmitter<boolean>();
   @Output() edit = new EventEmitter<GiftResponseDto>();
 
 
@@ -35,13 +36,11 @@ export class GiftCard {
 
     this.authService.getCurrentUserId().subscribe(userId => {
       console.log("userId", userId);
-      if (!userId) { alert('User not logged in'); return; }
+      if (!userId) { alert('User not logged in'); this.router.navigate(['/login']); return; }
       console.log('purchaseID', this.purchaseId);
 
       if (count === 0 && this.purchaseId) {
-
         this.cartService.remove(this.purchaseId).subscribe();
-        this.render.emit(true);
         return;
       }
 
@@ -49,9 +48,7 @@ export class GiftCard {
         userId,
         giftId: this.gift.id,
         qty: count
-      }).subscribe(() => {
-        this.render.emit(true); // בקשה לרינדור מחדש
-      });
+      }).subscribe();
     });
   }
 
@@ -61,7 +58,7 @@ export class GiftCard {
     this.giftsService.delete(this.gift.id).subscribe({
       next: gift => {
         alert('Gift deleted successfully!');
-        this.render.emit(true);
+        // this.render.emit(true);
       },
       error: (err) => {
         console.error('Delete gift failed', err);

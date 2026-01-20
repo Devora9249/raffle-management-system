@@ -90,7 +90,7 @@ private buildMainMenu(): void {
 }
 
 
-//     USER MENU
+//USER MENU
 
   private buildUserMenu(): void {
     this.userMenuItems = this.isLoggedIn
