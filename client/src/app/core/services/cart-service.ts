@@ -158,7 +158,7 @@ export class CartService {
     map(items => items.reduce((sum, i) => sum + i.qty, 0))
   );
 
-  // readonly totalPrice$ = this.cart$.pipe(
-  //   map(items => items.reduce((sum, i) => sum + i.qty * i.price, 0))
-  // );
+  readonly totalPrice$ = this.cart$.pipe(
+    map(items => items.reduce((sum, i) => sum + i.qty * i.giftPrice, 0))
+  );
 }

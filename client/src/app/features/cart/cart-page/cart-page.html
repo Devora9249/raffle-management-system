@@ -1,7 +1,13 @@
 <div class="card flex justify-center">
-    <p-drawer [(visible)]="visible" header="Drawer">
+    <p-drawer [(visible)]="visible" header="My Cart">
   @for (item of (cartItems$ | async) ?? []; track item.purchaseId) {
     <p>name:{{ item.giftName }} - Quantity: {{ item.qty }} price: {{ item.giftPrice }}</p>
+    <app-cart-item-qty (countChange)="onCountChange(item, $event)" [count]="item.qty"></app-cart-item-qty>
+      <button (click)="onDelete(item)"> 🗑️</button>
+
   }
+  total Price: {{ totalPrice$ | async }}
+
+  <button (click)="checkout()">Checkout</button>
     </p-drawer>
 </div>
