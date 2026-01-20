@@ -90,6 +90,8 @@ namespace server.Services.Implementations
             {
                 PurchaseId = p.Id,
                 GiftId = p.GiftId,
+                GiftName = p.Gift?.Description ?? string.Empty,
+                GiftPrice = p.Gift?.Price ?? 0,
                 Qty = p.Qty,
                 AddedAt = p.PurchaseDate
             };

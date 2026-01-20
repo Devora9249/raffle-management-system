@@ -10,7 +10,7 @@ import { DonorListItem } from '../../../core/models/donor-model';
 import { DonorService } from '../../../core/services/donor-service';
 import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
 import { AuthService } from '../../../core/services/auth-service';
-import { CartItemResponseDto } from '../../../core/models/purchase-model';
+import { CartItemResponseDto } from '../../../core/models/cart-model';
 import { CartService } from '../../../core/services/cart-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';

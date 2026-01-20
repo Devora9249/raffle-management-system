@@ -25,6 +25,8 @@ export interface CartUpdateDto {
 export interface CartItemResponseDto {
   purchaseId: number;
   giftId: number;
+  giftName: string;
+  giftPrice: number;
   qty: number;
   addedAt: string; 
 }
