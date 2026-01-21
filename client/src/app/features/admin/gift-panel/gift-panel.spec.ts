@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GiftsPanel } from './gifts-panel';
+import { GiftPanel } from './gift-panel';
 
-describe('GiftsPanel', () => {
-  let component: GiftsPanel;
-  let fixture: ComponentFixture<GiftsPanel>;
+describe('GiftPanel', () => {
+  let component: GiftPanel;
+  let fixture: ComponentFixture<GiftPanel>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GiftsPanel]
+      imports: [GiftPanel]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GiftsPanel);
+    fixture = TestBed.createComponent(GiftPanel);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
