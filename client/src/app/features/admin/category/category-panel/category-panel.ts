@@ -1,0 +1,63 @@
+import { Component } from '@angular/core';
+import { CategoryResponseDto } from '../../../../core/models/category-model';
+import { CategoriesService } from '../../../../core/services/categories-service';
+import { CategoryList } from '../category-list/category-list';
+import { CategoryFormDialog } from '../category-form-dialog/category-form-dialog';
+import { ButtonModule } from 'primeng/button';
+
+@Component({
+  selector: 'app-category-panel',
+  imports: [CategoryList, CategoryFormDialog, ButtonModule],
+  templateUrl: './category-panel.html',
+  styleUrl: './category-panel.scss',
+})
+export class CategoryPanel {
+  categories: CategoryResponseDto[] = [];
+  showDialog = false;
+  selectedCategory?: CategoryResponseDto;
+
+  constructor(private categoryService: CategoriesService) {}
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.categoryService.getAll().subscribe(res => {
+      this.categories = res;
+    });
+  }
+
+  openCreate(): void {
+    this.selectedCategory = undefined;
+    this.showDialog = true;
+  }
+
+  openEdit(category: CategoryResponseDto): void {
+    this.selectedCategory = category;
+    this.showDialog = true;
+  }
+
+delete(id: number): void {
+  this.categoryService.delete(id).subscribe({
+    next: () => {
+      this.loadCategories();
+    },
+    error: (err) => {
+      console.error('Delete category failed', err);
+  const message =
+          err?.error?.detail ||
+          err?.error?.message ||
+          'Unauthorized or unexpected error';
+
+        alert('Delete gift failed: ' + message);
+    }
+  });
+}
+
+
+  onSaved(): void {
+    this.showDialog = false;
+    this.loadCategories();
+  }
+}

@@ -78,10 +78,13 @@ public async Task<CategoryResponseDto> UpdateCategoryAsync(int id, CategoryUpdat
 
         public async Task DeleteCategoryAsync(int id)
         {
+            if (await _categoryRepository.HasGiftsAsync(id))
+                throw new InvalidOperationException($"Cannot delete Category {id} because it has associated gifts.");
             var ok = await _categoryRepository.DeleteCategoryAsync(id);
             if (!ok)
                 throw new KeyNotFoundException($"Category {id} not found");
         }
+
 
     }
 }

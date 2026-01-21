@@ -1,0 +1,47 @@
+<!-- <div class="category-panel">
+
+  <button pButton label="הוספת קטגוריה" (click)="openCreate()"></button>
+
+  <app-category-list
+    [categories]="categories"
+    (edit)="openEdit($event)"
+    (remove)="delete($event)">
+  </app-category-list>
+
+  <app-category-form-dialog
+    [visible]="showDialog"
+    [category]="selectedCategory"
+    (saved)="onSaved()"
+    (closed)="showDialog = false">
+  </app-category-form-dialog>
+
+</div> -->
+
+<div class="category-panel">
+
+  <div class="panel-header">
+    <h2>Categories</h2>
+
+
+  </div>
+      <p-button
+      label="Add Category"
+      icon="pi pi-plus"
+      severity="primary"
+      (onClick)="openCreate()">
+    </p-button>
+
+  <app-category-list
+    [categories]="categories"
+    (edit)="openEdit($event)"
+    (remove)="delete($event)">
+  </app-category-list>
+
+  <app-category-form-dialog
+    [visible]="showDialog"
+    [category]="selectedCategory"
+    (saved)="onSaved()"
+    (closed)="showDialog = false">
+  </app-category-form-dialog>
+
+</div>

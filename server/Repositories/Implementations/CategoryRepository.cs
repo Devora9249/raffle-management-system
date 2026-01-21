@@ -40,6 +40,12 @@ public class CategoryRepository : ICategoryRepository
         return existingCategory;
     }
 
+    public async Task<bool> HasGiftsAsync(int categoryId)
+    {
+        return await _context.Gifts
+            .AnyAsync(p => p.CategoryId == categoryId);
+    }
+    
     public async Task<bool> DeleteCategoryAsync(int id)
     {
         var category = await _context.Categories.FindAsync(id);

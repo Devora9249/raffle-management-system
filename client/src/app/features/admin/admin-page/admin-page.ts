@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { CategoryPanel } from '../category-panel/category-panel';
-import { DonorsPanel } from '../donors-panel/donors-panel';
+import { CategoryPanel } from '../category/category-panel/category-panel';
+import { GiftPanel } from '../gift-panel/gift-panel';
+import { DonorPanel } from '../donor-panel/donor-panel';
+import { PurchasePanel } from '../purchase-panel/purchase-panel';
+import { RafflePanel } from '../raffle-panel/raffle-panel';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CategoryPanel, DonorsPanel, gifts],
+  imports: [CategoryPanel,DonorPanel, GiftPanel, PurchasePanel, RafflePanel],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.scss',
 })

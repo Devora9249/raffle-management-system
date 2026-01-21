@@ -1,0 +1,57 @@
+<!-- <p-table [value]="categories">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>שם</th>
+      <th>פעולות</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-category>
+    <tr>
+      <td>{{ category.name }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" (click)="edit.emit(category)"></button>
+        <button pButton icon="pi pi-trash" severity="danger"
+                (click)="remove.emit(category.id)">
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table> -->
+
+<p-table
+  [value]="categories"
+  class="category-table"
+  responsiveLayout="scroll">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th class="actions-col">Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-category>
+    <tr>
+      <td>{{ category.name }}</td>
+      <td class="actions-col">
+        <p-button
+          icon="pi pi-pencil"
+          text
+          rounded
+          severity="secondary"
+          (onClick)="edit.emit(category)">
+        </p-button>
+
+        <p-button
+          icon="pi pi-trash"
+          text
+          rounded
+          severity="danger"
+          (onClick)="remove.emit(category.id)">
+        </p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>
