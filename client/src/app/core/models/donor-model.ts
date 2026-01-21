@@ -4,6 +4,7 @@ export interface DonorListItem {
   email: string;
   phone: string;
   city: string;
+  address: string;
 }
 
 export interface DonorDashboardResponse {
@@ -25,6 +26,15 @@ export interface DonorGiftStats {
   uniqueBuyers: number;
 
   hasWinning: boolean;
+}
+
+export interface addDonorDto {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  city: string;
+  address: string;
 }
 
 export enum RoleEnum {

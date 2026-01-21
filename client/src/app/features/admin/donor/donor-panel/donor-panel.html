@@ -1,1 +1,27 @@
-<p>donor-panel works!</p>
+<div class="donor-panel">
+
+  <div class="panel-header">
+    <h2>Donors</h2>
+
+  </div>
+    <p-button
+      label="Add Donor"
+      icon="pi pi-plus"
+      severity="primary"
+      (onClick)="openCreate()">
+    </p-button>
+
+  <app-donor-list
+    [donors]="donors">
+  </app-donor-list>
+  <!-- (remove)="delete($event)" -->
+  <!-- (edit)="openEdit($event)" -->
+
+  <app-donor-form-dialog
+    [visible]="showDialog"
+    [donor]="selectedDonor"
+    (saved)="onSaved()"
+    (closed)="showDialog = false">
+  </app-donor-form-dialog>
+
+</div>

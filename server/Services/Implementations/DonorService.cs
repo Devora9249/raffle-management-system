@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Donors;
 using server.Models;
+using server.Services.Implementations;
 using server.Services.Interfaces;
 
 namespace server.Services
@@ -10,10 +11,12 @@ namespace server.Services
     public class DonorService : IDonorService
     {
         private readonly AppDbContext _context;
+        private readonly IAuthService authService;
 
-        public DonorService(AppDbContext context)
+        public DonorService(AppDbContext context, IAuthService authService)
         {
             _context = context;
+            this.authService = authService;
         }
         ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
@@ -135,5 +138,34 @@ namespace server.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<bool> AddDonorAsync(addDonorDto donorDto)
+        {
+            var existingUser = await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == donorDto.Email);
+
+            if (existingUser != null)
+            {
+                return false;
+            }
+
+            var newDonor = new UserModel
+            {
+                Name = donorDto.Name,
+                Email = donorDto.Email,
+                Phone = donorDto.Phone,
+                City = donorDto.City,
+                Address = donorDto.Address,
+                Role = RoleEnum.Donor,
+                IsActive = true
+            };
+
+            //  Hash לסיסמה
+            newDonor.Password = authService.HashPassword(donorDto.Password);
+
+            _context.Users.Add(newDonor);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

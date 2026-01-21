@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CategoryPanel } from '../category/category-panel/category-panel';
 import { GiftPanel } from '../gift-panel/gift-panel';
 import { DonorPanel } from '../donor/donor-panel/donor-panel';
-import { PurchasePanel } from '../purchase-panel/purchase-panel';
+import { PurchasePanel } from '../purchase/purchase-panel/purchase-panel';
 import { RafflePanel } from '../raffle-panel/raffle-panel';
 
 @Component({

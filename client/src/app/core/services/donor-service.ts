@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DonorListItem, DonorDashboardResponse, RoleEnum } from '../models/donor-model';
+import { DonorListItem, DonorDashboardResponse, RoleEnum, addDonorDto } from '../models/donor-model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +54,9 @@ export class DonorService {
     return this.http.get<DonorListItem>(
       `${this.baseUrl}/details`
     );
+  }
+
+  addDonor(dto:addDonorDto): Observable<DonorListItem> {
+    return this.http.post<DonorListItem>(this.baseUrl, dto);
   }
 }

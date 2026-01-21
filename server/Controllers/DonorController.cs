@@ -61,5 +61,14 @@ namespace server.Controllers
 
             return await _donorService.GetDonorDetailsAsync(userId);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult> AddDonor([FromBody] addDonorDto donorDto)
+        {
+            await _donorService.AddDonorAsync(donorDto);
+            return Ok(donorDto);
+
+        }
     }
 }
