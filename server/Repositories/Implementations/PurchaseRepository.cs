@@ -38,8 +38,9 @@ public class PurchaseRepository : IPurchaseRepository
 
         _context.Entry(existing).CurrentValues.SetValues(purchase);
         await _context.SaveChangesAsync();
-        return existing;
-    }
+        return await _context.Purchases
+            .Include(p => p.Gift)
+            .FirstOrDefaultAsync(p => p.Id == existing.Id);    }
 
     public async Task<bool> DeleteAsync(int id)
     {
