@@ -5,6 +5,12 @@
   [style]="{ width: '360px' }"
   header="Shopping Cart">
 
+  @if(massage){
+    <div class="cart-message">
+      {{ massage }}
+    </div>
+  }
+
   <!-- Items list -->
   <div class="cart-list">
     @for (item of (cartItems$ | async) ?? []; track item.purchaseId) {

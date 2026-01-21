@@ -26,24 +26,31 @@ export class CartPage implements OnInit {
 
   totalPrice$!: Observable<number>;
 
+  massage: string = '';
+
   constructor(
     private cartDrawer: CartDrawerService,
     private cartService: CartService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cartItems$ = this.cartService.cart$;
     this.totalPrice$ = this.cartService.totalPrice$;
+    this.massage = '';
+
 
     this.cartDrawer.visible$.subscribe(visible => {
       this.visible = visible;
 
       if (visible) {
         this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-          if (!userId) return;
-          this.cartService.loadCart(userId).subscribe(); 
+          if (!userId) {
+            this.massage = 'Please log in to view your cart.';
+            return;
+          }
+          this.cartService.loadCart(userId).subscribe();
         });
       }
     });
@@ -55,7 +62,7 @@ export class CartPage implements OnInit {
 
     this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
       if (!userId) {
-        this.router.navigate(['/login']); 
+        this.router.navigate(['/login']);
         return;
       }
 
