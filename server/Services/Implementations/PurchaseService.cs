@@ -2,7 +2,6 @@ using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
-using server.Models.Enums;
 
 namespace server.Services.Implementations
 {
@@ -29,7 +28,7 @@ namespace server.Services.Implementations
             if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
             var purchase = new PurchaseModel
-            { 
+            {
                 UserId = createDto.UserId,
                 GiftId = createDto.GiftId,
                 Qty = createDto.Qty,
@@ -74,27 +73,53 @@ namespace server.Services.Implementations
         {
             var p = await _repo.GetByIdAsync(id);
             if (p == null)
-                throw new KeyNotFoundException("Purchase not found");  
-            
+                throw new KeyNotFoundException("Purchase not found");
+
             var deleted = await _repo.DeleteAsync(id);
 
             if (!deleted)
                 throw new KeyNotFoundException("Purchase not found or could not be deleted");
             return deleted;
-        } 
+        }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
             => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
 
+        public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
+        {
+            var data = await _repo.GetPurchaseCountByGiftAsync();
+
+            return data.Select(x => new GiftPurchaseCountDto
+            {
+                GiftId = x.GiftId,
+                GiftName = x.GiftName,
+                PurchaseCount = x.PurchaseCount
+            });
+        }
+
         private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
-            => new PurchaseResponseDto
+        {
+            // if (p.Gift == null)
+            //     throw new Exception("Gift is null");
+
+            // if (p.User == null)
+            //     throw new Exception("User is null");
+
+            return new PurchaseResponseDto
             {
                 Id = p.Id,
                 UserId = p.UserId,
+                UserName = p.User.Name,
                 GiftId = p.GiftId,
+                GiftName = p.Gift.Description,
+                DonorId = p.Gift.DonorId,
+                DonorName = p.Gift.Donor.Name,
                 Qty = p.Qty,
                 Status = p.Status,
                 PurchaseDate = p.PurchaseDate
             };
+
+        }
+
     }
 }

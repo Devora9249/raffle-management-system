@@ -1,0 +1,13 @@
+<div class="purchase-search">
+  <span class="p-input-icon-left w-full">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      type="text"
+      placeholder="Search purchases..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearchTermChange()"
+      class="w-full" />
+  </span>
+</div>
+<app-purchase-list [purchases]="purchases"></app-purchase-list>

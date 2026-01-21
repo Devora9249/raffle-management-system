@@ -13,5 +13,6 @@ namespace server.Services.Interfaces
         Task<bool> DeleteAsync(int id);
 
         Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId);
+        Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync();
     }
 }

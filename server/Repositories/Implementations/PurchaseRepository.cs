@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 
@@ -17,18 +18,24 @@ public class PurchaseRepository : IPurchaseRepository
     public async Task<IEnumerable<PurchaseModel>> GetAllAsync()
         => await _context.Purchases
             .Include(p => p.Gift)
+            .Include(p => p.User)
             .ToListAsync();
 
     public async Task<PurchaseModel?> GetByIdAsync(int id)
         => await _context.Purchases
             .Include(p => p.Gift)
+            .Include(p => p.User)
             .FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<PurchaseModel> AddAsync(PurchaseModel purchase)
     {
         _context.Purchases.Add(purchase);
         await _context.SaveChangesAsync();
-        return purchase;
+
+        return await _context.Purchases
+            .Include(p => p.Gift)
+            .Include(p => p.User)
+            .FirstAsync(p => p.Id == purchase.Id);
     }
 
     public async Task<PurchaseModel?> UpdateAsync(PurchaseModel purchase)
@@ -40,7 +47,9 @@ public class PurchaseRepository : IPurchaseRepository
         await _context.SaveChangesAsync();
         return await _context.Purchases
             .Include(p => p.Gift)
-            .FirstOrDefaultAsync(p => p.Id == existing.Id);    }
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == existing.Id);
+    }
 
     public async Task<bool> DeleteAsync(int id)
     {
@@ -56,12 +65,28 @@ public class PurchaseRepository : IPurchaseRepository
     public async Task<IEnumerable<PurchaseModel>> GetByGiftAsync(int giftId)
         => await _context.Purchases
             .Include(p => p.Gift)
+            .Include(p => p.User)
             .Where(p => p.GiftId == giftId && p.Status == Status.Completed)
             .ToListAsync();
+
+    public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
+    {
+        return await _context.Purchases
+            .GroupBy(p => p.GiftId)
+            .Select(g => new GiftPurchaseCountDto
+            {
+                GiftId = g.Key,
+                GiftName = g.First().Gift.Description,
+                PurchaseCount = g.Count()
+            })
+            .ToListAsync();
+    }
+
 
     public async Task<List<PurchaseModel>> GetUserCartAsync(int userId)
         => await _context.Purchases
             .Include(p => p.Gift)
+            .Include(p => p.User)
             .Where(p => p.UserId == userId && p.Status == Status.Draft)
             .ToListAsync();
 

@@ -30,9 +30,20 @@ namespace server.DTOs
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public string UserName { get; set; }
         public int GiftId { get; set; }
+        public string GiftName { get; set; }
+        public int DonorId { get; set; }
+        public string DonorName { get; set; }
         public int Qty { get; set; }
         public Status Status { get; set; }
         public DateTime PurchaseDate { get; set; }
+    }
+
+    public class GiftPurchaseCountDto
+    {
+        public int GiftId { get; set; }
+        public string GiftName { get; set; }
+        public int PurchaseCount { get; set; }
     }
 }

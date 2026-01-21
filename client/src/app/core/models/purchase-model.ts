@@ -1,19 +1,36 @@
-// // Add item to cart (create draft purchase)
-// export interface CartAddDto {
-//   userId: number;
-//   giftId: number;
-//   qty: number;
-// }
+export interface PurchaseResponseDto {
+  id: number;
+  userId: number;
+  userName: string;
+  giftId: number;
+  giftName: string;
+  donorId: number;
+  donorName: string;
+  qty: number;
+  status: Status;
+  purchaseDate: string; 
+}
 
-// // Update existing cart item quantity
-// export interface CartUpdateDto {
-//   purchaseId: number;
-//   qty: number;
-// }
 
-// // Checkout response
-// export interface CartCheckoutResponseDto {
-//   userId: number;
-//   itemsCompleted: number;
-//   message: string;
-// }
+export interface PurchaseCreateDto {
+  userId: number;
+  giftId: number;
+  qty: number;
+}
+
+export interface PurchaseUpdateDto {
+  qty?: number;
+  status?: Status;
+}
+
+export interface GiftPurchaseCountDto {
+  giftId: number;
+  giftName: string;
+  purchaseCount: number;
+}
+
+export enum Status {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Canceled = 'Canceled'
+}

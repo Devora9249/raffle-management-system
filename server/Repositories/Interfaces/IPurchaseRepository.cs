@@ -1,3 +1,4 @@
+using server.DTOs;
 using server.Models;
 
 namespace server.Repositories.Interfaces
@@ -15,5 +16,6 @@ namespace server.Repositories.Interfaces
         Task<List<PurchaseModel>> GetUserCartAsync(int userId); // Draft
         Task<int> CheckoutAsync(int userId);                    // Draft -> Completed
         Task<PurchaseModel?> FindDraftByUserAndGift(int userId, int giftId);
+        Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync();
     }
 }
