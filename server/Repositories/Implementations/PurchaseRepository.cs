@@ -77,7 +77,8 @@ public class PurchaseRepository : IPurchaseRepository
             {
                 GiftId = g.Key,
                 GiftName = g.First().Gift.Description,
-                PurchaseCount = g.Count()
+                PurchaseCount = g.Count(),
+                DonorName = g.First().Gift.Donor.Name   
             })
             .ToListAsync();
     }

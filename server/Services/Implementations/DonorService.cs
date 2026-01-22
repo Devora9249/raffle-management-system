@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Donors;
 using server.Models;
+using server.Models.Enums;
 using server.Services.Implementations;
 using server.Services.Interfaces;
 
@@ -12,11 +13,15 @@ namespace server.Services
     {
         private readonly AppDbContext _context;
         private readonly IAuthService authService;
+        private readonly IGiftService giftService;
+        private readonly ILogger<DonorService> _logger;
 
-        public DonorService(AppDbContext context, IAuthService authService)
+        public DonorService(AppDbContext context, IAuthService authService, IGiftService giftService, ILogger<DonorService> logger)
         {
             _context = context;
             this.authService = authService;
+            this.giftService = giftService;
+            _logger = logger;
         }
         ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
@@ -49,10 +54,31 @@ namespace server.Services
                     Name = u.Name,
                     Email = u.Email,
                     Phone = u.Phone,
-                    City = u.City
+                    City = u.City,
                 })
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<DonorWithGiftsDto>> GetDonorsWithGiftsAsync()
+        {
+            var donors = await GetDonorsAsync("", "");
+
+            var gifts = await giftService.GetAllGiftsAsync(PriceSort.None, null, null);
+
+            return donors.Select(d => new DonorWithGiftsDto
+            {
+                DonorId = d.Id,
+                Name = d.Name,
+                Email = d.Email,
+                Phone = d.Phone,
+                City = d.City,
+                Address = d.Address,
+                Gifts = gifts
+                    .Where(g => g.DonorId == d.Id)
+                    .ToList()
+            });
+        }
+
         ///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
         public async Task SetUserRoleAsync(int userId, RoleEnum role)
         {
@@ -164,6 +190,9 @@ namespace server.Services
 
             _context.Users.Add(newDonor);
             await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("Added new donor: {@DonorDto}", donorDto);
+
 
             return true;
         }

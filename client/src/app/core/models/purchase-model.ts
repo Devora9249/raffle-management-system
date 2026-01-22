@@ -26,6 +26,7 @@ export interface PurchaseUpdateDto {
 export interface GiftPurchaseCountDto {
   giftId: number;
   giftName: string;
+  donorName: string;
   purchaseCount: number;
 }
 

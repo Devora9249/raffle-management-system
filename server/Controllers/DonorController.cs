@@ -13,12 +13,18 @@ namespace server.Controllers
     {
         private readonly IDonorService _donorService;
         private readonly IUserService _userService;
+        private readonly ILogger<DonorController> _logger;
 
-        public DonorController(IDonorService donorService, IUserService userService)
+        
+
+        public DonorController(IDonorService donorService, IUserService userService, ILogger<DonorController> logger)
         {
             _donorService = donorService;
             _userService = userService;
+            _logger = logger;
         }
+
+        
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -26,6 +32,15 @@ namespace server.Controllers
                             [FromQuery] string? search,
                             [FromQuery] string? city)
                             => Ok(await _donorService.GetDonorsAsync(search, city));
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("with-gifts")]
+        public async Task<ActionResult<IEnumerable<DonorWithGiftsDto>>> GetDonorsWithGifts()
+        {
+            var donorsWithGifts = await _donorService.GetDonorsWithGiftsAsync();
+            // _logger.LogInformation("Retrieved donors with gifts: {@DonorsWithGifts}", donorsWithGifts);
+            return Ok(donorsWithGifts);
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPatch("role/{userId}")]

@@ -11,17 +11,30 @@
       (onClick)="openCreate()">
     </p-button>
 
+  <app-donor-filters-bar
+    [(searchTermGifts)]="searchTermGifts"
+    [(searchTermDonors)]="searchTermDonors"
+    (filterChanged)="onFilterChanged()">
+  </app-donor-filters-bar>
+
   <app-donor-list
-    [donors]="donors">
+    [donors]="donors"
+    (selectedDonor)="openGiftsDialog($event)">
   </app-donor-list>
   <!-- (remove)="delete($event)" -->
   <!-- (edit)="openEdit($event)" -->
 
   <app-donor-form-dialog
-    [visible]="showDialog"
+    [visible]="showCreateDialog"
     [donor]="selectedDonor"
     (saved)="onSaved()"
-    (closed)="showDialog = false">
+    (closed)="showCreateDialog = false">
   </app-donor-form-dialog>
+
+<app-donor-gifts-dialog
+    [visible]="showGiftsDialog"
+    [donor]="selectedDonor"
+    (closed)="closeGiftsDialog()">
+  </app-donor-gifts-dialog>
 
 </div>

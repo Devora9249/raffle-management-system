@@ -45,5 +45,6 @@ namespace server.DTOs
         public int GiftId { get; set; }
         public string GiftName { get; set; }
         public int PurchaseCount { get; set; }
+        public string DonorName { get; set; }
     }
 }

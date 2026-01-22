@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DonorListItem, DonorDashboardResponse, RoleEnum, addDonorDto } from '../models/donor-model';
+import { DonorListItem, DonorDashboardResponse, RoleEnum, addDonorDto, DonorWithGiftsDto } from '../models/donor-model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,10 @@ export class DonorService {
       params = params.set('city', city);
 
     return this.http.get<DonorListItem[]>(this.baseUrl, { params });
+  }
+
+  getDonorsWithGifts(): Observable<DonorWithGiftsDto[]> {
+    return this.http.get<DonorWithGiftsDto[]>(`${this.baseUrl}/with-gifts`);
   }
 
   /** PATCH api/Donor/role/{userId}?role= */

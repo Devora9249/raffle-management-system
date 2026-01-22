@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using server.Models;
 
+
 namespace server.DTOs.Donors
 {
 
@@ -11,6 +12,19 @@ namespace server.DTOs.Donors
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        // public Task<List<GiftModel>>? Gifts { get; set; }
+    }
+
+    public class DonorWithGiftsDto
+    {
+        public int DonorId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public List<GiftResponseDto> Gifts { get; set; } = new();
     }
 
     public class DonorDashboardResponseDto

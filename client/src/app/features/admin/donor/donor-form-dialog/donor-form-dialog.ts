@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DonorListItem } from '../../../../core/models/donor-model';
+import { DonorListItem, DonorWithGiftsDto } from '../../../../core/models/donor-model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DonorService } from '../../../../core/services/donor-service';
 import { AuthService } from '../../../../core/services/auth-service';
@@ -16,7 +16,7 @@ export class DonorFormDialog {
 
 
   @Input() visible = false;
-  @Input() donor?: DonorListItem;
+  @Input() donor?: DonorWithGiftsDto;
 
   @Output() saved = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();

@@ -93,7 +93,8 @@ namespace server.Services.Implementations
             {
                 GiftId = x.GiftId,
                 GiftName = x.GiftName,
-                PurchaseCount = x.PurchaseCount
+                PurchaseCount = x.PurchaseCount,
+                DonorName = x.DonorName
             });
         }
 
