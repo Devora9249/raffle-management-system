@@ -136,8 +136,7 @@ namespace server.Services
 
                 TotalGifts = gifts.Count,
                 TotalTicketsSold = purchaseStats.Sum(x => x.TicketsSold),
-                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), // סה"כ ייחודיים לכל מתנה (אפשר גם אחרת)
-
+                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), 
                 Gifts = gifts.Select(g => new DonorGiftStatsDto
                 {
                     GiftId = g.Id,

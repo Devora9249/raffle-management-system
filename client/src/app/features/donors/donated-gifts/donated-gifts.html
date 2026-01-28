@@ -20,8 +20,8 @@
     <div class="gift-item">
         <div class="gift-header">
             <strong>{{ gift.description }}</strong>
-            <span class="status" [class.win]="gift.hasWinning">
-                {{ gift.hasWinning ? 'No Winneing Yet' : 'Has Winneing!' }}
+            <span class="status" [class.win]="!gift.hasWinning">
+                {{ gift.hasWinning ? 'Has Winning!' : 'No Winning Yet' }}
             </span>
         </div>
 
