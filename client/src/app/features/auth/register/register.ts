@@ -3,10 +3,12 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
 import { RegisterDto } from '../../../core/models/auth-model';
 import { AuthService } from '../../../core/services/auth-service';
 import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })

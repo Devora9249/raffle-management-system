@@ -41,28 +41,28 @@ namespace server.Services.Implementations
         }
         public async Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto)
         {
-            // 1️⃣ שליפת הרכישה
+            // שליפת הרכישה
             var purchase = await _repo.GetByIdAsync(id);
             if (purchase == null)
                 throw new KeyNotFoundException("Purchase not found");
 
-            // 2️⃣ חוקים עסקיים
+            // תנאי
             if (dto.Qty.HasValue && dto.Qty.Value < 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
-            // 3️⃣ עדכון שדות
+            //  עדכון שדות
             if (dto.Qty.HasValue)
                 purchase.Qty = dto.Qty.Value;
 
             if (dto.Status.HasValue)
                 purchase.Status = dto.Status.Value;
 
-            // 4️⃣ שמירה (כיבוד חוזה ה-Repository)
+            //  שמירה 
             var updated = await _repo.UpdateAsync(purchase);
             if (updated == null)
                 throw new KeyNotFoundException("Purchase not found");
 
-            // 5️⃣ החזרת DTO
+            // החזרת DTO
             return ToResponseDto(updated);
         }
 
@@ -100,11 +100,6 @@ namespace server.Services.Implementations
 
         private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
         {
-            // if (p.Gift == null)
-            //     throw new Exception("Gift is null");
-
-            // if (p.User == null)
-            //     throw new Exception("User is null");
 
             return new PurchaseResponseDto
             {

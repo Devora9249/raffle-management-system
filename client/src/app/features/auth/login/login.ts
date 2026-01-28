@@ -3,10 +3,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 import { LoginDto } from '../../../core/models/auth-model';
+import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, InputGroupModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
