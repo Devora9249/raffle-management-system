@@ -64,4 +64,5 @@ public class GiftResponseDto
     public int CategoryId { get; set; }
     public int DonorId { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
+    
 }
