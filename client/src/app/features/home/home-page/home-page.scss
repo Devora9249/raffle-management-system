@@ -1,0 +1,86 @@
+/* ===== Page Wrapper ===== */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  padding: 48px 16px;
+}
+
+/* ===== Hero ===== */
+.hero {
+  width: 100%;
+  max-width: 720px;
+  padding: 40px 32px;
+
+  text-align: center;
+
+  background: var(--p-surface-0);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.hero-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.hero-subtitle {
+  margin: 12px 0 24px;
+  font-size: 1rem;
+  color: var(--p-text-secondary-color);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-link {
+  font-size: 0.9rem;
+  color: var(--p-primary-color);
+  text-decoration: none;
+}
+
+.hero-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Steps ===== */
+.steps {
+  width: 100%;
+  max-width: 900px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.step {
+  padding: 24px;
+  text-align: center;
+
+  background: var(--p-surface-0);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.step-icon {
+  font-size: 2rem;
+  color: var(--p-primary-color);
+  margin-bottom: 12px;
+}
+
+.step h3 {
+  margin: 8px 0;
+  font-size: 1.1rem;
+}
+
+.step p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--p-text-secondary-color);
+}
