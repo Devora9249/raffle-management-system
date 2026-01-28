@@ -24,10 +24,19 @@ export interface GiftUpdateDto {
   imageUrl?: string;
 }
 
+export interface GiftStatsDto {
+  giftId: number
+  description: string,
+  ticketsSold: number,
+  uniqueBuyers: number,
+  hasWinning: boolean
+}
 
- export enum PriceSort {
+export enum PriceSort {
   None = 'None',
   Ascending = 'Ascending',
   Descending = 'Descending',
 }
+
+
 

@@ -1,3 +1,35 @@
-<p>donated-gifts works!</p>
+<!-- <div style="border-radius: 10px; border: solid, black; width: 100%;">
 
-<div style="background-color: green; width: 50%;"><p>List of donated gifts will be displayed here.</p></div>
+    <h2>donated gifts</h2>
+    @for(gift of gifts; track gift.giftId){
+    <p>id: {{ gift.giftId }}</p>
+    <p>description: {{ gift.description }}</p>
+    <p>ticketsSold: {{ gift.ticketsSold }}</p>
+    <p>uniqueBuyers: {{ gift.uniqueBuyers }}</p>
+    <p>hasWinning: {{ gift.hasWinning}}</p>
+    }
+</div> -->
+
+<div class="card">
+    <h2 class="card-title">
+        <i class="pi pi-gift"></i>
+        Donated Gifts
+    </h2>
+
+    @for(gift of gifts; track gift.giftId){
+    <div class="gift-item">
+        <div class="gift-header">
+            <strong>{{ gift.description }}</strong>
+            <span class="status" [class.win]="gift.hasWinning">
+                {{ gift.hasWinning ? 'No Winneing Yet' : 'Has Winneing!' }}
+            </span>
+        </div>
+
+        <div class="gift-stats">
+            <span><i class="pi">ID: </i>{{ gift.giftId }}</span>
+            <span><i class="pi pi-users"></i> {{ gift.uniqueBuyers }}</span>
+            <span><i class="pi pi-ticket"></i> {{ gift.ticketsSold }}</span>
+        </div>
+    </div>
+    }
+</div>

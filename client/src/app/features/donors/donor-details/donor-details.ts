@@ -8,6 +8,6 @@ import { DonorListItem } from '../../../core/models/donor-model';
   styleUrl: './donor-details.scss',
 })
 export class DonorDetails {
-  @Input() donor!: DonorListItem ;
+  @Input() details!: DonorListItem ;
 
 }

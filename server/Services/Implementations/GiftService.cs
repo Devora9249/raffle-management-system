@@ -176,6 +176,9 @@ public class GiftService : IGiftService
         if (dto.CategoryId.HasValue)
             existing.CategoryId = dto.CategoryId.Value;
 
+        if (dto.DonorId.HasValue)
+            existing.DonorId = dto.DonorId.Value;
+
         if (dto.Image != null)
         {
             // 1. ולידציה בסיסית

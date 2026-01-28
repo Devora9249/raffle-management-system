@@ -1,0 +1,53 @@
+.gift-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--p-surface-200);
+}
+
+.gift-item:last-child {
+    border-bottom: none;
+}
+
+.gift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: var(--p-surface-100);
+}
+
+.status.win {
+    background: var(--p-success-color);
+    color: white;
+}
+
+.gift-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--p-text-secondary-color);
+}
+
+.gift-stats i {
+    margin-right: 4px;
+}
+
+.pi {
+    color: var(--p-primary-color);
+}
+
+.card {
+    background: var(--p-surface-0);
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+// .text{
+//     color: var(--p-primary-color);
+// }

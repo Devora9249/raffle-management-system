@@ -1,40 +1,35 @@
-<!-- <div *ngIf="isLoading">
+<!-- @if(isLoading){
+<div>
   טוען נתונים...
 </div>
+}
 
-<div *ngIf="donorDashboard as dashboard">
-<app-donor-details *ngIf="donor" [donor]="donor"></app-donor-details>
+@if(dashboard && details){
+<div>
+  <app-donor-details [details]="details"></app-donor-details>
 
+  <app-donor-dashboard [dashboard]="dashboard"></app-donor-dashboard>
 
+  <app-donated-gifts [gifts]="gifts"></app-donated-gifts>
+</div>}
 
-  <app-donor-dashboard
-    [totalGifts]="dashboard.totalGifts"
-    [totalTicketsSold]="dashboard.totalTicketsSold"
-    [totalUniqueBuyers]="dashboard.totalUniqueBuyers">
-  </app-donor-dashboard>
+ -->
 
-  <app-donated-gifts
-    [gifts]="dashboard.gifts">
-  </app-donated-gifts>
-</div> -->
-
-
-
-<!-- הכנסתי את הקוד שלך להערה, אפילו לא בדקתי אותו, רק רציתי לראות שחוזרים נתונים והם מוצגים -->
+ 
 @if(isLoading){
-<h1>is loading...</h1>
+  <div class="loading">טוען נתונים...</div>
 }
 
-@if (dashboard && details) {
+@if(dashboard && details){
+  <div class="donor-page">
 
-<h1>Donor Dashboard</h1>
-<h2>{{dashboard.totalGifts}}</h2>
-<h2>{{dashboard.totalTicketsSold}}</h2>
-<h2>{{dashboard.totalUniqueBuyers}}</h2>
+    <div class="top-grid">
+      <app-donor-details [details]="details"></app-donor-details>
+      <app-donor-dashboard [dashboard]="dashboard"></app-donor-dashboard>
+    </div>
 
-<h1>donor details</h1>
-<h2>{{details.name}}</h2>
-<h2>{{details.email}}</h2>
-<h2>{{details.phone}}</h2>
-<h2>{{details.city}}</h2>
+    <app-donated-gifts [gifts]="gifts"></app-donated-gifts>
+
+  </div>
 }
+

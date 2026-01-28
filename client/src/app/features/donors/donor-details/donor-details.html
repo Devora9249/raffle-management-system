@@ -1,9 +1,24 @@
-<div style="border-radius: 10px; border: solid, black; width: 100%;">
-    <h2>{{ donor.id }}</h2>
-        <p> {{ donor.name }}</p>
-    <p> {{ donor.email }} בעיח</p>
+<!-- <div style="border-radius: 10px; border: solid, black; width: 100%;">
 
-        <p> {{ donor.phone }} העינמ</p>
-    <p> {{ donor.city}} עיח</p>
+    <h2>Donor details</h2>
 
-    
+    <p>id: {{ details.id }}</p>
+    <p>name: {{ details.name }}</p>
+    <p>email: {{ details.email }}</p>
+    <p>phone: {{ details.phone }}</p>
+    <p>city: {{ details.city}}</p>
+
+</div> -->
+
+<div class="card info-card">
+  <h2 class="card-title">
+    <i class="pi pi-user"></i>
+    Donor Details
+  </h2>
+
+  <div class="info-row"><i class="pi pi-id-card"></i> {{ details.id }}</div>
+  <div class="info-row"><i class="pi pi-user"></i> {{ details.name }}</div>
+  <div class="info-row"><i class="pi pi-envelope"></i> {{ details.email }}</div>
+  <div class="info-row"><i class="pi pi-phone"></i> {{ details.phone }}</div>
+  <div class="info-row"><i class="pi pi-map-marker"></i> {{ details.city }}</div>
+</div>

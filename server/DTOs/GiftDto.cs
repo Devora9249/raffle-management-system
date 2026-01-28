@@ -32,7 +32,7 @@ public class GiftCreateWithImageDto
 
 public class GiftUpdateWithImageDto
 {
-    [Required, MaxLength(500)]
+    [MaxLength(500)]
     public string? Description { get; set; } = string.Empty;
     [Range(0.01, double.MaxValue)]
     public decimal? Price { get; set; }
