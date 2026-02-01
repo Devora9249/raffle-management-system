@@ -59,6 +59,11 @@ public class PurchaseController : ControllerBase
     [HttpGet("byGift/{giftId:int}")]
     public async Task<IActionResult> GetByGift(int giftId)
         => Ok(await _service.GetByGiftAsync(giftId));
+        
+
+    [HttpGet("count-by-gift")]
+    public async Task<IActionResult> GetPurchaseCountByGift()
+    => Ok(await _service.GetPurchaseCountByGiftAsync());
 
 }
 

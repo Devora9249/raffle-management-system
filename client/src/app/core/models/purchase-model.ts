@@ -1,26 +1,37 @@
-// Add item to cart (create draft purchase)
-export interface CartAddDto {
+export interface PurchaseResponseDto {
+  id: number;
+  userId: number;
+  userName: string;
+  giftId: number;
+  giftName: string;
+  donorId: number;
+  donorName: string;
+  qty: number;
+  status: Status;
+  purchaseDate: string; 
+}
+
+
+export interface PurchaseCreateDto {
   userId: number;
   giftId: number;
   qty: number;
 }
 
-// Update existing cart item quantity
-export interface CartUpdateDto {
-  purchaseId: number;
-  qty: number;
-}
-// Cart item returned from server
-export interface CartItemResponseDto {
-  purchaseId: number;
-  giftId: number;
-  qty: number;
-  addedAt: string; // ISO date string from server
+export interface PurchaseUpdateDto {
+  qty?: number;
+  status?: Status;
 }
 
-// Checkout response
-export interface CartCheckoutResponseDto {
-  userId: number;
-  itemsCompleted: number;
-  message: string;
+export interface GiftPurchaseCountDto {
+  giftId: number;
+  giftName: string;
+  donorName: string;
+  purchaseCount: number;
+}
+
+export enum Status {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Canceled = 'Canceled'
 }

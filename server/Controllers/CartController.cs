@@ -16,7 +16,6 @@ public class CartController : ControllerBase
     }
 
     [HttpGet("{userId:int}")]
-    [ProducesResponseType(typeof(IEnumerable<CartItemResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCart(int userId)
         => Ok(await _service.GetCartAsync(userId));
 
@@ -29,7 +28,7 @@ public class CartController : ControllerBase
 
 
     [HttpPut]
-    public async Task<IActionResult> UpdateQty([FromBody] CartUpdateDto dto)
+    public async Task<IActionResult> UpdateQty([FromBody] CartAddDto dto)
     {
         var updated = await _service.UpdateQtyAsync(dto);
         return Ok(updated);

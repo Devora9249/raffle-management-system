@@ -1,0 +1,44 @@
+<p-dialog
+  header="Donated Gifts"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  (onHide)="closed.emit()">
+
+  <ng-container *ngIf="donor">
+
+    <h4 class="mb-3">
+      Donor: {{ donor?.name }}
+    </h4>
+
+    <p-table
+      *ngIf="donor?.gifts?.length; else noGifts"
+      [value]="donor?.gifts ?? []">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Price</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-gift>
+        <tr>
+          <td>{{ gift.description }}</td>
+          <td>{{ gift.categoryName }}</td>
+          <td>{{ gift.price | number:'1.2-2' }}</td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+    <ng-template #noGifts>
+      <p class="text-center text-muted mt-4">
+        This donor has not donated any gifts.
+      </p>
+    </ng-template>
+
+  </ng-container>
+
+</p-dialog>

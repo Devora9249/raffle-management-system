@@ -15,15 +15,76 @@ public class GiftService : IGiftService
         _giftRepository = giftRepository;
     }
 
-    public async Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort)
+   public async Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(
+    PriceSort sort,
+    int? categoryId,
+    int? donorId
+    )
+{
+    var gifts = await _giftRepository.GetAllGiftsAsync(
+        categoryId,
+        donorId,
+        sort
+    );
+
+    return gifts.Select(g => new GiftResponseDto
     {
-        var gifts = await _giftRepository.GetAllGiftsAsync(sort);
+        Id = g.Id,
+        Description = g.Description,
+        CategoryId = g.CategoryId,
+        CategoryName = g.Category.Name,
+        Price = g.Price,
+        DonorId = g.DonorId,
+        ImageUrl = g.ImageUrl
+    });
+}
+
+
+
+    public async Task<IEnumerable<GiftResponseDto>> GetAllAsync(PriceSort sort)
+    {
+        var gifts = await _giftRepository.GetGiftsAsync(sort);
 
         return gifts.Select(g => new GiftResponseDto
         {
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
+            Price = g.Price,
+            DonorId = g.DonorId,
+            ImageUrl = g.ImageUrl
+        });
+    }
+
+
+    public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
+    {
+        var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
+        if (gifts == null) return null;
+
+        return gifts.Select(g => new GiftResponseDto
+        {
+            Id = g.Id,
+            Description = g.Description,
+            CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
+            Price = g.Price,
+            DonorId = g.DonorId,
+            ImageUrl = g.ImageUrl
+        });
+    }
+
+    public async Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId)
+    {
+        var gifts = await _giftRepository.GetByDonorAsync(donorId);
+
+        return gifts.Select(g => new GiftResponseDto
+        {
+            Id = g.Id,
+            Description = g.Description,
+            CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -40,34 +101,50 @@ public class GiftService : IGiftService
             Id = gift.Id,
             Description = gift.Description,
             CategoryName = gift.Category.Name,
+            CategoryId = gift.CategoryId,
             Price = gift.Price,
-            DonorId = gift.DonorId
+            DonorId = gift.DonorId,
+            ImageUrl = gift.ImageUrl
         };
     }
 
-    public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
+    public async Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto)
     {
-        var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
-        if(gifts == null) return null;
-
-        return gifts.Select(g => new GiftResponseDto
+        var imageUrl = string.Empty;
+        if (dto.Image != null)
         {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            Price = g.Price,
-            DonorId = g.DonorId
-        });
-    }
+            // 1. ולידציה בסיסית
+            if (dto.Image == null || dto.Image.Length == 0)
+                throw new Exception("Image is required");
 
-    public async Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto)
-    {
+            // 2. יצירת שם ייחודי
+            var extension = Path.GetExtension(dto.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+
+            // 3. נתיב פיזי
+            var folderPath = Path.Combine("wwwroot", "uploads", "gifts");
+            Directory.CreateDirectory(folderPath);
+
+            var filePath = Path.Combine(folderPath, fileName);
+
+            // 4. שמירה בפועל
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.Image.CopyToAsync(stream);
+            }
+
+            // 5. יצירת URL
+            imageUrl = $"/uploads/gifts/{fileName}";
+        }
+
+
         var model = new GiftModel
         {
             Description = dto.Description,
             CategoryId = dto.CategoryId,
             Price = dto.Price,
-            DonorId = dto.DonorId
+            DonorId = dto.DonorId,
+            ImageUrl = imageUrl
         };
 
         var created = await _giftRepository.AddGiftAsync(model);
@@ -78,12 +155,13 @@ public class GiftService : IGiftService
             Description = created.Description,
             CategoryName = created.Category.Name,
             Price = created.Price,
-            DonorId = created.DonorId
+            DonorId = created.DonorId,
+            ImageUrl = created.ImageUrl
         };
     }
 
 
-    public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto)
+    public async Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateWithImageDto dto)
     {
         var existing = await _giftRepository.GetGiftByIdAsync(id);
         if (existing == null)
@@ -91,12 +169,41 @@ public class GiftService : IGiftService
 
         if (dto.Description != null)
             existing.Description = dto.Description;
-    
+
         if (dto.Price.HasValue)
             existing.Price = dto.Price.Value;
 
         if (dto.CategoryId.HasValue)
             existing.CategoryId = dto.CategoryId.Value;
+
+        if (dto.DonorId.HasValue)
+            existing.DonorId = dto.DonorId.Value;
+
+        if (dto.Image != null)
+        {
+            // 1. ולידציה בסיסית
+            if (dto.Image == null || dto.Image.Length == 0)
+                throw new Exception("Image is required");
+
+            // 2. יצירת שם ייחודי
+            var extension = Path.GetExtension(dto.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+
+            // 3. נתיב פיזי
+            var folderPath = Path.Combine("wwwroot", "uploads", "gifts");
+            Directory.CreateDirectory(folderPath);
+
+            var filePath = Path.Combine(folderPath, fileName);
+
+            // 4. שמירה בפועל
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.Image.CopyToAsync(stream);
+            }
+
+            // 5. יצירת URL
+            existing.ImageUrl = $"/uploads/gifts/{fileName}";
+        }
 
         var updated = await _giftRepository.UpdateGiftAsync(existing);
 
@@ -108,17 +215,21 @@ public class GiftService : IGiftService
             Id = updated.Id,
             Description = updated.Description,
             CategoryName = updated.Category.Name,
+            CategoryId = updated.CategoryId,
             Price = updated.Price,
             DonorId = updated.DonorId
         };
     }
 
-    
-
 
     public async Task<bool> DeleteGiftAsync(int id)
     {
-        return await _giftRepository.DeleteGiftAsync(id);
+        if (await _giftRepository.HasPurchasesAsync(id))
+            throw new InvalidOperationException($"Cannot delete Gift {id} because it has associated purchases.");
+        var result = await _giftRepository.DeleteGiftAsync(id);
+        if (!result)
+            throw new KeyNotFoundException($"Gift {id} not found");
+        return result;
     }
 
     public async Task<IEnumerable<GiftResponseDto>> FilterByGiftName(string name)
@@ -130,6 +241,7 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });
@@ -144,22 +256,9 @@ public class GiftService : IGiftService
             Id = g.Id,
             Description = g.Description,
             CategoryName = g.Category.Name,
+            CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
         });
     }
-    public async Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId)
-    {
-        var gifts = await _giftRepository.GetByDonorAsync(donorId);
-
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            Price = g.Price,
-            DonorId = g.DonorId
-        });
-    }
-
 }

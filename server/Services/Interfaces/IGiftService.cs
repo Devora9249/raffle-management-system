@@ -7,11 +7,15 @@ namespace server.Services.Interfaces
     public interface IGiftService
     {
         //CRUD
-        Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(PriceSort sort);
+        Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(  
+    PriceSort sort,
+    int? categoryId,
+    int? donorId);
+        Task<IEnumerable<GiftResponseDto>> GetAllAsync(PriceSort sort);
         Task<GiftResponseDto?> GetGiftByIdAsync(int id);
         Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId);
-        Task<GiftResponseDto> AddGiftAsync(GiftCreateDto dto);
-        Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateDto dto);
+        Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto);
+        Task<GiftResponseDto> UpdateGiftAsync(int id, GiftUpdateWithImageDto dto);
         Task<bool> DeleteGiftAsync(int id);
 
         //בנוסף

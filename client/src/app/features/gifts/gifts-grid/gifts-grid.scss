@@ -1,0 +1,7 @@
+.gifts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 50px;
+  justify-content: center;
+  margin-top: 16px;
+}

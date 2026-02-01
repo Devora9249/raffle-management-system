@@ -2,7 +2,6 @@ using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
-using server.Models.Enums;
 
 namespace server.Services.Implementations
 {
@@ -29,7 +28,7 @@ namespace server.Services.Implementations
             if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
             var purchase = new PurchaseModel
-            { 
+            {
                 UserId = createDto.UserId,
                 GiftId = createDto.GiftId,
                 Qty = createDto.Qty,
@@ -42,28 +41,28 @@ namespace server.Services.Implementations
         }
         public async Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto)
         {
-            // 1️⃣ שליפת הרכישה
+            // שליפת הרכישה
             var purchase = await _repo.GetByIdAsync(id);
             if (purchase == null)
                 throw new KeyNotFoundException("Purchase not found");
 
-            // 2️⃣ חוקים עסקיים
-            if (dto.Qty.HasValue && dto.Qty.Value <= 0)
+            // תנאי
+            if (dto.Qty.HasValue && dto.Qty.Value < 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
-            // 3️⃣ עדכון שדות
+            //  עדכון שדות
             if (dto.Qty.HasValue)
                 purchase.Qty = dto.Qty.Value;
 
             if (dto.Status.HasValue)
                 purchase.Status = dto.Status.Value;
 
-            // 4️⃣ שמירה (כיבוד חוזה ה-Repository)
+            //  שמירה 
             var updated = await _repo.UpdateAsync(purchase);
             if (updated == null)
                 throw new KeyNotFoundException("Purchase not found");
 
-            // 5️⃣ החזרת DTO
+            // החזרת DTO
             return ToResponseDto(updated);
         }
 
@@ -72,24 +71,51 @@ namespace server.Services.Implementations
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var p = await _repo.DeleteAsync(id);
-            if (!p)
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null)
+                throw new KeyNotFoundException("Purchase not found");
+
+            var deleted = await _repo.DeleteAsync(id);
+
+            if (!deleted)
                 throw new KeyNotFoundException("Purchase not found or could not be deleted");
-           return p;
-        } 
+            return deleted;
+        }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
             => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
 
+        public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
+        {
+            var data = await _repo.GetPurchaseCountByGiftAsync();
+
+            return data.Select(x => new GiftPurchaseCountDto
+            {
+                GiftId = x.GiftId,
+                GiftName = x.GiftName,
+                PurchaseCount = x.PurchaseCount,
+                DonorName = x.DonorName
+            });
+        }
+
         private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
-            => new PurchaseResponseDto
+        {
+
+            return new PurchaseResponseDto
             {
                 Id = p.Id,
                 UserId = p.UserId,
+                UserName = p.User.Name,
                 GiftId = p.GiftId,
+                GiftName = p.Gift.Description,
+                DonorId = p.Gift.DonorId,
+                DonorName = p.Gift.Donor.Name,
                 Qty = p.Qty,
                 Status = p.Status,
                 PurchaseDate = p.PurchaseDate
             };
+
+        }
+
     }
 }

@@ -1,3 +1,33 @@
-<p>donor-dashboard works!</p>
-<div style="background-color: yellow; width: 50%;"><p>Dashboard content goes here.</p></div>
+<!-- <div style="border-radius: 10px; border: solid, black; width: 100%;">
+    <h2>Donor Dashboard</h2>
+    <p>total gifts: {{ dashboard.totalGifts }}</p>
+    <p>total tickets sold: {{ dashboard.totalTicketsSold }}</p>
+    <p>total unique buyers: {{ dashboard.totalUniqueBuyers }}</p>
+</div> -->
 
+<div class="card dashboard-card">
+    <h2 class="card-title">
+        <i class="pi pi-chart-bar"></i>
+        Overview
+    </h2>
+
+    <div class="kpi-grid">
+        <div class="kpi kpi-primary">
+            <i class="pi pi-gift"></i>
+            <div class="text">Total Gifts</div>
+            <strong>{{ dashboard.totalGifts }}</strong>
+        </div>
+
+        <div class="kpi kpi-success">
+            <i class="pi pi-ticket"></i>
+            <div class="text">Tickets Sold</div>
+            <strong>{{ dashboard.totalTicketsSold }}</strong>
+        </div>
+
+        <div class="kpi kpi-info">
+            <i class="pi pi-users"></i>
+            <div class="text">Unique Buyers</div>
+            <strong>{{ dashboard.totalUniqueBuyers }}</strong>
+        </div>
+    </div>
+</div>

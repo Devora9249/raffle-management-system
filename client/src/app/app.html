@@ -1,12 +1,8 @@
-<div class="my-nav">
-  <nav>
-    <a routerLink="register" routerLinkActive="active-link">הרשמה</a>
-    <a routerLink="login" routerLinkActive="active-link">התחברות</a>
-    <a routerLink="gifts" routerLinkActive="active-link">מתנות</a>
-    <a *ngIf="currentDonorId" [routerLink]="['/donor', currentDonorId]">צפה בתורם</a>
-  </nav>
-</div>
+<app-nav></app-nav>
+
 
 <div class="my-outlet">
   <router-outlet></router-outlet>
 </div>
+
+<app-cart-page></app-cart-page>

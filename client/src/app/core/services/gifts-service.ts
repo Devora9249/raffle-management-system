@@ -8,31 +8,46 @@ export class GiftsService {
 
   private readonly baseUrl = 'http://localhost:5071/api/Gift';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-getAll(sort: PriceSort): Observable<GiftResponseDto[]> {
-  return this.http
-    .get<GiftResponseDto[]>(this.baseUrl, {
-      params: { sort }
-    })
-}
+  getAll(
+    sort: PriceSort,
+    categoryId?: number | null,
+    donorId?: number | null
+  ): Observable<GiftResponseDto[]> {
+
+    let params: any = { sort };
+
+    if (categoryId != null) {
+      params.categoryId = categoryId;
+    }
+
+    if (donorId != null) {
+      params.donorId = donorId;
+    }
+
+    return this.http.get<GiftResponseDto[]>(this.baseUrl, { params });
+  }
+
 
   getById(id: number): Observable<GiftResponseDto> {
     return this.http
       .get<GiftResponseDto>(`${this.baseUrl}/${id}`)
   }
 
-  create(dto: GiftCreateDto): Observable<GiftResponseDto> {
+  create(data: FormData): Observable<GiftResponseDto> {
     return this.http
-      .post<GiftResponseDto>(this.baseUrl, dto)
+      .post<GiftResponseDto>(this.baseUrl, data)
   }
 
-  update(id: number, dto: GiftUpdateDto): Observable<GiftResponseDto> {
+  update(id: number, dto: FormData): Observable<GiftResponseDto> {
     return this.http
       .put<GiftResponseDto>(`${this.baseUrl}/${id}`, dto)
   }
 
   delete(id: number): Observable<void> {
+    console.log("hi", id);
+
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 

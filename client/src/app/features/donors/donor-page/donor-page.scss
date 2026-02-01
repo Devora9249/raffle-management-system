@@ -1,0 +1,30 @@
+
+.donor-page {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* אזור עליון – דשבורדי */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* מסכים רחבים */
+@media (min-width: 900px) {
+  .top-grid {
+    grid-template-columns: 1fr 2fr;
+    align-items: stretch;
+  }
+}
+
+/* מסכים מאוד רחבים */
+@media (min-width: 1400px) {
+  .donor-page {
+    padding: 32px 64px;
+  }
+}

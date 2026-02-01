@@ -13,12 +13,15 @@ namespace server.DTOs
     {
         [Required] public int PurchaseId { get; set; }
         [Required, Range(1, int.MaxValue)] public int Qty { get; set; }
+        
     }
 
     public class CartItemResponseDto
     {
         public int PurchaseId { get; set; }
         public int GiftId { get; set; }
+        public string GiftName { get; set; } = string.Empty;
+        public decimal GiftPrice { get; set; }
         public int Qty { get; set; }
         public DateTime AddedAt { get; set; }
     }

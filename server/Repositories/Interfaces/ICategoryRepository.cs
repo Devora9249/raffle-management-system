@@ -10,6 +10,7 @@ namespace server.Repositories.Interfaces
         Task<CategoryModel?> GetCategoryByIdAsync(int id);
         Task<CategoryModel> AddCategoryAsync(CategoryModel category);
         Task<CategoryModel?> UpdateCategoryAsync(CategoryModel category);
+        Task<bool> HasGiftsAsync(int categoryId);
         Task<bool> DeleteCategoryAsync(int id);
     }
 }

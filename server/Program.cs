@@ -30,13 +30,13 @@ builder.Host.UseSerilog((context, services, configuration) =>
             retainedFileCountLimit: 14);
 });
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration) 
-    .WriteTo.Console() 
-    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
+// Log.Logger = new LoggerConfiguration()
+//     .ReadFrom.Configuration(builder.Configuration) 
+//     .WriteTo.Console() 
+//     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+//     .CreateLogger();
 
-Log.Information("Application is starting");
+//Log.Information("Application is starting");
 
 // --- Services ---
 
@@ -139,6 +139,8 @@ builder.Services.AddControllers();
 
 // --- Build app ---
 var app = builder.Build();
+app.Logger.LogInformation("Application started");
+
 
 // הפעלת CORS
 app.UseCors("AllowAngularDev");
@@ -182,5 +184,7 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseStaticFiles();
+
 
 app.Run();

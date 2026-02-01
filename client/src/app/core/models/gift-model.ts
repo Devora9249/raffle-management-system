@@ -4,7 +4,9 @@ export interface GiftResponseDto {
   description: string;
   price: number;
   categoryName: string;
+  categoryId: number;
   donorId: number;
+  imageUrl: string;
 }
 
 export interface GiftCreateDto {
@@ -22,9 +24,19 @@ export interface GiftUpdateDto {
   imageUrl?: string;
 }
 
- export enum PriceSort {
+export interface GiftStatsDto {
+  giftId: number
+  description: string,
+  ticketsSold: number,
+  uniqueBuyers: number,
+  hasWinning: boolean
+}
+
+export enum PriceSort {
   None = 'None',
   Ascending = 'Ascending',
   Descending = 'Descending',
 }
+
+
 

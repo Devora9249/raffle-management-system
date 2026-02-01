@@ -1,0 +1,38 @@
+<!-- @for(p of purchases; track p.giftId){
+  <div class="purchase-card">
+    <div class="purchase-info">
+        <div class="gift-name">{{ p.giftName }}</div>
+        <div class="purchase-count">Purchased: {{ p.purchaseCount }}</div>
+    </div>
+  </div>
+} -->
+
+
+<p-table
+  [value]="purchases"
+  [rows]="8"
+  [responsiveLayout]="'scroll'"
+  styleClass="p-datatable-sm p-datatable-striped purchase-table">
+
+  <!-- Header -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Gift</th>
+      <th>Donor</th>
+      <th class="text-center">Purchased</th>
+    </tr>
+  </ng-template>
+
+  <!-- Body -->
+  <ng-template pTemplate="body" let-p>
+    <tr>
+      <td>{{ p.giftName }}</td>
+      <td>{{ p.donorName }}</td>
+      <td class="text-center">
+        <strong>{{ p.purchaseCount }}</strong>
+      </td>
+    </tr>
+  </ng-template>
+
+
+</p-table>

@@ -1,0 +1,71 @@
+<p-drawer
+  [(visible)]="visible"
+  position="right"
+  [modal]="true"
+  [style]="{ width: '360px' }"
+  header="Shopping Cart">
+
+  @if(massage){
+    <div class="cart-message">
+      {{ massage }}
+    </div>
+  }
+
+  <!-- Items list -->
+  <div class="cart-list">
+    @for (item of (cartItems$ | async) ?? []; track item.purchaseId) {
+      <div class="cart-item">
+
+        <!-- Name + subtotal -->
+        <div class="cart-item-header">
+          <span class="cart-item-name">{{ item.giftName }}</span>
+          <span class="cart-item-subtotal">
+            $ {{ item.giftPrice * item.qty }}
+          </span>
+        </div>
+
+        <!-- Unit price -->
+        <div class="cart-item-unit-price">
+          ${{ item.giftPrice }} each
+        </div>
+
+        <!-- Quantity + delete -->
+        <div class="cart-item-actions">
+          <app-cart-item-qty
+            [count]="item.qty"
+            (countChange)="onCountChange(item, $event)">
+          </app-cart-item-qty>
+
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            text
+            rounded
+            aria-label="Remove item"
+            (onClick)="onDelete(item)">
+          </p-button>
+        </div>
+
+      </div>
+    }
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong>$ {{ totalPrice$ | async }}</strong>
+      </div>
+
+      <p-button
+        label="Checkout"
+        icon="pi pi-credit-card"
+        class="w-full"
+        severity="primary"
+        (onClick)="checkout()">
+      </p-button>
+    </div>
+  </ng-template>
+
+</p-drawer>

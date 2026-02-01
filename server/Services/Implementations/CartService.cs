@@ -37,23 +37,20 @@ namespace server.Services.Implementations
             return ToCartItemDto(created);
         }
 
-        public async Task<CartItemResponseDto> UpdateQtyAsync(CartUpdateDto dto)
+        public async Task<CartItemResponseDto> UpdateQtyAsync(CartAddDto dto)
         {
             if (dto.Qty <= 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
-            var existing = await _repo.GetByIdAsync(dto.PurchaseId);
+            var existing = await _repo.FindDraftByUserAndGift(dto.UserId, dto.GiftId);
 
             if (existing == null)
-                throw new KeyNotFoundException("Cart item not found");
-
-            if (existing.Status != Status.Draft)
-                throw new InvalidOperationException("Only Draft items can be updated");
+                return await AddToCartAsync(dto);
 
             existing.Qty = dto.Qty;
 
             var updated = await _repo.UpdateAsync(existing);
-            return ToCartItemDto(updated);
+            return ToCartItemDto(updated); 
         }
 
         public async Task<bool> RemoveAsync(int purchaseId)
@@ -93,6 +90,8 @@ namespace server.Services.Implementations
             {
                 PurchaseId = p.Id,
                 GiftId = p.GiftId,
+                GiftName = p.Gift?.Description ?? string.Empty,
+                GiftPrice = p.Gift?.Price ?? 0,
                 Qty = p.Qty,
                 AddedAt = p.PurchaseDate
             };

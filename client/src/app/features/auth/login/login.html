@@ -1,4 +1,4 @@
-<form [formGroup]="loginForm" (ngSubmit)="submit()">
+<!-- <form [formGroup]="loginForm" (ngSubmit)="submit()">
   <div>
     <label>Email</label>
     <input type="email" formControlName="email" />
@@ -10,4 +10,64 @@
   </div>
 
   <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  <a href="/register">New here? Create an account</a>
 </form>
+ -->
+<div class="auth-page">
+
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="submit()"
+    class="auth-form">
+
+    <h2 class="form-title">Login</h2>
+
+    <!-- Email -->
+    <div class="field">
+      <label>Email</label>
+      <input
+        pInputText
+        type="email"
+        formControlName="email"
+        class="form-control" />
+
+      <small
+        class="error"
+        *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+        Email is required
+      </small>
+    </div>
+
+    <!-- Password -->
+    <div class="field">
+      <label>Password</label>
+
+      <p-password
+        formControlName="password"
+        [toggleMask]="true"
+        [feedback]="false"
+        inputStyleClass="w-full">
+      </p-password>
+
+      <small
+        class="error"
+        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        Password is required
+      </small>
+    </div>
+
+    <div class="actions">
+      <p-button
+        type="submit"
+        label="Login"
+        [disabled]="loginForm.invalid">
+      </p-button>
+    </div>
+
+    <a class="form-link" href="/register">
+      New here? Create an account
+    </a>
+
+  </form>
+
+</div>

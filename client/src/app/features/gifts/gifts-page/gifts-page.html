@@ -1,13 +1,32 @@
-<h1>gifts-page</h1>
-<app-gifts-header [categories]="categories"
-                  (sortChange)="onSortChange($event)"
-                  (categoryChange)="onCategoryChange($event)"
-                  [sortType]="sortType"
-                  [selectedCategoryId]="selectedCategoryId"
-                  (created)="onGiftCreated()"></app-gifts-header>
-<app-gifts-grid [gifts]="gifts"></app-gifts-grid>
 
+<div class="gifts-page">
 
+<app-gifts-header
+  [categories]="categories"
+  [sortType]="sortType"
+  [selectedCategoryId]="selectedCategoryId"
+  [selectedGift]="selectedGift"
+  [donors]="donors"
+  (sortChange)="onSortChange($event)"
+  (categoryChange)="onCategoryChange($event)"
+  (addGift)="onClickAddGift()"
+  (closed)="onDialogClosed()"
+  [isAdmin]="isAdmin">
+</app-gifts-header>
+
+<app-gifts-grid
+  [gifts]="gifts"
+  (render)="onRender()"
+  (edit)="onEdit($event)"
+  [isAdmin]="isAdmin"
+  [cartItems]="(cartItems$ | async) ?? []">
+</app-gifts-grid>
  
-
-    
+<app-gift-form-dialog
+  [categories]="categories"
+  [giftToEdit]="selectedGift"
+  [donors]="donors"
+  (created)="onGiftCreated()"
+  (closed)="onDialogClosed()">
+</app-gift-form-dialog>
+</div>

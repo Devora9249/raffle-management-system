@@ -7,15 +7,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './features/auth/login/login';
 import { AuthService } from './core/services/auth-service';
 import { UserResponseDto } from './core/models/auth-model';
+import { Nav } from './shared/components/nav/nav';
+import { CartPage } from './features/cart/cart-page/cart-page';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
-    CommonModule, // <-- חובה ל-*ngIf
-    NgIf,         // <-- חובה ל-*ngIf
+    CommonModule, 
+    NgIf,         
     RouterLink, RouterLinkActive, RouterOutlet,
-    GiftsPage, LoginComponent, Register, ReactiveFormsModule
+    GiftsPage, LoginComponent, Register, ReactiveFormsModule, Nav,
+    CartPage
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
@@ -23,15 +25,19 @@ import { UserResponseDto } from './core/models/auth-model';
 export class App implements OnInit {
   protected readonly title = signal('client');
   currentDonorId?: number;
+  // isDonor: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-this.authService.getCurrentUser().subscribe((user) => {
-  if (!user) return; // ✅ בדיקה אם null
-  console.log(user.name); // עכשיו בטוח שזה UserResponseDto
-  this.currentDonorId = user.id;
-});
-
+    this.authService.getCurrentUser().subscribe((user) => {
+      if (!user) return; 
+      console.log(user.name);
+      this.currentDonorId = user.id;
+    });
   }
+
+  // get isDonor(): boolean {
+  //   return this.authService.isDonor();
+  // }
 }

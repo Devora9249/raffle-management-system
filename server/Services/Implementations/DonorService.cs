@@ -1,7 +1,10 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Donors;
 using server.Models;
+using server.Models.Enums;
+using server.Services.Implementations;
 using server.Services.Interfaces;
 
 namespace server.Services
@@ -9,10 +12,16 @@ namespace server.Services
     public class DonorService : IDonorService
     {
         private readonly AppDbContext _context;
+        private readonly IAuthService authService;
+        private readonly IGiftService giftService;
+        private readonly ILogger<DonorService> _logger;
 
-        public DonorService(AppDbContext context)
+        public DonorService(AppDbContext context, IAuthService authService, IGiftService giftService, ILogger<DonorService> logger)
         {
             _context = context;
+            this.authService = authService;
+            this.giftService = giftService;
+            _logger = logger;
         }
         ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
@@ -45,10 +54,31 @@ namespace server.Services
                     Name = u.Name,
                     Email = u.Email,
                     Phone = u.Phone,
-                    City = u.City
+                    City = u.City,
                 })
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<DonorWithGiftsDto>> GetDonorsWithGiftsAsync()
+        {
+            var donors = await GetDonorsAsync("", "");
+
+            var gifts = await giftService.GetAllGiftsAsync(PriceSort.None, null, null);
+
+            return donors.Select(d => new DonorWithGiftsDto
+            {
+                DonorId = d.Id,
+                Name = d.Name,
+                Email = d.Email,
+                Phone = d.Phone,
+                City = d.City,
+                Address = d.Address,
+                Gifts = gifts
+                    .Where(g => g.DonorId == d.Id)
+                    .ToList()
+            });
+        }
+
         ///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
         public async Task SetUserRoleAsync(int userId, RoleEnum role)
         {
@@ -65,7 +95,6 @@ namespace server.Services
         {
             var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);
             if (donor == null) throw new KeyNotFoundException("Donor user not found");
-            if (donor.Role != RoleEnum.Donor) throw new InvalidOperationException("User is not a Donor");
 
             // 1) מתנות של התורם
             var gifts = await _context.Gifts
@@ -107,8 +136,7 @@ namespace server.Services
 
                 TotalGifts = gifts.Count,
                 TotalTicketsSold = purchaseStats.Sum(x => x.TicketsSold),
-                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), // סה"כ ייחודיים לכל מתנה (אפשר גם אחרת)
-
+                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), 
                 Gifts = gifts.Select(g => new DonorGiftStatsDto
                 {
                     GiftId = g.Id,
@@ -119,21 +147,53 @@ namespace server.Services
                 }).ToList()
             };
         }
-    
-    public async Task<DonorListItemDto?> GetCurrentDonorAsync(int userId)
-{
-    return await _context.Users
-        .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
-        .Select(u => new DonorListItemDto
-        {
-            Id = u.Id,
-            Name = u.Name,
-            Email = u.Email,
-            Phone = u.Phone,
-            City = u.City
-        })
-        .FirstOrDefaultAsync();
-}
 
-}
+        public async Task<DonorListItemDto?> GetDonorDetailsAsync(int userId)
+        {
+            return await _context.Users
+                .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
+                .Select(u => new DonorListItemDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    City = u.City
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> AddDonorAsync(addDonorDto donorDto)
+        {
+            var existingUser = await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == donorDto.Email);
+
+            if (existingUser != null)
+            {
+                return false;
+            }
+
+            var newDonor = new UserModel
+            {
+                Name = donorDto.Name,
+                Email = donorDto.Email,
+                Phone = donorDto.Phone,
+                City = donorDto.City,
+                Address = donorDto.Address,
+                Role = RoleEnum.Donor,
+                IsActive = true
+            };
+
+            //  Hash לסיסמה
+            newDonor.Password = authService.HashPassword(donorDto.Password);
+
+            _context.Users.Add(newDonor);
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("Added new donor: {@DonorDto}", donorDto);
+
+
+            return true;
+        }
+    }
 }

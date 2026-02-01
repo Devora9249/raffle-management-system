@@ -1,9 +1,38 @@
-<div style="border-radius: 10px; border: solid, black;">
-    <h2>{{ gift.description }}</h2>
-    <p>Price: {{ gift.price }}</p>
-    <p>Category Name: {{ gift.categoryName }}</p>
-    <app-cart-item-qty></app-cart-item-qty>
-    <app-admin-options></app-admin-options>
-    <app-add-to-cart-button></app-add-to-cart-button>
-</div><img [src]="gift.description" alt="Gift Image" />
-    
+<p-card class="product-card">
+
+  <!-- תמונה -->
+  <ng-template pTemplate="header">
+    <div class="product-image-wrapper">
+      <img [src]="imageSrc" alt="Gift Image" class="product-image" />
+    </div>
+  </ng-template>
+
+  <!-- תוכן -->
+  <div class="product-content">
+
+    <!-- שם + מחיר -->
+    <div class="product-header-row">
+      <span class="product-title">{{ gift.description }}</span>
+      <span class="product-price">₪ {{ gift.price }}</span>
+    </div>
+
+    <!-- כמות -->
+    <div class="product-qty">
+      <app-cart-item-qty  class="qty-wrapper" [count]="qty" (countChange)="onCountChange($event)">
+      </app-cart-item-qty>
+    </div>
+  </div>
+
+  <!-- פעולות אדמין -->
+  @if(isAdmin){
+  <ng-template pTemplate="footer">
+    <div class="product-actions">
+      <p-button icon="pi pi-pencil" severity="secondary" rounded text (onClick)="onEdit()">
+      </p-button>
+
+      <p-button icon="pi pi-trash" severity="danger" rounded text (onClick)="onDelete()">
+      </p-button>
+    </div>
+  </ng-template>
+  }
+</p-card>

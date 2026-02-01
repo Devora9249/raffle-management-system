@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Donors;
@@ -11,53 +12,78 @@ namespace server.Controllers
     public class DonorController : ControllerBase
     {
         private readonly IDonorService _donorService;
+        private readonly IUserService _userService;
+        private readonly ILogger<DonorController> _logger;
 
-        public DonorController(IDonorService donorService)
+        
+
+        public DonorController(IDonorService donorService, IUserService userService, ILogger<DonorController> logger)
         {
             _donorService = donorService;
+            _userService = userService;
+            _logger = logger;
         }
-[Authorize(Roles = "Donor")]
-        // GET /api/donor?search=...&city=...
-        [HttpGet]
-        public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(
-                    [FromQuery] string? search,
-                    [FromQuery] string? city)
-                    => Ok(await _donorService.GetDonorsAsync(search, city));
+
+        
 
         [Authorize(Roles = "Admin")]
-        // PATCH /api/donor/role/5?role=Donor
+        [HttpGet]
+        public async Task<ActionResult<List<DonorListItemDto>>> GetDonors(
+                            [FromQuery] string? search,
+                            [FromQuery] string? city)
+                            => Ok(await _donorService.GetDonorsAsync(search, city));
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("with-gifts")]
+        public async Task<ActionResult<IEnumerable<DonorWithGiftsDto>>> GetDonorsWithGifts()
+        {
+            var donorsWithGifts = await _donorService.GetDonorsWithGiftsAsync();
+            // _logger.LogInformation("Retrieved donors with gifts: {@DonorsWithGifts}", donorsWithGifts);
+            return Ok(donorsWithGifts);
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPatch("role/{userId}")]
         public async Task<IActionResult> SetRole(int userId, [FromQuery] RoleEnum role)
         {
             await _donorService.SetUserRoleAsync(userId, role);
             return NoContent();
-
         }
 
-        // -------- דשבורד לתורם --------
-[Authorize(Roles = "Donor")]
+        [Authorize(Roles = "Donor")]
+        [HttpGet("dashboard")]
+        public async Task<ActionResult<DonorDashboardResponseDto>> GetDonorDashboard()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
 
-        // GET /api/donor/5/dashboard
-        [HttpGet("{donorId}/dashboard")]
-        public async Task<ActionResult<DonorDashboardResponseDto>> Dashboard(int donorId)
-            => Ok(await _donorService.GetDonorDashboardAsync(donorId));
-    
+            var userId = int.Parse(userIdClaim);
 
-   [Authorize(Roles = "Donor")]
-[HttpGet("me")]
-public async Task<ActionResult<DonorListItemDto>> Me()
-{
-    var userIdClaim = User.FindFirst("id")?.Value;
-    if (userIdClaim == null)
-        return Unauthorized();
+            return await _donorService.GetDonorDashboardAsync(userId);
+        }
+        
 
-    var userId = int.Parse(userIdClaim);
+        [Authorize(Roles = "Donor")]
+        [HttpGet("details")]
+        public async Task<ActionResult<DonorListItemDto?>> GetDonorDetails()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
 
-    var donor = await _donorService.GetCurrentDonorAsync(userId);
-    if (donor == null)
-        return NotFound();
+            var userId = int.Parse(userIdClaim);
 
-    return Ok(donor);
-}
-}
+            return await _donorService.GetDonorDetailsAsync(userId);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult> AddDonor([FromBody] addDonorDto donorDto)
+        {
+            await _donorService.AddDonorAsync(donorDto);
+            return Ok(donorDto);
+
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, output, Output } from '@angular/core';
+import { Component, EventEmitter, output, Output, ViewChild } from '@angular/core';
 import { GiftsService } from '../../../core/services/gifts-service';
 import { GiftCard } from '../giftCard/gift-card/gift-card';
 import { GiftsGrid } from '../gifts-grid/gifts-grid';
@@ -6,78 +6,88 @@ import { GiftsHeader } from '../giftsHeader/gifts-header/gifts-header';
 import { GiftResponseDto, PriceSort } from '../../../core/models/gift-model';
 import { CategoriesService } from '../../../core/services/categories-service';
 import { CategoryResponseDto } from '../../../core/models/category-model';
+import { DonorListItem } from '../../../core/models/donor-model';
+import { DonorService } from '../../../core/services/donor-service';
+import { GiftFormDialog } from '../giftsHeader/GiftFormDialog/gift-form-dialog';
+import { AuthService } from '../../../core/services/auth-service';
+import { CartItemResponseDto } from '../../../core/models/cart-model';
+import { CartService } from '../../../core/services/cart-service';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-gifts-page',
-  imports: [GiftCard, GiftsGrid, GiftsHeader],
+  imports: [GiftCard, GiftsGrid, GiftsHeader, GiftFormDialog, AsyncPipe],
   templateUrl: './gifts-page.html',
   styleUrl: './gifts-page.scss',
-  standalone: true,
 })
 export class GiftsPage {
+
   gifts: GiftResponseDto[] = [];
   categories: CategoryResponseDto[] = [];
-
-  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService) { }
+  donors: DonorListItem[] = [];
+  selectedGift: GiftResponseDto | null = null;
+  isAdmin: boolean = false;
+  // cartItems: CartItemResponseDto[] = [];
+  userId: number | null = null;
+  cartItems$!: Observable<CartItemResponseDto[]>;
+  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService) { }
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
 
-
+  @ViewChild(GiftFormDialog) giftDialog!: GiftFormDialog;
 
 
 
 
   ngOnInit(): void {
-    this.giftsService.getAll(PriceSort.None).subscribe(gifts => {
+    this.cartItems$ = this.cartService.cart$; // ✅ כאן זה כבר בטוח
+
+    this.giftsService.getAll(PriceSort.None, null, null).subscribe(gifts => {
       this.gifts = gifts;
     });
 
     this.categoriesService.getAll().subscribe(cats => {
-    this.categories = cats;
-  });
-  console.log(this.categories, "categories");
+      this.categories = cats;
+    });
+
+    this.donorService.getDonors().subscribe(donors => {
+      this.donors = donors;
+    });
+
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+    });
+
+    this.authService.getCurrentUserId().subscribe(userId => {
+      if (!userId) return;
+      this.userId = userId;
+      this.cartService.loadCart(this.userId).subscribe();
+    });
 
   }
 
-  loadAscending() {
-    this.giftsService.getAll(PriceSort.Ascending)
-      .subscribe(gifts => this.gifts = gifts);
+  // getPurchaseId(giftId: number): number | null {
+  //   return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
+  // }
+
+  loadGifts(): void {
+    this.giftsService.getAll(this.sortType, this.selectedCategoryId, null).subscribe(gifts => {
+      this.gifts = gifts;
+    });
   }
 
-  loadDescending() {
-    this.giftsService.getAll(PriceSort.Descending)
-      .subscribe(gifts => this.gifts = gifts);
-  }
-
-  loadByCategory(categoryId: number | null) {
-    this.giftsService.getGiftsByCategory(categoryId)
-      .subscribe(gifts => this.gifts = gifts);
-  }
-
-  // @Output() sortChange = new EventEmitter<PriceSort>();
 
   onSortChange(sort: PriceSort) {
-    console.log('sort change:', sort);
-    if (sort === PriceSort.Ascending) {
-      this.loadAscending();
-    } else if (sort === PriceSort.Descending) {
-      this.loadDescending();
-    } else {
-      this.ngOnInit();
-    }
+    this.sortType = sort;
+    this.loadGifts();
   }
 
-  // @Output() categoryChange = new EventEmitter<number | null>();
 
   onCategoryChange(value: number | null): void {
     this.selectedCategoryId = value;
-    if (value === null) {
-      this.ngOnInit();
-      return;
-    }
-    this.loadByCategory(value);
-    console.log('selected category id in gifts page:', value);
+    this.loadGifts();
   }
 
   onGiftCreated(): void {
@@ -85,4 +95,23 @@ export class GiftsPage {
     this.ngOnInit();
   }
 
+
+  onRender(): void {
+    //רינדור אחרי מחיקה ועדכון מתנה
+    this.ngOnInit();
+  }
+
+  onEdit(gift: GiftResponseDto): void {
+    this.selectedGift = { ...gift };
+  }
+
+  onDialogClosed(): void {
+    this.selectedGift = null;
+  }
+
+  onClickAddGift(): void {
+    this.selectedGift = null;
+    this.giftDialog.open();
+    console.log("clicked!");
+  }
 }

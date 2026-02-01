@@ -1,19 +1,35 @@
-<div *ngIf="isLoading">
+<!-- @if(isLoading){
+<div>
   טוען נתונים...
 </div>
+}
 
-<div *ngIf="donorDashboard as dashboard">
-<app-donor-details *ngIf="donor" [donor]="donor"></app-donor-details>
+@if(dashboard && details){
+<div>
+  <app-donor-details [details]="details"></app-donor-details>
 
+  <app-donor-dashboard [dashboard]="dashboard"></app-donor-dashboard>
 
+  <app-donated-gifts [gifts]="gifts"></app-donated-gifts>
+</div>}
 
-  <app-donor-dashboard
-    [totalGifts]="dashboard.totalGifts"
-    [totalTicketsSold]="dashboard.totalTicketsSold"
-    [totalUniqueBuyers]="dashboard.totalUniqueBuyers">
-  </app-donor-dashboard>
+ -->
 
-  <app-donated-gifts
-    [gifts]="dashboard.gifts">
-  </app-donated-gifts>
-</div>
+ 
+@if(isLoading){
+  <div class="loading">טוען נתונים...</div>
+}
+
+@if(dashboard && details){
+  <div class="donor-page">
+
+    <div class="top-grid">
+      <app-donor-details [details]="details"></app-donor-details>
+      <app-donor-dashboard [dashboard]="dashboard"></app-donor-dashboard>
+    </div>
+
+    <app-donated-gifts [gifts]="gifts"></app-donated-gifts>
+
+  </div>
+}
+
