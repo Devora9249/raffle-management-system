@@ -11,10 +11,12 @@ namespace server.Repositories.Implementations;
 public class GiftRepository : IGiftRepository
 {
     private readonly AppDbContext _context;
+    private readonly ILogger<GiftRepository> _logger;
 
-    public GiftRepository(AppDbContext context)
+    public GiftRepository(AppDbContext context, ILogger<GiftRepository> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<GiftModel>> GetAllGiftsAsync(
@@ -110,6 +112,7 @@ public class GiftRepository : IGiftRepository
 
     public async Task<GiftModel?> UpdateGiftAsync(GiftModel gift)
     {
+        _logger.LogInformation($"Updating gift with ID {gift.Id}. hasWinning: {gift.HasWinning}");
         var existingGift = await _context.Gifts.FindAsync(gift.Id);
         if (existingGift == null)
         {
@@ -123,6 +126,8 @@ public class GiftRepository : IGiftRepository
         await _context.Entry(existingGift)
             .Reference(g => g.Category)
             .LoadAsync();
+        _logger.LogInformation($"Gift {gift.Id} updated successfully. hasWinning: {existingGift.HasWinning}");
+
 
         return existingGift;
 

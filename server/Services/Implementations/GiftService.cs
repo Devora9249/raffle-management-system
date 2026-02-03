@@ -9,35 +9,38 @@ namespace server.Services.Implementations;
 public class GiftService : IGiftService
 {
     private readonly IGiftRepository _giftRepository;
+    private readonly ILogger<GiftService> _logger;
 
-    public GiftService(IGiftRepository giftRepository)
+    public GiftService(IGiftRepository giftRepository, ILogger<GiftService> logger)
     {
         _giftRepository = giftRepository;
+        _logger = logger;
     }
 
-   public async Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(
-    PriceSort sort,
-    int? categoryId,
-    int? donorId
-    )
-{
-    var gifts = await _giftRepository.GetAllGiftsAsync(
-        categoryId,
-        donorId,
-        sort
-    );
-
-    return gifts.Select(g => new GiftResponseDto
+    public async Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(
+     PriceSort sort,
+     int? categoryId,
+     int? donorId
+     )
     {
-        Id = g.Id,
-        Description = g.Description,
-        CategoryId = g.CategoryId,
-        CategoryName = g.Category.Name,
-        Price = g.Price,
-        DonorId = g.DonorId,
-        ImageUrl = g.ImageUrl
-    });
-}
+        var gifts = await _giftRepository.GetAllGiftsAsync(
+            categoryId,
+            donorId,
+            sort
+        );
+
+        return gifts.Select(g => new GiftResponseDto
+        {
+            Id = g.Id,
+            Description = g.Description,
+            CategoryId = g.CategoryId,
+            CategoryName = g.Category.Name,
+            Price = g.Price,
+            DonorId = g.DonorId,
+            ImageUrl = g.ImageUrl,
+            HasWinning = g.HasWinning
+        });
+    }
 
 
 
@@ -104,7 +107,8 @@ public class GiftService : IGiftService
             CategoryId = gift.CategoryId,
             Price = gift.Price,
             DonorId = gift.DonorId,
-            ImageUrl = gift.ImageUrl
+            ImageUrl = gift.ImageUrl,
+            HasWinning = gift.HasWinning
         };
     }
 
@@ -156,7 +160,8 @@ public class GiftService : IGiftService
             CategoryName = created.Category.Name,
             Price = created.Price,
             DonorId = created.DonorId,
-            ImageUrl = created.ImageUrl
+            ImageUrl = created.ImageUrl,
+            HasWinning = created.HasWinning
         };
     }
 
@@ -178,6 +183,10 @@ public class GiftService : IGiftService
 
         if (dto.DonorId.HasValue)
             existing.DonorId = dto.DonorId.Value;
+
+        if (dto.HasWinning.HasValue)
+            existing.HasWinning = dto.HasWinning.Value;
+
 
         if (dto.Image != null)
         {
@@ -209,7 +218,7 @@ public class GiftService : IGiftService
 
         if (updated == null)
             throw new KeyNotFoundException($"Gift {id} not found");
-
+        _logger.LogInformation($"Gift {id} updated successfully. hasWinning: {updated.HasWinning}");
         return new GiftResponseDto
         {
             Id = updated.Id,
@@ -217,8 +226,20 @@ public class GiftService : IGiftService
             CategoryName = updated.Category.Name,
             CategoryId = updated.CategoryId,
             Price = updated.Price,
-            DonorId = updated.DonorId
+            DonorId = updated.DonorId,
+            ImageUrl = updated.ImageUrl,
+            HasWinning = updated.HasWinning
         };
+    }
+
+    public async Task MarkGiftAsHavingWinningAsync(int giftId)
+    {
+        var gift = await _giftRepository.GetGiftByIdAsync(giftId);
+        if (gift == null)
+            throw new KeyNotFoundException($"Gift {giftId} not found");
+
+        gift.HasWinning = true;
+        await _giftRepository.UpdateGiftAsync(gift);
     }
 
 
@@ -261,4 +282,6 @@ public class GiftService : IGiftService
             DonorId = g.DonorId
         });
     }
+
+
 }

@@ -39,6 +39,7 @@ public class GiftUpdateWithImageDto
     public int? CategoryId { get; set; }
     public int? DonorId { get; set; }
     public IFormFile? Image { get; set; } = null!;
+    public bool? HasWinning { get; set; }
 }
 
 
@@ -64,5 +65,6 @@ public class GiftResponseDto
     public int CategoryId { get; set; }
     public int DonorId { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
+    public bool HasWinning { get; set; }
     
 }

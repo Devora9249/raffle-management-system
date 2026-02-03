@@ -10,8 +10,8 @@ namespace server.Models
         public UserModel Donor { get; set; }
         public CategoryModel Category { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
+        public Boolean HasWinning { get; set; } = false;
 
-        
         // public int RaffleId { get; set; }
         // public RaffleModel Raffle { get; set; }
     }

@@ -7,7 +7,7 @@ namespace server.Services.Interfaces
     public interface IGiftService
     {
         //CRUD
-        Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(  
+        Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(
     PriceSort sort,
     int? categoryId,
     int? donorId);
@@ -22,7 +22,7 @@ namespace server.Services.Interfaces
         Task<IEnumerable<GiftResponseDto>> FilterByGiftName(string name);
         Task<IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);
         Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId);
-
+        Task MarkGiftAsHavingWinningAsync(int giftId);
 
     }
 }

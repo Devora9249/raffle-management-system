@@ -12,17 +12,24 @@ public class WinningService : IWinningService
     private readonly IPurchaseRepository _purchaseRepository;
     private readonly IGiftRepository _giftRepository;
     private readonly IEmailService _emailService;
+    private readonly IGiftService _giftService;
+    private readonly ILogger<WinningService> _logger;
 
     public WinningService(
         IWinningRepository winningRepository,
         IPurchaseRepository purchaseRepository,
         IGiftRepository giftRepository,
-        IEmailService emailService)
+        IEmailService emailService,
+        IGiftService giftService,
+        ILogger<WinningService> logger
+        )
     {
         _winningRepository = winningRepository;
         _purchaseRepository = purchaseRepository;
         _giftRepository = giftRepository;
         _emailService = emailService;
+        _giftService = giftService;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
@@ -137,6 +144,8 @@ public class WinningService : IWinningService
             {
                 Console.WriteLine(ex.Message);
             }
+            _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
+            await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
         }
 
         return await GetAllWinningsAsync();

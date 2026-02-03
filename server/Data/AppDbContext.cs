@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Description).IsRequired().HasMaxLength(500);
             entity.Property(e => e.Price).HasPrecision(18, 2).IsRequired();
-
+            entity.Property(e => e.HasWinning).IsRequired();
             entity.ToTable(t =>
             {
                 t.HasCheckConstraint(
