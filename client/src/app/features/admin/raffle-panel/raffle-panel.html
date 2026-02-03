@@ -1,1 +1,84 @@
-<button (click)="startRaffle()">Start Raffle</button>
+<!-- <button (click)="startRaffle()">Start Raffle</button>
+<p style="color: red;">Count: {{ winnings.length }}</p>
+@if(loading){
+<app-spinner></app-spinner>
+}
+@else{
+<div>
+    @for(winning of winnings; track winning.id) {
+    <div style="border: 1px solid black;">
+        <p>User ID: {{winning.winnerId}}</p>
+        <p>userName: {{winning.winnerName}}</p>
+        <p>Gift ID: {{winning.giftId}}</p>
+        <p>Gift Name: {{winning.giftName}}</p>
+    </div>
+    }
+</div>
+} -->
+<p-card class="raffle-card">
+
+  <!-- Header -->
+  <div class="raffle-header">
+<div class="raffle-title">
+  <i class="pi pi-star"></i>
+  Raffle Panel
+</div>
+
+    <p-tag
+      severity="info"
+      value="Winners: {{ winnings.length }}">
+    </p-tag>
+  </div>
+
+  <!-- Action -->
+  <div class="raffle-actions">
+    <p-button
+      label="Start Raffle"
+      icon="pi pi-play"
+      (onClick)="startRaffle()"
+      [disabled]="loading">
+    </p-button>
+  </div>
+
+  <!-- Content -->
+  <div class="raffle-content">
+
+    <!-- Spinner overlay -->
+    @if(loading){
+      <div class="raffle-loading">
+        <app-spinner></app-spinner>
+      </div>
+    }
+
+    <!-- Table -->
+    <p-table
+      [value]="winnings"
+      dataKey="id"
+      scrollable="true"
+      scrollHeight="320px"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-sm">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>User ID</th>
+          <th>User Name</th>
+          <th>Gift ID</th>
+          <th>Gift Name</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-winning>
+        <tr>
+          <td>{{ winning.winnerId }}</td>
+          <td>{{ winning.winnerName }}</td>
+          <td>{{ winning.giftId }}</td>
+          <td>{{ winning.giftName }}</td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
+</p-card>

@@ -8,7 +8,7 @@ import { WinningResponseDto, WinningCreateDto } from '../models/winning-model';
 })
 export class WinningService {
 
-  private readonly baseUrl = 'api/winning';
+  private readonly baseUrl = 'http://localhost:5071/api/winning';
 
   constructor(private http: HttpClient) {}
 
