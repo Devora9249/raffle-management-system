@@ -8,6 +8,7 @@ import { GiftsService } from '../../../../core/services/gifts-service';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../../core/services/notification-service';
 
 @Component({
   selector: 'app-gift-card',
@@ -16,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrl: './gift-card.scss',
 })
 export class GiftCard {
-  constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService, private router: Router) { }
+  constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService, private router: Router, private notificationService: NotificationService ) { }
 
   @Input() gift!: GiftResponseDto;
   // @Input() count!: number;
@@ -36,7 +37,7 @@ export class GiftCard {
 
     this.authService.getCurrentUserId().subscribe(userId => {
       console.log("userId", userId);
-      if (!userId) { alert('User not logged in'); this.router.navigate(['/login']); return; }
+      if (!userId) { this.notificationService.showError('User not logged in'); this.router.navigate(['/login']); return; }
       console.log('purchaseID', this.purchaseId);
 
       if (count === 0 && this.purchaseId) {
@@ -57,7 +58,7 @@ export class GiftCard {
 
     this.giftsService.delete(this.gift.id).subscribe({
       next: gift => {
-        alert('Gift deleted successfully!');
+        this.notificationService.showSuccess('Gift deleted successfully!');
         // this.render.emit(true);
       },
       error: (err) => {
@@ -68,7 +69,7 @@ export class GiftCard {
           err?.error?.message ||
           'Unauthorized or unexpected error';
 
-        alert('Delete gift failed: ' + message);
+        this.notificationService.showError('Delete gift failed: ' + message);
       }
     });
   }

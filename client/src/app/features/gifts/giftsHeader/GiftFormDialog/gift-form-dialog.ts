@@ -11,6 +11,7 @@ import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
+import { NotificationService } from '../../../../core/services/notification-service';
 
 @Component({
   selector: 'app-gift-form-dialog',
@@ -35,7 +36,7 @@ export class GiftFormDialog implements OnChanges {
   selectedFile: File | null = null;  
   previewUrl: string | null = null;    
 
-  constructor(private fb: FormBuilder, private giftsService: GiftsService) {
+  constructor(private fb: FormBuilder, private giftsService: GiftsService, private notificationService: NotificationService ) {
     this.form = this.fb.group({
       description: [''],
       price: [null, [Validators.required, Validators.min(1)]],
@@ -140,7 +141,7 @@ export class GiftFormDialog implements OnChanges {
         this.created.emit(true);
         this.close();
       },
-      error: () => alert('שגיאה בשמירה'),
+      error: () => this.notificationService.showError('שגיאה בשמירה'),
     });
   }
 }

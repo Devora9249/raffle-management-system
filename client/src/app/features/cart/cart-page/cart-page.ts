@@ -10,7 +10,7 @@ import { CartService } from '../../../core/services/cart-service';
 import { AuthService } from '../../../core/services/auth-service';
 import { CartItemResponseDto } from '../../../core/models/cart-model';
 import { CartItemQty } from '../../gifts/giftCard/cart-item-qty/cart-item-qty';
-
+import { NotificationService } from '../../../core/services/notification-service';
 @Component({
   selector: 'app-cart-page',
   standalone: true,
@@ -32,7 +32,8 @@ export class CartPage implements OnInit {
     private cartDrawer: CartDrawerService,
     private cartService: CartService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService 
   ) { }
 
   ngOnInit(): void {
@@ -98,18 +99,18 @@ export class CartPage implements OnInit {
       //בדיקת סל
       this.cartItems$.pipe(take(1)).subscribe(items => {
         if (items.length === 0) {
-          alert('Your cart is empty. Please add items before checkout.');
+          this.notificationService.showError('Your cart is empty. Please add items before checkout.');
           return;
         }
 
         //checkout
         this.cartService.checkout(userId).subscribe({
           next: () => {
-            alert('Checkout successful!');
+            this.notificationService.showSuccess('Checkout successful!');
           },
           error: err => {
             console.error('Checkout failed', err);
-            alert('Checkout failed. Please try again later.');
+            this.notificationService.showError('Checkout failed. Please try again later.');
           }
         });
       });
