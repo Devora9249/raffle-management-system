@@ -8,8 +8,8 @@ namespace server.Models
         public int Qty { get; set; }
         public Status Status { get; set; } = Status.Draft;
         public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
-        public UserModel User { get; set; }
-        public GiftModel Gift { get; set; }
+        public UserModel User { get; set; }=default!;
+        public GiftModel Gift { get; set; }=default!;
     }
 
     public enum Status

@@ -70,7 +70,7 @@ public class WinningService : IWinningService
         });
 
         var full = await _winningRepository.GetWinningByIdAsync(created.Id);
-        // if (full == null) throw new Exception("Winning was created but could not be loaded.");
+         if (full == null) throw new Exception("Winning was created but could not be loaded.");
 
         return new WinningResponseDto
         {
@@ -95,7 +95,7 @@ public class WinningService : IWinningService
         if (updated == null) throw new KeyNotFoundException($"Winning {id} not found");
 
         var full = await _winningRepository.GetWinningByIdAsync(updated.Id);
-        // if (full == null) throw new Exception("Winning was updated but could not be loaded.");
+         if (full == null) throw new Exception("Winning was updated but could not be loaded.");
 
         return new WinningResponseDto
         {

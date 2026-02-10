@@ -34,7 +34,7 @@ namespace server.Services.Implementations
             };
 
             var created = await _repo.AddAsync(purchase);
-            return ToCartItemDto(created);
+            return ToCartItemDto(created!);
         }
 
         public async Task<CartItemResponseDto> UpdateQtyAsync(CartAddDto dto)
@@ -50,7 +50,7 @@ namespace server.Services.Implementations
             existing.Qty = dto.Qty;
 
             var updated = await _repo.UpdateAsync(existing);
-            return ToCartItemDto(updated); 
+            return ToCartItemDto(updated!); 
         }
 
         public async Task<bool> RemoveAsync(int purchaseId)

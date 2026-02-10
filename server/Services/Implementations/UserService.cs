@@ -26,7 +26,7 @@ namespace server.Services.Implementations
             if (user == null)
                 throw new KeyNotFoundException("User not found");
 
-            return ToResponseDto(user);
+            return ToResponseDto(user!);
         }
 
         public async Task<UserResponseDto> AddUserAsync(UserCreateDto createDto)
@@ -47,7 +47,7 @@ namespace server.Services.Implementations
             };
 
             var created = await _repo.AddUserAsync(user);
-            return ToResponseDto(created);
+            return ToResponseDto(created!);
         }
 
         public async Task<UserResponseDto> UpdateUserAsync(int id, UserUpdateDto dto)
