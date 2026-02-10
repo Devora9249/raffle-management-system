@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, ButtonModule, PasswordModule, InputGroupModule, CommonModule],
@@ -17,6 +18,7 @@ export class LoginComponent {
   loginForm: FormGroup;
 
   constructor(
+    private messageService: MessageService,
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
@@ -38,12 +40,23 @@ export class LoginComponent {
     this.authService.login(dto).subscribe({
       next: (res) => {
         this.authService.saveToken(res.token);
-        alert('Login successful!');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Login successful!',
+          life: 3000
+        });
         this.router.navigate(['/gifts']); // ניתוב אחרי התחברות
       },
       error: (err) => {
         console.error('Login failed', err);
-        alert('Login failed. Check your credentials.');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Login failed. Check your credentials.',
+          life: 3000
+        });
+
       }
     });
   }

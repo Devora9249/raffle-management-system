@@ -9,6 +9,7 @@ import { AuthService } from './core/services/auth-service';
 import { UserResponseDto } from './core/models/auth-model';
 import { Nav } from './shared/components/nav/nav';
 import { CartPage } from './features/cart/cart-page/cart-page';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { CartPage } from './features/cart/cart-page/cart-page';
     CommonModule, 
  RouterOutlet,
    ReactiveFormsModule, Nav,
-    CartPage
+    CartPage,
+    ToastModule
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],

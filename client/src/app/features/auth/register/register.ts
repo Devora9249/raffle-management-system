@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,7 @@ export class Register {
   @Output() registered = new EventEmitter<RegisterDto>();
 
   constructor(
+    private messageService: MessageService,
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
@@ -44,18 +46,28 @@ export class Register {
 
     this.authService.register(model).subscribe({
       next: () => {
-        alert('Registration successful!');
+            this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Registration successful!',
+          life: 3000
+        });
         this.registered.emit(model);
         this.form.reset();
       },
       error: (err) => {
-      let msg = 'Registration failed. Check your input.';
-      if (err.status === 400 && err.error?.message) {
-        msg = err.error.message;
+        let msg = 'Registration failed. Check your input.';
+        if (err.status === 400 && err.error?.message) {
+          msg = err.error.message;
+        }
+            this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: msg,
+          life: 3000
+        });
+        console.error('Registration failed', err);
       }
-      alert(msg);
-      console.error('Registration failed', err);
-    }
     });
   }
 
