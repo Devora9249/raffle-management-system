@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gift-card',
-  imports: [CartItemQty, AdminOptions, CardModule, ButtonModule],
+  imports: [CartItemQty, CardModule, ButtonModule],
   templateUrl: './gift-card.html',
   styleUrl: './gift-card.scss',
 })

@@ -5,10 +5,11 @@ import { AuthService } from '../../../core/services/auth-service';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, ButtonModule, PasswordModule],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, CommonModule],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })

@@ -17,7 +17,7 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-gifts-page',
-  imports: [GiftCard, GiftsGrid, GiftsHeader, GiftFormDialog, AsyncPipe],
+  imports: [ GiftsGrid, GiftsHeader, GiftFormDialog, AsyncPipe],
   templateUrl: './gifts-page.html',
   styleUrl: './gifts-page.scss',
 })

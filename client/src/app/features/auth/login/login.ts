@@ -6,10 +6,10 @@ import { LoginDto } from '../../../core/models/auth-model';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { InputGroupModule } from 'primeng/inputgroup';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, InputGroupModule],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, InputGroupModule, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })

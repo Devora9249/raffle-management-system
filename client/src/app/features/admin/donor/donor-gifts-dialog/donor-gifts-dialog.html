@@ -8,12 +8,12 @@
   <ng-container *ngIf="donor">
 
     <h4 class="mb-3">
-      Donor: {{ donor?.name }}
+      Donor: {{ donor.name }}
     </h4>
 
     <p-table
       *ngIf="donor?.gifts?.length; else noGifts"
-      [value]="donor?.gifts ?? []">
+      [value]="donor.gifts">
 
       <ng-template pTemplate="header">
         <tr>

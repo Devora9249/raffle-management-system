@@ -14,9 +14,8 @@ import { CartPage } from './features/cart/cart-page/cart-page';
   selector: 'app-root',
   imports: [
     CommonModule, 
-    NgIf,         
-    RouterLink, RouterLinkActive, RouterOutlet,
-    GiftsPage, LoginComponent, Register, ReactiveFormsModule, Nav,
+ RouterOutlet,
+   ReactiveFormsModule, Nav,
     CartPage
   ],
   templateUrl: './app.html',

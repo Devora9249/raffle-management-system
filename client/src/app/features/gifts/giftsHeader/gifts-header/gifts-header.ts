@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-gifts-header',
-  imports: [SortPanel, FormsModule, GiftFormDialog, ButtonModule],
+  imports: [SortPanel, FormsModule, ButtonModule],
   templateUrl: './gifts-header.html',
   styleUrl: './gifts-header.scss',
 })

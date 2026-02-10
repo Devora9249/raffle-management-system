@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-purchase-panel',
-  imports: [DatePipe, PurchaseList, FormsModule],
+  imports: [ PurchaseList, FormsModule],
   templateUrl: './purchase-panel.html',
   styleUrl: './purchase-panel.scss',
 })

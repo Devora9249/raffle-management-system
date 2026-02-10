@@ -7,7 +7,7 @@ import { RafflePanel } from '../raffle-panel/raffle-panel';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CategoryPanel,DonorPanel, GiftPanel, PurchasePanel, RafflePanel],
+  imports: [ RafflePanel],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.scss',
 })
