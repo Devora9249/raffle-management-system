@@ -16,12 +16,12 @@
 
 
 <p-dialog
-  header="Category"
+  header="Add Category"
   [(visible)]="visible"
   [modal]="true"
   [draggable]="false"
   [resizable]="false"
-  [style]="{ width: '360px' }"
+  [style]="{ width: '360px'}"
   (onHide)="closed.emit()">
 
   <form [formGroup]="form" class="category-form">
@@ -31,6 +31,8 @@
       formControlName="name"
       placeholder="Enter category name"
       class="w-full" />
+
+
   </form>
 
   <ng-template pTemplate="footer">

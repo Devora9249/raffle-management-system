@@ -14,3 +14,10 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.field-error {
+  min-height: 1rem;         
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--p-danger-color);
+}
