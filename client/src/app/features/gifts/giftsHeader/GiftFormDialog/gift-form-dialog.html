@@ -39,7 +39,7 @@
       <label>קטגוריה *</label>
 
       <p-select formControlName="categoryId" [options]="categories" optionLabel="name" optionValue="id"
-        placeholder="בחרי קטגוריה" class="w-full">
+        placeholder="ברי קטגוריה" class="w-full">
       </p-select>
 
       <small class="error" *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.invalid">
@@ -90,7 +90,7 @@
   </form>
 </p-dialog> -->
 <p-dialog
-  header="{{ editMode ? 'עריכת מתנה' : 'הוספת מתנה' }}"
+  header="{{ editMode ? 'Edit Gift' : 'Add Gift' }}"
   [(visible)]="showDialog"
   [modal]="true"
   [closable]="true"
@@ -103,7 +103,7 @@
 
     <!-- תיאור -->
     <div class="field">
-      <label>תיאור</label>
+      <label>description</label>
       <textarea
         pInputTextarea
         rows="3"
@@ -113,7 +113,7 @@
 
     <!-- מחיר -->
     <div class="field">
-      <label>מחיר *</label>
+      <label>price *</label>
       <input
         pInputText
         type="number"
@@ -122,38 +122,38 @@
 
     <!-- קטגוריה -->
     <div class="field">
-      <label>קטגוריה *</label>
+      <label>category *</label>
       <p-select
         formControlName="categoryId"
         [options]="categories"
         optionLabel="name"
         optionValue="id"
-        placeholder="בחרי קטגוריה"
+        placeholder="choose category"
         class="w-full">
       </p-select>
     </div>
 
     <!-- תורם -->
     <div class="field">
-      <label>תורם *</label>
+      <label>donor *</label>
       <p-select
         formControlName="donorId"
         [options]="donors"
         optionLabel="name"
         optionValue="id"
-        placeholder="בחרי תורם"
+        placeholder="choose donor"
         class="w-full">
       </p-select>
     </div>
 
     <!-- תמונה -->
     <div class="field">
-      <label>תמונה</label>
+      <label>image</label>
       <p-fileUpload
         mode="basic"
         name="image"
         accept="image/*"
-        chooseLabel="בחרי תמונה"
+        chooseLabel="choose image"
         [auto]="false"
         [customUpload]="true"
         (onSelect)="onFileChange($event)">
@@ -169,13 +169,13 @@
     <div class="actions">
       <p-button
         type="submit"
-        label="שמור"
+        label="save"
         [disabled]="form.invalid">
       </p-button>
 
       <p-button
         type="button"
-        label="ביטול"
+        label="cancel"
         severity="secondary"
         (onClick)="close()">
       </p-button>

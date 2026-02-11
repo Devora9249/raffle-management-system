@@ -36,44 +36,43 @@ namespace server.Services
 
             var donorEmail = donor.Email;
             if (string.IsNullOrWhiteSpace(donorEmail))
-                throw new InvalidOperationException("לתורם אין Email");
+                throw new InvalidOperationException(" donor Email is empty");
             var winnerEmail = winner.Email;
             if (string.IsNullOrWhiteSpace(winnerEmail))
-                throw new InvalidOperationException("לזוכה אין Email");
+                throw new InvalidOperationException("winner Email is empty");
 
             var raffleDate = DateTime.Now.ToString("dd/MM/yyyy");
 
-            var subjectDonor = "🎉 המתנה שלך זכתה בהגרלה!";
+            var subjectDonor = "🎉  your gift was won in a raffle!";
             var bodyDonor = $@"
-שלום {donor.Name},
+hello {donor.Name},
 
-המתנה שתרמת זכתה בהגרלה 🎉
+the gift you donated was won in a raffle 🎉
 
-📦 פרטי המתנה:
-תיאור: {gift.Description}
-קטגוריה: {gift.Category?.Name}
-שווי: {gift.Price} ₪
+📦 gift details:
+description: {gift.Description}
+category: {gift.Category?.Name}
+price: {gift.Price} ₪
 
-🏆 פרטי הזוכה:
-שם: {winner.Name}
+🏆  winner details:
+name: {winner.Name}
 
-📅 תאריך ההגרלה: {raffleDate}
+📅 raffle date: {raffleDate}
 
-תודה רבה על התרומה!
+thank you for you donation!
 ";
 
-            var subjectWinner = "🎉 זכית בהגרלה!";
+            var subjectWinner = "🎉 you won a raffle!";
             var bodyWinner = $@"
-שלום {winner.Name},
+hello {winner.Name},
 
-מזל טוב! זכית בהגרלה 🎉
+it's your lucky day! you won a raffle for the following gift 🎉
+gift details:
+description: {gift.Description}
+category: {gift.Category?.Name}
+price: {gift.Price} ₪
 
-📦 פרטי המתנה:
-תיאור: {gift.Description}
-קטגוריה: {gift.Category?.Name}
-שווי: {gift.Price} ₪
-
-📅 תאריך ההגרלה: {raffleDate}
+📅 raffle date: {raffleDate}
 ";
 
             using var smtp = new SmtpClient(_emailSettings.Host, _emailSettings.Port)

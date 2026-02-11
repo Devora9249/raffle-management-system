@@ -39,7 +39,6 @@ export class CategoryPanel {
   openEdit(category: CategoryResponseDto): void {
     this.selectedCategory = category;
     this.showDialog = true;
-    this.notificationService.showSuccess('Edit category: ' + category.name);
   }
 
 delete(id: number): void {

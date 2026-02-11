@@ -56,6 +56,5 @@ export class RafflePanel {
         this.notificationService.showError('Failed to start raffle');
       }
     });
-    this.notificationService.showSuccess('Raffle started successfully');
   }
 }

@@ -93,6 +93,7 @@ export class GiftsPage {
 
   onGiftCreated(): void {
     this.loadGifts();
+    this.notificationService.showSuccess('Gift created successfully');
   }
 
 
