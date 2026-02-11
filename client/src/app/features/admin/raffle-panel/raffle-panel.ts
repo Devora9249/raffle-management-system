@@ -33,7 +33,6 @@ export class RafflePanel {
       next: res => {
         this.winnings = res;
         this.loading = false;
-        this.notificationService.showSuccess('Winnings loaded successfully');
       },
       error: err => {
         console.error(err);
@@ -49,6 +48,8 @@ export class RafflePanel {
     this.winningService.doRaffle().subscribe({
       next: () => {
         this.loadWinnings(); // יסיים loading
+                this.notificationService.showSuccess('done raffle successfully');
+
       },
       error: err => {
         console.error(err);
