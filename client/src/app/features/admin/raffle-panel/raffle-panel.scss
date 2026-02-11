@@ -145,14 +145,13 @@
 /* ===== Actions ===== */
 .raffle-actions {
   display: flex;
-  justify-content: center;
   margin-bottom: 20px;
 }
 
 /* ===== Content (גובה קבוע – אין קפיצות) ===== */
 .raffle-content {
   position: relative;
-  min-height: 420px; /* 🔒 הגובה הקבוע */
+  min-height: 300px; /* 🔒 הגובה הקבוע */
   display: flex;
   flex-direction: column;
 }
@@ -193,18 +192,23 @@
   background: var(--p-surface-100);
   font-weight: 600;
   white-space: nowrap;
+  line-height: 2;
 }
 
 /* Rows */
 :host ::ng-deep .p-datatable-tbody > tr > td {
   white-space: nowrap;
   color: var(--p-text-color);
+  line-height: 2.3;
+  padding: 8px 12px;
 }
 
 /* Hover row */
 :host ::ng-deep .p-datatable-tbody > tr:hover {
   background: var(--p-surface-50);
 }
+
+
 
 /* ===== Tag ===== */
 :host ::ng-deep .p-tag-info {

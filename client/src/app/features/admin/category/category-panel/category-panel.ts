@@ -6,12 +6,13 @@ import { CategoryFormDialog } from '../category-form-dialog/category-form-dialog
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { NotificationService } from '../../../../core/services/notification-service';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-category-panel',
-  imports: [CategoryList, CategoryFormDialog, ButtonModule, CardModule],
+  imports: [CategoryList, CategoryFormDialog, ButtonModule, CardModule, TagModule],
   templateUrl: './category-panel.html',
-  styleUrl: './category-panel.scss',
+  styleUrl: '../../globalAdminDesign.scss',
 })
 export class CategoryPanel {
   categories: CategoryResponseDto[] = [];

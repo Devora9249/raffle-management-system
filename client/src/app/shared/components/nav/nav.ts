@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
@@ -12,7 +12,7 @@ import { NotificationService } from '../../../core/services/notification-service
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [CommonModule, MenubarModule, MenuModule, ButtonModule],
+  imports: [CommonModule, MenubarModule, MenuModule, ButtonModule, RouterModule],
   templateUrl: './nav.html',
   styleUrl: './nav.scss',
 })

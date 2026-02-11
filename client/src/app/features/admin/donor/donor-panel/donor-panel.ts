@@ -12,7 +12,7 @@ import { CardModule } from 'primeng/card';
   selector: 'app-donor-panel',
   imports: [DonorList, DonorFormDialog, ButtonModule, DonorFiltersBar, DonorGiftsDialog, CardModule],
   templateUrl: './donor-panel.html',
-  styleUrl: './donor-panel.scss',
+  styleUrl: '../../globalAdminDesign.scss',
 })
 export class DonorPanel {
 

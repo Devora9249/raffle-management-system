@@ -1,4 +1,4 @@
-<div class="purchase-search">
+<!-- <div class="purchase-search">
   <span class="p-input-icon-left w-full">
     <i class="pi pi-search"></i>
 <input
@@ -23,4 +23,34 @@
   (ngModelChange)="onDonorsChange($event)"
   class="w-full" />
 
-  </span>
+  </span> -->
+
+  <div style="display: flex; gap: 12px; width: 200px; flex-wrap: wrap;">
+  
+  <div class="search-container">
+    <span class="p-input-icon-left w-full">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="Search gifts..."
+        [ngModel]="searchTermGifts"
+        (ngModelChange)="onGiftsChange($event)"
+        class="w-full p-inputtext-sm" />
+    </span>
+  </div>
+
+  <div class="search-container">
+    <span class="p-input-icon-left w-full">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="Search donors..."
+        [ngModel]="searchTermDonors"
+        (ngModelChange)="onDonorsChange($event)"
+        class="w-full p-inputtext-sm" />
+    </span>
+  </div>
+
+</div>

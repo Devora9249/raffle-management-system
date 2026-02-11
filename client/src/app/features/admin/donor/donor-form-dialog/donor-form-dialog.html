@@ -1,4 +1,4 @@
-<p-dialog header="Donor" [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false"
+<!-- <p-dialog header="Donor" [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false"
   [style]="{ width: '360px' }" (onHide)="closed.emit()">
 
   <form [formGroup]="form" class="donor-form">
@@ -24,6 +24,89 @@
   <ng-template pTemplate="footer">
     <div class="dialog-footer">
       <p-button label="Save" icon="pi pi-check" severity="primary" (onClick)="submit()">
+      </p-button>
+    </div>
+  </ng-template>
+
+</p-dialog> -->
+
+
+<p-dialog
+  header="Add Donor"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '420px' }"
+  (onHide)="closed.emit()">
+
+  <form
+    [formGroup]="form"
+    class="donor-form">
+
+    <div class="field">
+      <label>Donor name</label>
+      <input
+        pInputText
+        formControlName="name"
+        placeholder="Enter donor name" />
+    </div>
+
+    <div class="field">
+      <label>Donor email address</label>
+      <input
+        pInputText
+        formControlName="email"
+        placeholder="Enter donor email address" />
+    </div>
+
+    <div class="field">
+      <label>Donor password</label>
+      <input
+        pInputText
+        type="password"
+        formControlName="password"
+        placeholder="Enter donor password" />
+    </div>
+
+    <div class="field">
+      <label>Donor phone</label>
+      <input
+        pInputText
+        formControlName="phone"
+        placeholder="Enter donor phone" />
+    </div>
+
+    <div class="field">
+      <label>Donor city</label>
+      <input
+        pInputText
+        formControlName="city"
+        placeholder="Enter donor city" />
+    </div>
+
+    <div class="field">
+      <label>Donor address</label>
+      <input
+        pInputText
+        formControlName="address"
+        placeholder="Enter donor address" />
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="actions">
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        (onClick)="submit()">
+      </p-button>
+
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        (onClick)="closed.emit()">
       </p-button>
     </div>
   </ng-template>

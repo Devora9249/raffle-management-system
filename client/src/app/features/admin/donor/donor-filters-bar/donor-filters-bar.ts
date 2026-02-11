@@ -2,11 +2,14 @@ import { Component, EventEmitter, Input, output, Output } from '@angular/core';
 import { DonorListItem } from '../../../../core/models/donor-model';
 import { FormsModule } from '@angular/forms';
 
+
+
 @Component({
   selector: 'app-donor-filters-bar',
   imports: [FormsModule],
   templateUrl: './donor-filters-bar.html',
-  styleUrl: './donor-filters-bar.scss',
+  styleUrl: '../../globalAdminDesign.scss',
+  
 })
 export class DonorFiltersBar {
 

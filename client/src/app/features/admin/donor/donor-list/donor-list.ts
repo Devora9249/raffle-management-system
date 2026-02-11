@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
   selector: 'app-donor-list',
   imports: [TableModule],
   templateUrl: './donor-list.html',
-  styleUrl: './donor-list.scss',
+  styleUrl: '../../globalAdminDesign.scss',
 })
 export class DonorList {
   @Input() donors: DonorWithGiftsDto[] = [];
