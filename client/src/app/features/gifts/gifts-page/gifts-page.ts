@@ -104,7 +104,6 @@ export class GiftsPage {
 
   onEdit(gift: GiftResponseDto): void {
     this.selectedGift = { ...gift };
-    this.notificationService.showSuccess('Edit gift clicked');
   }
 
   onDialogClosed(): void {
