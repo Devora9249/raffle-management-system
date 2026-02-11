@@ -8,7 +8,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { NotificationService } from '../../../core/services/notification-service';
 @Component({
   selector: 'app-raffle-panel',
   imports: [Spinner, CardModule, ButtonModule, PaginatorModule, TableModule, TagModule, ProgressSpinnerModule],
@@ -21,7 +21,7 @@ export class RafflePanel {
   winnings: WinningResponseDto[] = [];
   loading:boolean = false;
 
-  constructor(private winningService: WinningService) {}
+  constructor(private winningService: WinningService,private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.loadWinnings();
@@ -33,10 +33,12 @@ export class RafflePanel {
       next: res => {
         this.winnings = res;
         this.loading = false;
+        this.notificationService.showSuccess('Winnings loaded successfully');
       },
       error: err => {
         console.error(err);
         this.loading = false;
+        this.notificationService.showError('Failed to load winnings');
       }
     });
   }
@@ -51,7 +53,9 @@ export class RafflePanel {
       error: err => {
         console.error(err);
         this.loading = false;
+        this.notificationService.showError('Failed to start raffle');
       }
     });
+    this.notificationService.showSuccess('Raffle started successfully');
   }
 }

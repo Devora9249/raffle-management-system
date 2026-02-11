@@ -24,5 +24,6 @@ constructor(private notification: NotificationService) {}
 
   onEditClick() {
     this.toEdit.emit();
+    this.notification.showSuccess('Edit gift card clicked');
   }
 } 

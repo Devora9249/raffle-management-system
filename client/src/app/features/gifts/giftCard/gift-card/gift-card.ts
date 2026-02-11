@@ -50,7 +50,7 @@ export class GiftCard {
         giftId: this.gift.id,
         qty: count
       }).subscribe();
-      
+      this.notificationService.showSuccess('Cart updated successfully');
     });
   }
 

@@ -14,7 +14,7 @@ import { CartItemResponseDto } from '../../../core/models/cart-model';
 import { CartService } from '../../../core/services/cart-service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-
+import { NotificationService } from '../../../core/services/notification-service';
 @Component({
   selector: 'app-gifts-page',
   imports: [ GiftsGrid, GiftsHeader, GiftFormDialog, AsyncPipe],
@@ -31,13 +31,12 @@ export class GiftsPage {
   // cartItems: CartItemResponseDto[] = [];
   userId: number | null = null;
   cartItems$!: Observable<CartItemResponseDto[]>;
-  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService) { }
+  constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService,private notificationService: NotificationService) { }
 
   sortType: PriceSort = PriceSort.None;
   selectedCategoryId: number | null = null;
 
   @ViewChild(GiftFormDialog) giftDialog!: GiftFormDialog;
-
 
 
 
@@ -94,6 +93,7 @@ export class GiftsPage {
 
   onGiftCreated(): void {
     this.loadGifts();
+    this.notificationService.showSuccess('Gift created successfully');
   }
 
 
@@ -104,6 +104,7 @@ export class GiftsPage {
 
   onEdit(gift: GiftResponseDto): void {
     this.selectedGift = { ...gift };
+    this.notificationService.showSuccess('Edit gift clicked');
   }
 
   onDialogClosed(): void {

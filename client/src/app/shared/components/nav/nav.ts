@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../core/services/auth-service';
 import { Subscription } from 'rxjs'; 
 import { CartDrawerService } from '../../../core/services/CartDrawerService ';
-
+import { NotificationService } from '../../../core/services/notification-service';
 @Component({
   selector: 'app-nav',
   standalone: true,
@@ -28,7 +28,7 @@ isDonor = false;
   private authSub!: Subscription; 
   private roleSub!: Subscription;
 
-  constructor(private router: Router, private authService: AuthService, private cartDrawerService: CartDrawerService) {}
+  constructor(private router: Router, private authService: AuthService, private cartDrawerService: CartDrawerService,private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.buildMainMenu();
@@ -118,6 +118,7 @@ private buildMainMenu(): void {
     // ACTIONS
 
   private logout(): void {
+    this.notificationService.showSuccess('Logged out successfully');
     this.authService.logout();
     this.router.navigate(['/login']);
   }

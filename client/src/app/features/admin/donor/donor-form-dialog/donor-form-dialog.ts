@@ -5,7 +5,7 @@ import { DonorService } from '../../../../core/services/donor-service';
 import { AuthService } from '../../../../core/services/auth-service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-
+import { NotificationService } from '../../../../core/services/notification-service';
 @Component({
   selector: 'app-donor-form-dialog',
   imports: [ButtonModule, DialogModule,ReactiveFormsModule,],
@@ -26,6 +26,7 @@ export class DonorFormDialog {
   constructor(
     private fb: FormBuilder,
     private donorsService: DonorService,
+    private notificationService: NotificationService,
     // private authService: AuthService
   ) {}
 
@@ -46,7 +47,10 @@ export class DonorFormDialog {
     //     .subscribe(() => this.saved.emit());
     // } else {
       this.donorsService.addDonor(this.form.value)
-        .subscribe(() => this.saved.emit());
+        .subscribe(() => {
+          this.saved.emit();
+          this.notificationService.showSuccess('Donor added successfully');
+        });
     // }
   }
 }
