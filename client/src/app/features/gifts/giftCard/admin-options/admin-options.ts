@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { NotificationService } from '../../../../core/services/notification-service';
 
 @Component({
   selector: 'app-admin-options',
@@ -12,9 +13,13 @@ export class AdminOptions {
   @Output() toEdit = new EventEmitter<void>();
 
 
+constructor(private notification: NotificationService) {}
 
   onDeleteClick() {
-    this.toDelete.emit();
+    this.notification.confirmDelete(()=>{
+          this.toDelete.emit();
+          this.notification.showSuccess('Gift card deleted successfully');
+    })
   }
 
   onEditClick() {

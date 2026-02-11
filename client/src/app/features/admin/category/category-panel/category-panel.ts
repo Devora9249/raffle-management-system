@@ -5,6 +5,7 @@ import { CategoryList } from '../category-list/category-list';
 import { CategoryFormDialog } from '../category-form-dialog/category-form-dialog';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { NotificationService } from '../../../../core/services/notification-service';
 
 @Component({
   selector: 'app-category-panel',
@@ -17,8 +18,8 @@ export class CategoryPanel {
   showDialog = false;
   selectedCategory?: CategoryResponseDto;
 
-  constructor(private categoryService: CategoriesService) {}
-
+  constructor(private categoryService: CategoriesService,private notificationService: NotificationService ) {}
+  
   ngOnInit(): void {
     this.loadCategories();
   }
@@ -40,9 +41,11 @@ export class CategoryPanel {
   }
 
 delete(id: number): void {
+  this.notificationService.confirmDelete(() => {
   this.categoryService.delete(id).subscribe({
     next: () => {
       this.loadCategories();
+      this.notificationService.showSuccess('Category deleted successfully');
     },
     error: (err) => {
       console.error('Delete category failed', err);
@@ -51,9 +54,10 @@ delete(id: number): void {
           err?.error?.message ||
           'Unauthorized or unexpected error';
 
-        alert('Delete gift failed: ' + message);
+        this.notificationService.showError('Delete category failed: ' + message);
     }
   });
+});
 }
 
 

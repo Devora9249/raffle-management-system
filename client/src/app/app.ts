@@ -10,7 +10,7 @@ import { UserResponseDto } from './core/models/auth-model';
 import { Nav } from './shared/components/nav/nav';
 import { CartPage } from './features/cart/cart-page/cart-page';
 import { ToastModule } from 'primeng/toast';
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-root',
   imports: [
@@ -18,7 +18,8 @@ import { ToastModule } from 'primeng/toast';
  RouterOutlet,
    ReactiveFormsModule, Nav,
     CartPage,
-    ToastModule
+    ToastModule,
+    ConfirmDialogModule
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
