@@ -6,10 +6,11 @@ import { DonorFormDialog } from '../donor-form-dialog/donor-form-dialog';
 import { ButtonModule } from 'primeng/button';
 import { DonorFiltersBar } from '../donor-filters-bar/donor-filters-bar';
 import { DonorGiftsDialog } from '../donor-gifts-dialog/donor-gifts-dialog';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-donor-panel',
-  imports: [DonorList, DonorFormDialog, ButtonModule, DonorFiltersBar, DonorGiftsDialog],
+  imports: [DonorList, DonorFormDialog, ButtonModule, DonorFiltersBar, DonorGiftsDialog, CardModule],
   templateUrl: './donor-panel.html',
   styleUrl: './donor-panel.scss',
 })

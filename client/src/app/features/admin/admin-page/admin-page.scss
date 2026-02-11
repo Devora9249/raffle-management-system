@@ -1,0 +1,95 @@
+/* ============================= */
+/* Admin Tabs (PrimeNG 20 Tabs)  */
+/* ============================= */
+
+.admin-tabs {
+  display: block;
+
+  /* ----- Tab List (headers) ----- */
+  .p-tablist {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1.25rem;
+
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ----- Single Tab ----- */
+  .p-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    i {
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    /* Hover */
+    &:hover {
+      background: #f3f4f6;
+    }
+  }
+
+  /* ----- Active Tab ----- */
+  .p-tab.p-highlight {
+    background: #fdecec;
+    color: #b91c1c;
+
+    i {
+      color: #b91c1c;
+    }
+  }
+
+  /* ----- Panels Wrapper ----- */
+  .p-tabpanels {
+    background: transparent;
+  }
+}
+
+/* ============================= */
+/* Admin Card Wrapper            */
+/* ============================= */
+
+.admin-card {
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+  .p-card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* ============================= */
+/* Responsive                    */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .admin-tabs {
+    .p-tablist {
+      overflow-x: auto;
+      gap: 0.25rem;
+    }
+
+    .p-tab {
+      padding: 0.65rem 1rem;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+  }
+}

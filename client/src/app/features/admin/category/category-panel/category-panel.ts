@@ -4,10 +4,11 @@ import { CategoriesService } from '../../../../core/services/categories-service'
 import { CategoryList } from '../category-list/category-list';
 import { CategoryFormDialog } from '../category-form-dialog/category-form-dialog';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-category-panel',
-  imports: [CategoryList, CategoryFormDialog, ButtonModule],
+  imports: [CategoryList, CategoryFormDialog, ButtonModule, CardModule],
   templateUrl: './category-panel.html',
   styleUrl: './category-panel.scss',
 })
