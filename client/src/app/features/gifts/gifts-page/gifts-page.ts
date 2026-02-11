@@ -93,7 +93,6 @@ export class GiftsPage {
 
   onGiftCreated(): void {
     this.loadGifts();
-    this.notificationService.showSuccess('Gift created successfully');
   }
 
 
@@ -104,7 +103,6 @@ export class GiftsPage {
 
   onEdit(gift: GiftResponseDto): void {
     this.selectedGift = { ...gift };
-    this.notificationService.showSuccess('Edit gift clicked');
   }
 
   onDialogClosed(): void {
