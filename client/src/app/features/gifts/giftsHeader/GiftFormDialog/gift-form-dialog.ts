@@ -142,7 +142,7 @@ export class GiftFormDialog implements OnChanges {
         this.notificationService.showSuccess('Gift edited successfully');
         this.close();
       },
-      error: () => this.notificationService.showError('שגיאה בשמירה'),
+      error: () => this.notificationService.showError('Failed to save gift'),
     });
   }
 }
