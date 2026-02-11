@@ -13,7 +13,7 @@ import { NotificationService } from '../../../core/services/notification-service
   selector: 'app-raffle-panel',
   imports: [Spinner, CardModule, ButtonModule, PaginatorModule, TableModule, TagModule, ProgressSpinnerModule],
   templateUrl: './raffle-panel.html',
-  styleUrl: './raffle-panel.scss',
+  styleUrl: '../globalAdminDesign.scss',
   standalone: true
 })
 export class RafflePanel {

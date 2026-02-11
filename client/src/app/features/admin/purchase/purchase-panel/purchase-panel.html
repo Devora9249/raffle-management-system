@@ -1,4 +1,4 @@
-<div class="purchase-search">
+<!-- <div class="purchase-search">
     <div class="panel-header">
     <h2>Gifts & Purchases</h2>
       
@@ -16,4 +16,37 @@
       class="w-full" />
   </span>
 </div>
-<app-purchase-list (remove)="delete($event)" [purchases]="purchases"></app-purchase-list>
+<app-purchase-list (remove)="delete($event)" [purchases]="purchases"></app-purchase-list> -->
+<p-card class="panel-card">
+
+  <div class="panel-header">
+    <div class="panel-title">
+      <i class="pi pi-shopping-cart"></i>
+      Gifts & Purchases
+    </div>
+
+  </div>
+
+  <div class="panel-actions">
+    <div class="search-container">
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Search gifts..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchTermChange()"
+          class="w-full p-inputtext-sm" />
+      </span>
+    </div>
+  </div>
+
+  <div class="panel-content">
+    <app-purchase-list 
+      (remove)="delete($event)" 
+      [purchases]="purchases">
+    </app-purchase-list>
+  </div>
+
+</p-card>

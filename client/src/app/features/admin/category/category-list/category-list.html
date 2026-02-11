@@ -18,7 +18,7 @@
     </tr>
   </ng-template>
 </p-table> -->
-
+<!-- 
 <p-table
   [value]="categories"
   class="category-table"
@@ -50,6 +50,49 @@
           severity="danger"
           (onClick)="remove.emit(category.id)">
         </p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table> -->
+
+
+<p-table
+  [value]="categories"
+  dataKey="id"
+  scrollable="true"
+  scrollHeight="320px"
+  responsiveLayout="scroll"
+  styleClass="p-datatable-sm">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th style="width: 120px; text-align: center;">Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-category>
+    <tr>
+      <td>{{ category.name }}</td>
+      <td>
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <p-button 
+            icon="pi pi-pencil" 
+            [text]="true" 
+            [rounded]="true" 
+            severity="secondary" 
+            (onClick)="edit.emit(category)">
+          </p-button>
+
+          <p-button 
+            icon="pi pi-trash" 
+            [text]="true" 
+            [rounded]="true" 
+            severity="danger" 
+            (onClick)="remove.emit(category.id)">
+          </p-button>
+        </div>
       </td>
     </tr>
   </ng-template>

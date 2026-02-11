@@ -6,12 +6,14 @@ import { PurchaseList } from '../purchase-list/purchase-list';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../../core/services/notification-service';
 import { GiftsService } from '../../../../core/services/gifts-service';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-purchase-panel',
-  imports: [PurchaseList, FormsModule],
+  imports: [PurchaseList, FormsModule, CardModule, TagModule],
   templateUrl: './purchase-panel.html',
-  styleUrl: './purchase-panel.scss',
+  styleUrl: '../../globalAdminDesign.scss',
 })
 export class PurchasePanel {
   allPurchases: GiftPurchaseCountDto[] = [];

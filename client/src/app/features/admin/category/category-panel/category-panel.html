@@ -16,7 +16,7 @@
   </app-category-form-dialog>
 
 </div> -->
-
+<!-- 
 <div class="category-panel">
 
   <div class="panel-header">
@@ -44,4 +44,40 @@
     (closed)="showDialog = false">
   </app-category-form-dialog>
 
-</div>
+</div> -->
+
+
+<p-card class="panel-card">
+
+  <div class="panel-header">
+    <div class="panel-title">
+      <i class="pi pi-th-large"></i> Categories
+    </div>
+
+  </div>
+
+  <div class="panel-actions">
+    <p-button 
+      label="Add Category" 
+      icon="pi pi-plus" 
+      severity="primary" 
+      (onClick)="openCreate()">
+    </p-button>
+  </div>
+
+  <div class="panel-content">
+    <app-category-list
+      [categories]="categories"
+      (edit)="openEdit($event)"
+      (remove)="delete($event)">
+    </app-category-list>
+  </div>
+
+  <app-category-form-dialog
+    [visible]="showDialog"
+    [category]="selectedCategory"
+    (saved)="onSaved()"
+    (closed)="showDialog = false">
+  </app-category-form-dialog>
+
+</p-card>

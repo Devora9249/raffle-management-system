@@ -1,4 +1,4 @@
-<div class="donor-panel">
+<!-- <div class="donor-panel">
 
   <div class="panel-header">
     <h2>Donors</h2>
@@ -36,4 +36,54 @@
     (closed)="closeGiftsDialog()">
   </app-donor-gifts-dialog>
 
-</div>
+</div> -->
+
+
+<p-card class="panel-card">
+
+  <div class="panel-header">
+    <div class="panel-title">
+      <i class="pi pi-users"></i>
+      Donors
+    </div>
+  </div>
+
+  <div class="panel-actions">
+    
+    <p-button 
+      label="Add Donor" 
+      icon="pi pi-plus" 
+      severity="primary" 
+      (onClick)="openCreate()">
+    </p-button>
+
+    <app-donor-filters-bar
+      [(searchTermGifts)]="searchTermGifts"
+      [(searchTermDonors)]="searchTermDonors"
+      (filterChanged)="onFilterChanged()"
+      class="w-full">
+    </app-donor-filters-bar>
+
+  </div>
+
+  <div class="panel-content">
+    <app-donor-list
+      [donors]="donors"
+      (selectedDonor)="openGiftsDialog($event)">
+    </app-donor-list>
+  </div>
+
+  <app-donor-form-dialog
+    [visible]="showCreateDialog"
+    [donor]="selectedDonor"
+    (saved)="onSaved()"
+    (closed)="showCreateDialog = false">
+  </app-donor-form-dialog>
+
+  <app-donor-gifts-dialog
+    [visible]="showGiftsDialog"
+    [donor]="selectedDonor"
+    (closed)="closeGiftsDialog()">
+  </app-donor-gifts-dialog>
+
+</p-card>

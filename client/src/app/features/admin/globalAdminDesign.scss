@@ -1,68 +1,76 @@
-/* ============================= */
-/* Admin Panel – Design Contract */
-/* ============================= */
-
+/* ===== Admin Panel Wrapper ===== */
 .admin-panel {
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
-
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-/* ===== Card ===== */
-.admin-card {
+/* ===== Card Container ===== */
+.panel-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   border-radius: 14px;
 }
 
-/* ===== Header ===== */
-.admin-panel-header {
+/* ===== Header Section ===== */
+.panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 16px;
 }
 
-.admin-panel-title {
+.panel-title {
   display: flex;
   align-items: center;
   gap: 8px;
-
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--p-text-color);
 }
 
-/* ===== Actions ===== */
-.admin-panel-actions {
-  display: flex;
-  justify-content: center;
+.panel-title i {
+  color: var(--p-primary-color);
 }
 
-/* ===== Content (אין קפיצות) ===== */
-.admin-panel-content {
+/* ===== Actions Area (Buttons & Filters) ===== */
+.panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px; /* רווח בין כפתורים לפילטרים */
+  margin-bottom: 20px;
+}
+
+/* ===== Content Area (Fixed Height) ===== */
+.panel-content {
   position: relative;
-  min-height: 420px; /* 🔒 אחיד לכולם */
+  height: 320px;
+  min-height: 320px; 
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
+
 /* ===== Loading Overlay ===== */
-.admin-panel-loading {
+.panel-loading-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
-
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  gap: 12px;
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(1px);
+  color: var(--p-text-secondary-color);
+  font-size: 0.9rem;
 }
 
-/* ===== Tables ===== */
+/* ===== PrimeNG Table Customization ===== */
 :host ::ng-deep .p-datatable {
   height: 100%;
   border-radius: 12px;
@@ -70,7 +78,7 @@
 }
 
 :host ::ng-deep .p-datatable-wrapper {
-  max-height: 320px; /* 🔒 אחיד */
+  max-height: 320px;
   overflow-y: auto;
 }
 
@@ -78,27 +86,73 @@
   background: var(--p-surface-100);
   font-weight: 600;
   white-space: nowrap;
+  line-height: 2;
 }
 
 :host ::ng-deep .p-datatable-tbody > tr > td {
   white-space: nowrap;
+  color: var(--p-text-color);
+  line-height: 2.3;
+  padding: 8px 12px;
 }
 
 :host ::ng-deep .p-datatable-tbody > tr:hover {
   background: var(--p-surface-50);
 }
 
-/* ===== Responsive ===== */
+/* ===== Shared Tag Style ===== */
+:host ::ng-deep .p-tag-info {
+  background-color: #cc043d;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* חיפוש מעוצב בתוך אזור הפעולות */
+.search-container {
+  max-width: 300px; /* הגבלת רוחב למראה אלגנטי */
+  width: 100%;
+}
+
+/* ===== searching box ===== */
+
+/* חיפוש מעוצב - פתרון חזק עבור PrimeNG */
+.search-container {
+  max-width: 300px;
+  width: 100%;
+}
+
+/* שימוש ב-ng-deep כדי לחדור לתוך רכיבי PrimeNG */
+:host ::ng-deep .panel-actions .p-inputtext {
+  padding-left: 35px !important; /* דחיפת הטקסט שהאייקון לא יסתיר */
+  border-radius: 8px !important;
+  border: 1px solid var(--p-surface-300) !important;
+  background: var(--p-surface-0) !important;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+:host ::ng-deep .panel-actions .p-inputtext:focus {
+  border-color: var(--p-primary-color) !important;
+  box-shadow: 0 0 0 2px var(--p-primary-100) !important;
+}
+
+/* מיקום האייקון בתוך השדה */
+:host ::ng-deep .panel-actions .p-input-icon-left > i,
+:host ::ng-deep .panel-actions .p-iconfield > i {
+  left: 12px !important;
+  color: var(--p-text-secondary-color) !important;
+  z-index: 10;
+}
+
+/* ===== Responsive Layout ===== */
 @media (max-width: 600px) {
-  .admin-panel {
+  .panel-card {
     max-width: 100%;
   }
-
-  .admin-panel-content {
+  .panel-content {
     min-height: 360px;
   }
-
-  .admin-panel-header {
+  .panel-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;

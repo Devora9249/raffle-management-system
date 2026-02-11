@@ -15,50 +15,33 @@
     }
 </div>
 } -->
-<p-card class="raffle-card">
+<p-card class="panel-card">
 
-  <!-- Header -->
-  <div class="raffle-header">
-<div class="raffle-title">
-  <i class="pi pi-star"></i>
-  Raffle Panel
-</div>
-
-    <p-tag
-      severity="info"
-      value="Winners: {{ winnings.length }}">
-    </p-tag>
+  <div class="panel-header">
+    <div class="panel-title">
+      <i class="pi pi-star"></i>
+      Raffle Panel
+    </div>
+    <p-tag severity="info" value="Winners: {{ winnings.length }}"></p-tag>
   </div>
 
-  <!-- Action -->
-  <div class="raffle-actions">
-    <p-button
-      label="Start Raffle"
-      icon="pi pi-play"
-      (onClick)="startRaffle()"
+  <div class="panel-actions">
+    <p-button 
+      label="Start Raffle" 
+      icon="pi pi-play" 
+      (onClick)="startRaffle()" 
       [disabled]="loading">
     </p-button>
   </div>
 
-  <!-- Content -->
-  <div class="raffle-content">
-
-    <!-- Spinner overlay -->
+  <div class="panel-content">
     @if(loading){
-      <div class="raffle-loading">
+      <div class="panel-loading-overlay">
         <app-spinner></app-spinner>
       </div>
     }
 
-    <!-- Table -->
-    <p-table
-      [value]="winnings"
-      dataKey="id"
-      scrollable="true"
-      scrollHeight="320px"
-      responsiveLayout="scroll"
-      styleClass="p-datatable-sm">
-
+    <p-table [value]="winnings" dataKey="id" scrollable="true" scrollHeight="320px" styleClass="p-datatable-sm">
       <ng-template pTemplate="header">
         <tr>
           <th>User ID</th>
@@ -67,7 +50,6 @@
           <th>Gift Name</th>
         </tr>
       </ng-template>
-
       <ng-template pTemplate="body" let-winning>
         <tr>
           <td>{{ winning.winnerId }}</td>
@@ -76,9 +58,6 @@
           <td>{{ winning.giftName }}</td>
         </tr>
       </ng-template>
-
     </p-table>
-
   </div>
-
 </p-card>

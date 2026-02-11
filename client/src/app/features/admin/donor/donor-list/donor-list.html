@@ -1,4 +1,4 @@
-<p-table
+<!-- <p-table
   [value]="donors"
   class="donor-table"
   responsiveLayout="scroll">
@@ -17,6 +17,32 @@
       <td>{{ donor.email }}</td>
       <td>{{ donor.phone }}</td>
 
+    </tr>
+  </ng-template>
+
+</p-table> -->
+
+<p-table
+  [value]="donors"
+  dataKey="id"
+  [scrollable]="true"
+  scrollHeight="320px"
+  responsiveLayout="scroll"
+  styleClass="p-datatable-sm p-datatable-striped">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-donor>
+    <tr (click)="selectedDonor.emit(donor)" style="cursor: pointer;">
+      <td>{{ donor.name }}</td>
+      <td>{{ donor.email }}</td>
+      <td>{{ donor.phone }}</td>
     </tr>
   </ng-template>
 
