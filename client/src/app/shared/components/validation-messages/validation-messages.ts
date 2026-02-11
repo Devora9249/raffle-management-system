@@ -9,7 +9,7 @@ import { getValidatorErrorMessage } from '../validation-messages';
   imports: [CommonModule], // וודאי שזה מופיע
   template: `
     <div *ngIf="errorMessage" class="error-text">
-      <small style="color: red;">{{ errorMessage }}</small>
+      <small style="color: grey;">{{ errorMessage }}</small>
     </div>
   `
 })
