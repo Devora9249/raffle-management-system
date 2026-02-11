@@ -1,4 +1,50 @@
+/* ============================= */
+/* Purchase Panel (Parent)       */
+/* ============================= */
+
+.purchase-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ============================= */
+/* Search + Header               */
+/* ============================= */
+
 .purchase-search {
-  margin-bottom: 16px;
-  max-width: 420px;
+  max-width: 600px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--p-text-color);
+}
+
+/* Search input */
+:host ::ng-deep .purchase-search .p-inputtext {
+  border-radius: 10px;
+}
+
+/* ============================= */
+/* Responsive                    */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .purchase-search {
+    max-width: 100%;
+  }
 }

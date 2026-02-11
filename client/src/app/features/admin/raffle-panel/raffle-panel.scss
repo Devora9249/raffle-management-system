@@ -1,3 +1,109 @@
+// /* ===== Panel Wrapper ===== */
+// .raffle-panel {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 24px;
+// }
+
+// /* ===== Card ===== */
+// .raffle-card {
+//   width: 100%;
+//   max-width: 600px;
+//   margin: 0 auto;
+// }
+
+// /* ===== Header ===== */
+// .raffle-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   margin-bottom: 16px;
+// }
+
+// .raffle-title {
+//   font-size: 1.2rem;
+//   font-weight: 600;
+// }
+
+// /* ===== Actions ===== */
+// .raffle-actions {
+//   display: flex;
+//   justify-content: center;
+//   margin-bottom: 20px;
+// }
+
+// /* ===== Content (גובה קבוע – אין קפיצות) ===== */
+// .raffle-content {
+//   position: relative;
+//   min-height: 420px; /* 🔒 הגובה הקבוע */
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// /* ===== Loading Overlay ===== */
+// .raffle-loading {
+//   position: absolute;
+//   inset: 0;
+//   z-index: 2;
+
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 12px;
+
+//   background: rgba(255, 255, 255, 0.65);
+//   backdrop-filter: blur(1px);
+
+//   color: var(--p-text-secondary-color);
+//   font-size: 0.9rem;
+// }
+
+// /* ===== PrimeNG Table tweaks ===== */
+// :host ::ng-deep .p-datatable {
+//   height: 100%;
+//   border-radius: 12px;
+//   overflow: hidden;
+// }
+
+// :host ::ng-deep .p-datatable-wrapper {
+//   max-height: 320px; /* 🔽 גובה הסקרול */
+//   overflow-y: auto;
+// }
+
+// /* Header */
+// :host ::ng-deep .p-datatable-thead > tr > th {
+//   background: var(--p-surface-100);
+//   font-weight: 600;
+//   white-space: nowrap;
+// }
+
+// /* Rows */
+// :host ::ng-deep .p-datatable-tbody > tr > td {
+//   white-space: nowrap;
+// }
+
+// /* Hover row */
+// :host ::ng-deep .p-datatable-tbody > tr:hover {
+//   background: var(--p-surface-50);
+// }
+
+// /* ===== Responsive ===== */
+// @media (max-width: 600px) {
+//   .raffle-card {
+//     max-width: 100%;
+//   }
+
+//   .raffle-content {
+//     min-height: 360px;
+//   }
+// }
+
+// .p-tag-info{
+//     background-color: #CC043D;
+// }
+
+
 /* ===== Panel Wrapper ===== */
 .raffle-panel {
   display: flex;
@@ -10,6 +116,8 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+
+  border-radius: 14px; /* ריכוך קל */
 }
 
 /* ===== Header ===== */
@@ -21,8 +129,17 @@
 }
 
 .raffle-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   font-size: 1.2rem;
   font-weight: 600;
+  color: var(--p-text-color);
+
+  i {
+    color: var(--p-primary-color);
+  }
 }
 
 /* ===== Actions ===== */
@@ -81,11 +198,19 @@
 /* Rows */
 :host ::ng-deep .p-datatable-tbody > tr > td {
   white-space: nowrap;
+  color: var(--p-text-color);
 }
 
 /* Hover row */
 :host ::ng-deep .p-datatable-tbody > tr:hover {
   background: var(--p-surface-50);
+}
+
+/* ===== Tag ===== */
+:host ::ng-deep .p-tag-info {
+  background-color: #cc043d;
+  border-radius: 999px; /* pill עדין */
+  font-weight: 500;
 }
 
 /* ===== Responsive ===== */
@@ -97,8 +222,10 @@
   .raffle-content {
     min-height: 360px;
   }
-}
 
-.p-tag-info{
-    background-color: #CC043D;
+  .raffle-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }

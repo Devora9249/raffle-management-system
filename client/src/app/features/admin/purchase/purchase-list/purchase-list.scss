@@ -1,13 +1,56 @@
-.purchase-search {
-  max-width: 420px;
-  margin-bottom: 20px;
-}
+/* ============================= */
+/* Purchase List (Table only)    */
+/* ============================= */
 
-.purchase-table {
-  max-width: 720px;
+:host {
+  display: block;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.text-center {
+/* ============================= */
+/* PrimeNG Table tweaks          */
+/* ============================= */
+
+:host ::ng-deep .purchase-table.p-datatable {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .purchase-table .p-datatable-wrapper {
+  max-height: 320px; /* 🔒 גובה קבוע – אין קפיצות */
+  overflow-y: auto;
+}
+
+/* Header */
+:host ::ng-deep .purchase-table .p-datatable-thead > tr > th {
+  background: var(--p-surface-100);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Cells */
+:host ::ng-deep .purchase-table .p-datatable-tbody > tr > td {
+  white-space: nowrap;
+  color: var(--p-text-color);
+}
+
+/* Hover */
+:host ::ng-deep .purchase-table .p-datatable-tbody > tr:hover {
+  background: var(--p-surface-50);
+}
+
+/* Centered column */
+:host ::ng-deep .purchase-table .text-center {
   text-align: center;
+}
+
+/* ============================= */
+/* Responsive                    */
+/* ============================= */
+
+@media (max-width: 600px) {
+  :host {
+    max-width: 100%;
+  }
 }
