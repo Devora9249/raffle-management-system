@@ -93,7 +93,6 @@ export class GiftsPage {
   }
 
   onGiftCreated(): void {
-    //רינדור אחרי הוספת מתנה
     this.loadGifts();
   }
 
