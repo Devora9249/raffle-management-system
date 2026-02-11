@@ -218,7 +218,7 @@ public class GiftService : IGiftService
 
         if (updated == null)
             throw new KeyNotFoundException($"Gift {id} not found");
-        _logger.LogInformation($"Gift {id} updated successfully. hasWinning: {updated.HasWinning}");
+        //_logger.LogInformation($"Gift {id} updated successfully. hasWinning: {updated.HasWinning}");
         return new GiftResponseDto
         {
             Id = updated.Id,
@@ -280,6 +280,19 @@ public class GiftService : IGiftService
             CategoryId = g.CategoryId,
             Price = g.Price,
             DonorId = g.DonorId
+        });
+    }
+
+    public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
+    {
+        var result = await _giftRepository.GetPurchaseCountByGiftAsync();
+
+        return result.Select(g => new GiftPurchaseCountDto
+        {
+            GiftId = g.GiftId,
+            GiftName = g.GiftName,
+            PurchaseCount = g.PurchaseCount,
+            DonorName = g.DonorName
         });
     }
 

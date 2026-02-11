@@ -21,6 +21,16 @@ public class PurchaseRepository : IPurchaseRepository
             .Include(p => p.User)
             .ToListAsync();
 
+    public async Task<IEnumerable<PurchaseModel>> GetByGiftIdsAsync(IEnumerable<int> giftIds)
+    {
+           return await _context.Purchases
+        .Where(p =>
+            giftIds.Contains(p.GiftId) &&
+            p.Status == Status.Completed)
+        .ToListAsync();
+    }
+
+
     public async Task<PurchaseModel?> GetByIdAsync(int id)
         => await _context.Purchases
             .Include(p => p.Gift)
@@ -78,7 +88,7 @@ public class PurchaseRepository : IPurchaseRepository
                 GiftId = g.Key,
                 GiftName = g.First().Gift.Description,
                 PurchaseCount = g.Count(),
-                DonorName = g.First().Gift.Donor.Name   
+                DonorName = g.First().Gift.Donor.Name
             })
             .ToListAsync();
     }

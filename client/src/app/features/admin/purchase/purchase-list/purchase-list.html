@@ -20,6 +20,7 @@
       <th>Gift</th>
       <th>Donor</th>
       <th class="text-center">Purchased</th>
+      <th class="text-center">Delete</th>
     </tr>
   </ng-template>
 
@@ -30,6 +31,16 @@
       <td>{{ p.donorName }}</td>
       <td class="text-center">
         <strong>{{ p.purchaseCount }}</strong>
+      </td>
+
+      <td class="text-center">  
+        <p-button
+          icon="pi pi-trash"
+          text
+          rounded
+          severity="danger"
+          (onClick)="remove.emit(p.giftId)">
+        </p-button>
       </td>
     </tr>
   </ng-template>

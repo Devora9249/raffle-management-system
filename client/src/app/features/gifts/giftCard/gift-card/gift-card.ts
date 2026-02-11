@@ -26,7 +26,7 @@ export class GiftCard {
   @Input() qty: number=0;
 
 
-  // @Output() render = new EventEmitter<boolean>();
+  @Output() render = new EventEmitter<boolean>();
   @Output() edit = new EventEmitter<GiftResponseDto>();
 
 
@@ -59,7 +59,7 @@ this.notificationService.confirmDelete(() => {
     this.giftsService.delete(this.gift.id).subscribe({
       next: gift => {
         this.notificationService.showSuccess('Gift deleted successfully!');
-        // this.render.emit(true);
+        this.render.emit(true);
       },
       error: (err) => {
         console.error('Delete gift failed', err);

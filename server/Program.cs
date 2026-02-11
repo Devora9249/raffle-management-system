@@ -112,6 +112,7 @@ builder.Services.AddScoped<IWinningService, WinningService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

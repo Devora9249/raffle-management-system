@@ -23,25 +23,7 @@ namespace server.Services.Interfaces
         Task<IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name);
         Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId);
         Task MarkGiftAsHavingWinningAsync(int giftId);
+        Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync();
 
     }
 }
-
-
-// using server.Models;
-
-// namespace server.Services.Interfaces
-// {
-//     public interface IGiftService
-//     {
-//         Task<IEnumerable<GiftModel>> GetAllGiftsAsync();
-//         Task<GiftModel?> GetGiftByIdAsync(int id);
-//         Task<GiftModel> AddGiftAsync(GiftModel gift);
-//         Task<GiftModel> UpdateGiftAsync(GiftModel gift);
-//         Task<bool> DeleteGiftAsync(int id);
-
-//         Task<IEnumerable<GiftModel>> SearchByNameAsync(string name);
-//         Task<IEnumerable<GiftModel>> FilterByDonorAsync(int donorId);
-//         Task<IEnumerable<GiftModel>> SortByPriceAsync(bool ascending);
-//     }
-// }

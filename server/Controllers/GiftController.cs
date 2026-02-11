@@ -83,4 +83,11 @@ public class GiftController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("purchaseCount")]
+    public async Task<ActionResult<IEnumerable<GiftPurchaseCountDto>>> GetPurchaseCountByGift()
+    {
+        var purchaseCounts = await _giftService.GetPurchaseCountByGiftAsync();
+        return Ok(purchaseCounts);
+    }
+
 }

@@ -1,3 +1,4 @@
+using server.DTOs;
 using server.Models;
 using server.Models.Enums;
 
@@ -22,7 +23,7 @@ namespace server.Repositories.Interfaces
         Task<IEnumerable<GiftModel>> FilterByGiftName(string name);
         Task<IEnumerable<GiftModel>> FilterByGiftDonor(string name);
         Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId);
-
+        Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync();
 
     }
 }

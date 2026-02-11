@@ -68,6 +68,8 @@ export class GiftsPage {
 
   }
 
+
+
   // getPurchaseId(giftId: number): number | null {
   //   return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
   // }
@@ -91,14 +93,13 @@ export class GiftsPage {
   }
 
   onGiftCreated(): void {
-    //רינדור אחרי הוספת מתנה
-    this.ngOnInit();
+    this.loadGifts();
   }
 
 
   onRender(): void {
     //רינדור אחרי מחיקה ועדכון מתנה
-    this.ngOnInit();
+    this.loadGifts();
   }
 
   onEdit(gift: GiftResponseDto): void {

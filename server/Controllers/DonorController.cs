@@ -38,7 +38,6 @@ namespace server.Controllers
         public async Task<ActionResult<IEnumerable<DonorWithGiftsDto>>> GetDonorsWithGifts()
         {
             var donorsWithGifts = await _donorService.GetDonorsWithGiftsAsync();
-            // _logger.LogInformation("Retrieved donors with gifts: {@DonorsWithGifts}", donorsWithGifts);
             return Ok(donorsWithGifts);
         }
 

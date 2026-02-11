@@ -6,6 +6,7 @@ namespace server.Repositories.Interfaces
     public interface IPurchaseRepository
     {
         Task<IEnumerable<PurchaseModel>> GetAllAsync();
+        Task<IEnumerable<PurchaseModel>> GetByGiftIdsAsync(IEnumerable<int> giftIds);
         Task<PurchaseModel?> GetByIdAsync(int id);
 
         Task<PurchaseModel> AddAsync(PurchaseModel purchase);
