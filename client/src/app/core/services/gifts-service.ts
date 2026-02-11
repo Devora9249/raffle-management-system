@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { GiftResponseDto, GiftCreateDto, GiftUpdateDto, PriceSort } from '../models/gift-model'
+import { GiftResponseDto, GiftCreateDto, GiftUpdateDto, PriceSort, } from '../models/gift-model'
+import { GiftPurchaseCountDto } from '../models/purchase-model';
 
 @Injectable({ providedIn: 'root' })
 export class GiftsService {
@@ -56,5 +57,8 @@ export class GiftsService {
     });
   }
 
+  getPurchaseCountByGift(): Observable<GiftPurchaseCountDto[]> {
+    return this.http.get<GiftPurchaseCountDto[]>(`${this.baseUrl}/purchaseCount`);
+  }
 
 }

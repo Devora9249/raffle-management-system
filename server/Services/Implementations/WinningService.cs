@@ -3,6 +3,7 @@ using server.Services.Interfaces;
 using server.DTOs;
 using server.Models;
 using server.Models.Enums;
+using server.Repositories.Implementations;
 
 namespace server.Services.Implementations;
 
@@ -14,6 +15,8 @@ public class WinningService : IWinningService
     private readonly IEmailService _emailService;
     private readonly IGiftService _giftService;
     private readonly ILogger<WinningService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
+
 
     public WinningService(
         IWinningRepository winningRepository,
@@ -21,12 +24,17 @@ public class WinningService : IWinningService
         IGiftRepository giftRepository,
         IEmailService emailService,
         IGiftService giftService,
-        ILogger<WinningService> logger
+        ILogger<WinningService> logger,
+        IUnitOfWork unitOfWork
         )
     {
         _winningRepository = winningRepository;
         _purchaseRepository = purchaseRepository;
         _giftRepository = giftRepository;
+        _emailService = emailService;
+        _giftService = giftService;
+        _logger = logger;
+        _unitOfWork = unitOfWork;
         _emailService = emailService;
         _giftService = giftService;
         _logger = logger;
@@ -70,7 +78,7 @@ public class WinningService : IWinningService
         });
 
         var full = await _winningRepository.GetWinningByIdAsync(created.Id);
-         if (full == null) throw new Exception("Winning was created but could not be loaded.");
+        if (full == null) throw new Exception("Winning was created but could not be loaded.");
 
         return new WinningResponseDto
         {
@@ -95,7 +103,7 @@ public class WinningService : IWinningService
         if (updated == null) throw new KeyNotFoundException($"Winning {id} not found");
 
         var full = await _winningRepository.GetWinningByIdAsync(updated.Id);
-         if (full == null) throw new Exception("Winning was updated but could not be loaded.");
+        if (full == null) throw new Exception("Winning was updated but could not be loaded.");
 
         return new WinningResponseDto
         {
@@ -116,39 +124,124 @@ public class WinningService : IWinningService
     }
 
 
+    // public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
+    // {
+    //     var gifts = await _giftRepository.GetGiftsAsync(PriceSort.None);
+    //     var rng = new Random();
+
+    //     foreach (var gift in gifts)
+    //     {
+    //         _logger.LogInformation($"Raffling gift {gift.Id} - {gift.Description} hasWinning: {gift.HasWinning} 🎁");
+    //         var purchases = (await _purchaseRepository.GetByGiftAsync(gift.Id)).ToList();
+
+    //         if (purchases.Count == 0) continue;
+
+    //         var winnerUserId =
+    //             purchases[rng.Next(purchases.Count)].UserId;
+
+    //         await _winningRepository.AddWinningAsync(new WinningModel
+    //         {
+    //             GiftId = gift.Id,
+    //             WinnerId = winnerUserId
+    //         });
+
+    //         try
+    //         {
+    //             await _emailService.SendWinningEmailAsync(gift.Id, winnerUserId);
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             Console.WriteLine(ex.Message);
+    //         }
+    //         _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
+    //         await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
+    //     }
+
+    //     return await GetAllWinningsAsync();
+    // }
+
     public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
     {
-        var gifts = await _giftRepository.GetGiftsAsync(PriceSort.None);
-        var rng = new Random();
+        await _unitOfWork.BeginTransactionAsync();
 
-        foreach (var gift in gifts)
+        try
         {
-            var purchases = (await _purchaseRepository.GetByGiftAsync(gift.Id)).ToList();
+            var rng = new Random();
 
-            if (purchases.Count == 0) continue;
+            // 1️⃣ מתנות שעדיין לא הוגרלו
+            var gifts = (await _giftRepository.GetGiftsAsync(PriceSort.None))
+                .Where(g => !g.HasWinning)
+                .ToList();
 
-            var winnerUserId =
-                purchases[rng.Next(purchases.Count)].UserId;
+            _logger.LogInformation($"Raffling {gifts.Count} gifts that have not been raffled yet.");
 
-            await _winningRepository.AddWinningAsync(new WinningModel
+            // 2️⃣ שליפת כל הרכישות בבת אחת
+            var giftIds = gifts.Select(g => g.Id).ToList();
+
+            var purchases = await _purchaseRepository.GetByGiftIdsAsync(giftIds);
+
+            var purchasesByGift = purchases
+                .GroupBy(p => p.GiftId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var winningsToEmail = new List<(int GiftId, int WinnerId)>();
+
+            foreach (var gift in gifts)
             {
-                GiftId = gift.Id,
-                WinnerId = winnerUserId
-            });
+                if (!purchasesByGift.TryGetValue(gift.Id, out var giftPurchases))
+                {
+                    _logger.LogInformation($"No purchases found for gift {gift.Id} - {gift.Description}. Skipping raffle for this gift.");
+                    continue;
+                }
 
-            try
-            {
-                await _emailService.SendWinningEmailAsync(gift.Id, winnerUserId);
+                if (giftPurchases.Count == 0)
+                {
+                    _logger.LogInformation($"No purchases found for gift {gift.Id} - {gift.Description}. Skipping raffle for this gift.");
+                    continue;
+
+                }
+
+                var winnerUserId =
+                    giftPurchases[rng.Next(giftPurchases.Count)].UserId;
+
+                // 3️⃣ יצירת זכייה
+                await _winningRepository.AddWinningAsync(new WinningModel
+                {
+                    GiftId = gift.Id,
+                    WinnerId = winnerUserId
+                });
+
+                // 4️⃣ סימון מתנה כהוגרלה
+                await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
+                _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
+
+                winningsToEmail.Add((gift.Id, winnerUserId));
             }
-            catch (Exception ex)
+
+            // 5️⃣ Commit אטומי
+            await _unitOfWork.CommitAsync();
+
+            // 6️⃣ Side effects אחרי Commit
+            foreach (var (giftId, winnerId) in winningsToEmail)
             {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    await _emailService.SendWinningEmailAsync(giftId, winnerId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        $"Failed to send winning email. GiftId={giftId}, WinnerId={winnerId}");
+                }
             }
-            _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
-            await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
+
+            return await GetAllWinningsAsync();
         }
-
-        return await GetAllWinningsAsync();
+        catch
+        {
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 
 

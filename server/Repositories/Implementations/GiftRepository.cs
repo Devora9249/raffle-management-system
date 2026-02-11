@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.DTOs;
 using server.Models;
 using server.Models.Enums;
 using server.Repositories.Interfaces;
@@ -112,7 +113,7 @@ public class GiftRepository : IGiftRepository
 
     public async Task<GiftModel?> UpdateGiftAsync(GiftModel gift)
     {
-        _logger.LogInformation($"Updating gift with ID {gift.Id}. hasWinning: {gift.HasWinning}");
+        // _logger.LogInformation($"Updating gift with ID {gift.Id}. hasWinning: {gift.HasWinning}");
         var existingGift = await _context.Gifts.FindAsync(gift.Id);
         if (existingGift == null)
         {
@@ -126,7 +127,7 @@ public class GiftRepository : IGiftRepository
         await _context.Entry(existingGift)
             .Reference(g => g.Category)
             .LoadAsync();
-        _logger.LogInformation($"Gift {gift.Id} updated successfully. hasWinning: {existingGift.HasWinning}");
+        // _logger.LogInformation($"Gift {gift.Id} updated successfully. hasWinning: {existingGift.HasWinning}");
 
 
         return existingGift;
@@ -166,6 +167,24 @@ public class GiftRepository : IGiftRepository
         .Where(g => g.Donor.Name.Contains(name))
         .ToListAsync();
     }
+
+    public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
+    {
+        return await _context.Gifts
+            .GroupJoin(
+                _context.Purchases,
+                gift => gift.Id,
+                purchase => purchase.GiftId,
+                (gift, purchases) => new GiftPurchaseCountDto
+                {
+                    GiftId = gift.Id,
+                    GiftName = gift.Description,
+                PurchaseCount = purchases.Count(p => p.Status == Status.Completed),
+                    DonorName = gift.Donor.Name
+                })
+            .ToListAsync();
+    }
+
 
 
 }
