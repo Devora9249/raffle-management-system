@@ -139,7 +139,11 @@ export class GiftFormDialog implements OnChanges {
     request$.subscribe({
       next: () => {
         this.created.emit(true);
-        this.notificationService.showSuccess('Gift edited successfully');
+        if(!this.editMode) {
+          this.notificationService.showSuccess('Gift created successfully');
+        } else {
+          this.notificationService.showSuccess('Gift edited successfully');
+        }
         this.close();
       },
       error: () => this.notificationService.showError(' An error occurred while saving the gift'),
