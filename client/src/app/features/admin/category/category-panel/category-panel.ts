@@ -40,9 +40,11 @@ export class CategoryPanel {
   }
 
 delete(id: number): void {
+  this.notificationService.confirmDelete(() => {
   this.categoryService.delete(id).subscribe({
     next: () => {
       this.loadCategories();
+      this.notificationService.showSuccess('Category deleted successfully');
     },
     error: (err) => {
       console.error('Delete category failed', err);
@@ -51,9 +53,10 @@ delete(id: number): void {
           err?.error?.message ||
           'Unauthorized or unexpected error';
 
-        this.notificationService.showError('Delete gift failed: ' + message);
+        this.notificationService.showError('Delete category failed: ' + message);
     }
   });
+});
 }
 
 

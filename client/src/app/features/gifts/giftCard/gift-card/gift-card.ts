@@ -55,7 +55,7 @@ export class GiftCard {
 
   onDelete() {
     console.log("onDelete!");
-
+this.notificationService.confirmDelete(() => {
     this.giftsService.delete(this.gift.id).subscribe({
       next: gift => {
         this.notificationService.showSuccess('Gift deleted successfully!');
@@ -72,6 +72,7 @@ export class GiftCard {
         this.notificationService.showError('Delete gift failed: ' + message);
       }
     });
+  });
   }
 
   onEdit() {

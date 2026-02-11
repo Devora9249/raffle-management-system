@@ -33,7 +33,7 @@ export class CartPage implements OnInit {
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService 
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -83,8 +83,11 @@ export class CartPage implements OnInit {
 
   onDelete(item: CartItemResponseDto): void {
     if (!item.purchaseId) return;
-
-    this.cartService.remove(item.purchaseId).subscribe();
+    this.notificationService.confirmDelete(() => {
+      this.cartService.remove(item.purchaseId!).subscribe(() => {
+        this.notificationService.showSuccess('deleted successfully ');
+      });
+    });
   }
 
 

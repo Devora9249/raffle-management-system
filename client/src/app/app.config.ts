@@ -14,6 +14,8 @@ import Nora from '@primeng/themes/nora';
 import Aura from '@primeng/themes/aura';
 import {mainDesign} from '../app/styles/mainDesign';
 import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+
 export const appConfig: ApplicationConfig = {
 
   providers: [
@@ -37,6 +39,7 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: mainDesign
     }),
-    MessageService
+    MessageService,
+    ConfirmationService
   ]
 };

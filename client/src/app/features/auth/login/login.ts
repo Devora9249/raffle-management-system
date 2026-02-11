@@ -37,18 +37,21 @@ private notification: NotificationService,
     }
 
     const dto: LoginDto = this.loginForm.value;
-
     this.authService.login(dto).subscribe({
       next: (res) => {
         this.authService.saveToken(res.token);
         this.notification.showSuccess('Login successful!');
         this.router.navigate(['/gifts']); // ניתוב אחרי התחברות
       },
+     
+      
       error: (err) => {
         console.error('Login failed', err);
         this.notification.showError('Login failed. Check your credentials.');
 
       }
     });
+  
   }
+  
 }
