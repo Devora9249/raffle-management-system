@@ -31,11 +31,7 @@
         formControlName="email"
         class="form-control" />
 
-      <small
-        class="error"
-        *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-        Email is required
-      </small>
+
     </div>
 
     <!-- Password -->
@@ -49,11 +45,6 @@
         inputStyleClass="w-full">
       </p-password>
 
-      <small
-        class="error"
-        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-        Password is required
-      </small>
     </div>
 
     <div class="actions">

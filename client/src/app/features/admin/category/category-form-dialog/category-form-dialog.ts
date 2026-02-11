@@ -5,9 +5,10 @@ import { CategoriesService } from '../../../../core/services/categories-service'
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { NotificationService } from '../../../../core/services/notification-service';
+import { ValidationErrorDirective } from '../../../../shared/directives/validation-error';
 @Component({
   selector: 'app-category-form-dialog',
-  imports: [DialogModule,ReactiveFormsModule, ButtonModule],
+  imports: [DialogModule,ReactiveFormsModule, ButtonModule,ValidationErrorDirective],
   templateUrl: './category-form-dialog.html',
   styleUrl: './category-form-dialog.scss',
 })

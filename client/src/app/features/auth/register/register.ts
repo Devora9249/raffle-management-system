@@ -8,10 +8,10 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from '../../../core/services/notification-service';
-
+import { ValidationErrorDirective } from '../../../shared/directives/validation-error';
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, CommonModule],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, CommonModule,ValidationErrorDirective],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })

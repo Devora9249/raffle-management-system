@@ -12,11 +12,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { NotificationService } from '../../../../core/services/notification-service';
-
+import { ValidationErrorDirective } from '../../../../shared/directives/validation-error';
 @Component({
   selector: 'app-gift-form-dialog',
   standalone: true,
-  imports: [InputTextModule, FileUploadModule, DialogModule, ButtonModule, ReactiveFormsModule, CommonModule, FormsModule, SelectModule, InputNumberModule],
+  imports: [InputTextModule, FileUploadModule, DialogModule, ButtonModule, ReactiveFormsModule, CommonModule, FormsModule, SelectModule, InputNumberModule,ValidationErrorDirective],
   templateUrl: './gift-form-dialog.html',
   styleUrl: './gift-form-dialog.scss',
 })
@@ -38,8 +38,8 @@ export class GiftFormDialog implements OnChanges {
 
   constructor(private fb: FormBuilder, private giftsService: GiftsService, private notificationService: NotificationService ) {
     this.form = this.fb.group({
-      description: [''],
-      price: [null, [Validators.required, Validators.min(1)]],
+      description: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
       categoryId: [null, Validators.required],
       donorId: [null, Validators.required],
     });
@@ -142,7 +142,7 @@ export class GiftFormDialog implements OnChanges {
         this.notificationService.showSuccess('Gift edited successfully');
         this.close();
       },
-      error: () => this.notificationService.showError('Failed to save gift'),
+      error: () => this.notificationService.showError(' An error occurred while saving the gift'),
     });
   }
 }

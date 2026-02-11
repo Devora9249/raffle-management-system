@@ -6,9 +6,10 @@ import { AuthService } from '../../../../core/services/auth-service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { NotificationService } from '../../../../core/services/notification-service';
+import { ValidationErrorDirective } from '../../../../shared/directives/validation-error';
 @Component({
   selector: 'app-donor-form-dialog',
-  imports: [ButtonModule, DialogModule,ReactiveFormsModule,],
+  imports: [ButtonModule, DialogModule,ReactiveFormsModule,ValidationErrorDirective],
   templateUrl: './donor-form-dialog.html',
   styleUrl: './donor-form-dialog.scss',
 })
