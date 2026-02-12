@@ -11,7 +11,7 @@ import { NotificationService } from '../../../core/services/notification-service
 import { ValidationErrorDirective } from '../../../shared/directives/validation-error';
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, CommonModule,ValidationErrorDirective],
+  imports: [ReactiveFormsModule, ButtonModule, PasswordModule, CommonModule, ValidationErrorDirective],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })
@@ -25,7 +25,7 @@ export class Register {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private notification: NotificationService 
+    private notification: NotificationService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -48,17 +48,10 @@ export class Register {
     this.authService.register(model).subscribe({
       next: () => {
         this.notification.showSuccess('Registration successful!');
- 
+
         this.registered.emit(model);
+        this.router.navigate(['/login']);
         this.form.reset();
-      },
-      error: (err) => {
-        let msg = 'Registration failed. Check your input.';
-        if (err.status === 400 && err.error?.message) {
-          msg = err.error.message;
-        }
-        this.notification.showError(msg);
-        console.error('Registration failed', err);
       }
     });
   }

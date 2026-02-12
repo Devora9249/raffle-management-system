@@ -136,7 +136,7 @@ namespace server.Services
 
                 TotalGifts = gifts.Count,
                 TotalTicketsSold = purchaseStats.Sum(x => x.TicketsSold),
-                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(), 
+                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(),
                 Gifts = gifts.Select(g => new DonorGiftStatsDto
                 {
                     GiftId = g.Id,
@@ -163,14 +163,14 @@ namespace server.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> AddDonorAsync(addDonorDto donorDto)
+        public async Task<addDonorDto> AddDonorAsync(addDonorDto donorDto)
         {
             var existingUser = await _context.Users
         .FirstOrDefaultAsync(u => u.Email == donorDto.Email);
 
             if (existingUser != null)
             {
-                return false;
+                throw new InvalidOperationException("A user with this email already exists.");
             }
 
             var newDonor = new UserModel
@@ -189,11 +189,11 @@ namespace server.Services
 
             _context.Users.Add(newDonor);
             await _context.SaveChangesAsync();
-            
+
             _logger.LogInformation("Added new donor: {@DonorDto}", donorDto);
 
 
-            return true;
+            return donorDto;
         }
     }
 }

@@ -47,15 +47,6 @@ delete(id: number): void {
     next: () => {
       this.loadCategories();
       this.notificationService.showSuccess('Category deleted successfully');
-    },
-    error: (err) => {
-      console.error('Delete category failed', err);
-  const message =
-          err?.error?.detail ||
-          err?.error?.message ||
-          'Unauthorized or unexpected error';
-
-        this.notificationService.showError('Delete category failed: ' + message);
     }
   });
 });

@@ -61,16 +61,6 @@ this.notificationService.confirmDelete(() => {
       next: gift => {
         this.notificationService.showSuccess('Gift deleted successfully!');
         this.render.emit(true);
-      },
-      error: (err) => {
-        console.error('Delete gift failed', err);
-
-        const message =
-          err?.error?.detail ||
-          err?.error?.message ||
-          'Unauthorized or unexpected error';
-
-        this.notificationService.showError('Delete gift failed: ' + message);
       }
     });
   });

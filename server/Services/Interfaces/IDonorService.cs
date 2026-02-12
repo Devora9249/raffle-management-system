@@ -14,7 +14,7 @@ namespace server.Services.Interfaces
         Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId);
 
         Task<DonorListItemDto?> GetDonorDetailsAsync(int userId);
-        Task<bool> AddDonorAsync(addDonorDto donorDto);
+        Task<addDonorDto> AddDonorAsync(addDonorDto donorDto);
 
     }
 }

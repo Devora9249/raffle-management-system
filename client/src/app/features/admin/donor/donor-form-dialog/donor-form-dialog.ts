@@ -9,7 +9,7 @@ import { NotificationService } from '../../../../core/services/notification-serv
 import { ValidationErrorDirective } from '../../../../shared/directives/validation-error';
 @Component({
   selector: 'app-donor-form-dialog',
-  imports: [ButtonModule, DialogModule,ReactiveFormsModule,ValidationErrorDirective],
+  imports: [ButtonModule, DialogModule, ReactiveFormsModule, ValidationErrorDirective],
   templateUrl: './donor-form-dialog.html',
   styleUrl: './donor-form-dialog.scss',
 })
@@ -29,7 +29,7 @@ export class DonorFormDialog {
     private donorsService: DonorService,
     private notificationService: NotificationService,
     // private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnChanges(): void {
     this.form = this.fb.group({
@@ -43,16 +43,15 @@ export class DonorFormDialog {
   }
 
   submit(): void {
-    // if (this.category) {
-    //   this.authService.update()
-    //     .subscribe(() => this.saved.emit());
-    // } else {
-      this.donorsService.addDonor(this.form.value)
-        .subscribe(() => {
+
+    this.donorsService.addDonor(this.form.value)
+      .subscribe({
+        next: () => {
           this.saved.emit();
           this.notificationService.showSuccess('Donor added successfully');
-        });
-    // }
+        }
+      });
+
   }
 }
 
