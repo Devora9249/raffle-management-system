@@ -1,11 +1,10 @@
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.DTOs.Donors;
 using server.Models;
 using server.Models.Enums;
-using server.Services.Implementations;
 using server.Services.Interfaces;
+using AutoMapper;
 
 namespace server.Services
 {
@@ -15,13 +14,15 @@ namespace server.Services
         private readonly IAuthService authService;
         private readonly IGiftService giftService;
         private readonly ILogger<DonorService> _logger;
+        private readonly IMapper _mapper;
 
-        public DonorService(AppDbContext context, IAuthService authService, IGiftService giftService, ILogger<DonorService> logger)
+        public DonorService(AppDbContext context, IAuthService authService, IGiftService giftService, ILogger<DonorService> logger, IMapper mapper)
         {
             _context = context;
             this.authService = authService;
             this.giftService = giftService;
             _logger = logger;
+            _mapper = mapper;
         }
         ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
@@ -46,37 +47,32 @@ namespace server.Services
                 q = q.Where(u => u.City.Contains(city));
             }
 
-            return await q
-                .OrderBy(u => u.Name)
-                .Select(u => new DonorListItemDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Email = u.Email,
-                    Phone = u.Phone,
-                    City = u.City,
-                })
+            return await _mapper
+                .ProjectTo<DonorListItemDto>(q.OrderBy(u => u.Name))
                 .ToListAsync();
+
         }
 
         public async Task<IEnumerable<DonorWithGiftsDto>> GetDonorsWithGiftsAsync()
         {
-            var donors = await GetDonorsAsync("", "");
+            var donors = await _context.Users
+                .Where(u => u.Role == RoleEnum.Donor)
+                .ToListAsync();
 
             var gifts = await giftService.GetAllGiftsAsync(PriceSort.None, null, null);
 
-            return donors.Select(d => new DonorWithGiftsDto
+            return donors.Select(d =>
             {
-                DonorId = d.Id,
-                Name = d.Name,
-                Email = d.Email,
-                Phone = d.Phone,
-                City = d.City,
-                Address = d.Address,
-                Gifts = gifts
+                var dto = _mapper.Map<DonorWithGiftsDto>(d);
+
+                dto.Gifts = gifts
                     .Where(g => g.DonorId == d.Id)
-                    .ToList()
+                    .ToList();
+
+                return dto;
             });
+
+
         }
 
         ///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
@@ -111,7 +107,7 @@ namespace server.Services
                 .Select(grp => new
                 {
                     GiftId = grp.Key,
-                    TicketsSold = grp.Sum(x => x.Qty), // ✅ אצלך זה Qty
+                    TicketsSold = grp.Sum(x => x.Qty),
                     UniqueBuyers = grp.Select(x => x.UserId).Distinct().Count()
                 })
                 .ToListAsync();
@@ -136,7 +132,7 @@ namespace server.Services
 
                 TotalGifts = gifts.Count,
                 TotalTicketsSold = purchaseStats.Sum(x => x.TicketsSold),
-                TotalUniqueBuyers = purchaseStats.SelectMany(x => new int[] { x.UniqueBuyers }).Sum(),
+                TotalUniqueBuyers = purchaseStats.Sum(x => x.UniqueBuyers),
                 Gifts = gifts.Select(g => new DonorGiftStatsDto
                 {
                     GiftId = g.Id,
@@ -150,17 +146,12 @@ namespace server.Services
 
         public async Task<DonorListItemDto?> GetDonorDetailsAsync(int userId)
         {
-            return await _context.Users
-                .Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
-                .Select(u => new DonorListItemDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Email = u.Email,
-                    Phone = u.Phone,
-                    City = u.City
-                })
+            return await _mapper
+                .ProjectTo<DonorListItemDto>(
+                    _context.Users.Where(u => u.Id == userId && u.Role == RoleEnum.Donor)
+                )
                 .FirstOrDefaultAsync();
+
         }
 
         public async Task<addDonorDto> AddDonorAsync(addDonorDto donorDto)
