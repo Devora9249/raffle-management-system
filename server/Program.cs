@@ -13,6 +13,7 @@ using server.Models;
 using System.Security.Claims;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +114,8 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 // Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

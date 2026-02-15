@@ -67,7 +67,7 @@ this.notificationService.confirmDelete(() => {
   }
 
   onEdit() {
-    this.edit.emit(this.gift);
+    this.edit.emit(this.gift);     
   }
 
   get imageSrc(): string {

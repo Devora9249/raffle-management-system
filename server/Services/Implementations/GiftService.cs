@@ -3,6 +3,7 @@ using server.Models.Enums;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
 using server.DTOs;
+using AutoMapper;
 
 namespace server.Services.Implementations;
 
@@ -11,10 +12,13 @@ public class GiftService : IGiftService
     private readonly IGiftRepository _giftRepository;
     private readonly ILogger<GiftService> _logger;
 
-    public GiftService(IGiftRepository giftRepository, ILogger<GiftService> logger)
+    private readonly IMapper _mapper;
+
+    public GiftService(IGiftRepository giftRepository, ILogger<GiftService> logger, IMapper mapper)
     {
         _giftRepository = giftRepository;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<GiftResponseDto>> GetAllGiftsAsync(
@@ -29,17 +33,8 @@ public class GiftService : IGiftService
             sort
         );
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryId = g.CategoryId,
-            CategoryName = g.Category.Name,
-            Price = g.Price,
-            DonorId = g.DonorId,
-            ImageUrl = g.ImageUrl,
-            HasWinning = g.HasWinning
-        });
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
+
     }
 
 
@@ -48,16 +43,19 @@ public class GiftService : IGiftService
     {
         var gifts = await _giftRepository.GetGiftsAsync(sort);
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            CategoryId = g.CategoryId,
-            Price = g.Price,
-            DonorId = g.DonorId,
-            ImageUrl = g.ImageUrl
-        });
+        // return gifts.Select(g => new GiftResponseDto
+        // {
+        //     Id = g.Id,
+        //     Description = g.Description,
+        //     CategoryName = g.Category.Name,
+        //     CategoryId = g.CategoryId,
+        //     Price = g.Price,
+        //     DonorId = g.DonorId,
+        //     ImageUrl = g.ImageUrl
+        // });
+
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
+
     }
 
 
@@ -66,31 +64,15 @@ public class GiftService : IGiftService
         var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
         if (gifts == null) return null;
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            CategoryId = g.CategoryId,
-            Price = g.Price,
-            DonorId = g.DonorId,
-            ImageUrl = g.ImageUrl
-        });
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
+
     }
 
     public async Task<IEnumerable<GiftResponseDto>> GetByDonorAsync(int donorId)
     {
         var gifts = await _giftRepository.GetByDonorAsync(donorId);
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            CategoryId = g.CategoryId,
-            Price = g.Price,
-            DonorId = g.DonorId
-        });
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
     }
 
     public async Task<GiftResponseDto?> GetGiftByIdAsync(int id)
@@ -99,17 +81,8 @@ public class GiftService : IGiftService
         if (gift == null)
             return null;
 
-        return new GiftResponseDto
-        {
-            Id = gift.Id,
-            Description = gift.Description,
-            CategoryName = gift.Category.Name,
-            CategoryId = gift.CategoryId,
-            Price = gift.Price,
-            DonorId = gift.DonorId,
-            ImageUrl = gift.ImageUrl,
-            HasWinning = gift.HasWinning
-        };
+        return _mapper.Map<GiftResponseDto>(gift);
+
     }
 
     public async Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto)
@@ -153,16 +126,8 @@ public class GiftService : IGiftService
 
         var created = await _giftRepository.AddGiftAsync(model);
 
-        return new GiftResponseDto
-        {
-            Id = created.Id,
-            Description = created.Description,
-            CategoryName = created.Category.Name,
-            Price = created.Price,
-            DonorId = created.DonorId,
-            ImageUrl = created.ImageUrl,
-            HasWinning = created.HasWinning
-        };
+        return _mapper.Map<GiftResponseDto>(created);
+
     }
 
 
@@ -219,17 +184,8 @@ public class GiftService : IGiftService
         if (updated == null)
             throw new KeyNotFoundException($"Gift {id} not found");
         //_logger.LogInformation($"Gift {id} updated successfully. hasWinning: {updated.HasWinning}");
-        return new GiftResponseDto
-        {
-            Id = updated.Id,
-            Description = updated.Description,
-            CategoryName = updated.Category.Name,
-            CategoryId = updated.CategoryId,
-            Price = updated.Price,
-            DonorId = updated.DonorId,
-            ImageUrl = updated.ImageUrl,
-            HasWinning = updated.HasWinning
-        };
+        return _mapper.Map<GiftResponseDto>(updated);
+
     }
 
     public async Task MarkGiftAsHavingWinningAsync(int giftId)
@@ -257,30 +213,16 @@ public class GiftService : IGiftService
     {
         var gifts = await _giftRepository.FilterByGiftName(name);
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            CategoryId = g.CategoryId,
-            Price = g.Price,
-            DonorId = g.DonorId
-        });
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
+
     }
 
     public async Task<IEnumerable<GiftResponseDto>> FilterByGiftDonor(string name)
     {
         var gifts = await _giftRepository.FilterByGiftDonor(name);
 
-        return gifts.Select(g => new GiftResponseDto
-        {
-            Id = g.Id,
-            Description = g.Description,
-            CategoryName = g.Category.Name,
-            CategoryId = g.CategoryId,
-            Price = g.Price,
-            DonorId = g.DonorId
-        });
+        return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
+
     }
 
     public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
