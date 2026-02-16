@@ -47,7 +47,7 @@ export class RafflePanel {
 
     this.winningService.doRaffle().subscribe({
       next: () => {
-        this.loadWinnings(); // יסיים loading
+        this.loadWinnings(); 
                 this.notificationService.showSuccess('done raffle successfully');
 
       },

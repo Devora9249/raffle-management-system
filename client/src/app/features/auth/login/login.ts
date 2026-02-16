@@ -42,7 +42,7 @@ private notification: NotificationService,
       next: (res) => {
         this.authService.saveToken(res.token);
         this.notification.showSuccess('Login successful!');
-        this.router.navigate(['/gifts']); // ניתוב אחרי התחברות
+        this.router.navigate(['/gifts']);
       }
     });
   

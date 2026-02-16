@@ -11,7 +11,6 @@ import { ValidationMessagesComponent } from '../components/validation-messages/v
 import { Subscription } from 'rxjs';
 
 @Directive({
-  // הדירקטיבה תעבוד על כל שדה שיש לו formControlName או formControl
   selector: '[formControlName], [formControl]',
   standalone: true
 })
@@ -25,13 +24,13 @@ export class ValidationErrorDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // מאזין לשינויים בסטטוס (למשל כשהשדה הופך מקין ללא תקין תוך כדי הקלדה)
+    // מאזין לשינויים בסטטוס 
     this.statusSub = this.control.statusChanges!.subscribe(() => {
       this.updateErrorMessage();
     });
   }
 
-  // האירוע שחיפשת: ברגע שהמשתמש יוצא מהשדה (Blur) - תבדוק ולידציה
+  //  - תבדוק ולידציה
   @HostListener('blur')
   onBlur() {
     this.updateErrorMessage();
@@ -40,16 +39,12 @@ export class ValidationErrorDirective implements OnInit, OnDestroy {
   private updateErrorMessage() {
     const errors = this.control.errors;
 
-    // התנאי המעודכן: אם יש שגיאה וגם (נגעו בשדה או שינו אותו)
     if (errors && (this.control.touched || this.control.dirty)) {
       if (!this.componentRef) {
-        // יוצר את קומפוננטת הודעת השגיאה מתחת לאינפוט
         this.componentRef = this.vcr.createComponent(ValidationMessagesComponent);
       }
-      // מעביר לקומפוננטה את ה-control כדי שתשלוף את הטקסט הנכון מהמילון
       this.componentRef.instance.control = this.control.control;
     } else {
-      // אם אין שגיאה או שהמשתמש עוד לא נגע בשדה - תסיר את ההודעה
       this.removeError();
     }
   }

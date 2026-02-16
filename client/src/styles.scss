@@ -1,19 +1,4 @@
-// /* You can add global styles to this file, and also import other style files */
-// html, body {
-//   margin: 0;
-//   background-color: var(--p-surface-50);
-//   color: var(--p-text-color);
-// }
-// p, h1, h2, h3, h4, h5, h6 {
-//   margin: 0;
-//   color: black;
-// }
 
-
-// @import './app//styles/mainDesign.css';
-// @import "primeng/resources/themes/lara-light-blue/theme.css";
-// @import "primeng/resources/primeng.css";
-// @import "primeicons/primeicons.css";
 
 @layer tailwind-base, primeng, tailwind-components, tailwind-utilities;
 
@@ -42,47 +27,7 @@
  
 
 
-        /* Surfaces (רקעים) */
-        // --primary-surface-0: #FBFBFB;
-        // //   --surface-1: #FBFBFB;
-        // //   --surface-2: #f2f2f2;
-        // //   --surface-3: #e5e5e5;
-
-        // /* Text */
-        // --primary-text-color: #CC043D;
-        // --primary-text-color-secondary: black;
-        // //   --text-color-muted: #6b7280;
-
-        // /*buttons*/
-        // --p-button-primary-color: #FF3F72;
-        // --p-button-primary-background: #FBFBFB;
-        // --p-button-primary-border-color: var(--primary-color);
-        // --p-button-primary-text-color: #FF3F72;
-
-        // /* Hover */
-        // --p-button-primary-hover-background: #CC043D;
-        // --p-button-primary-hover-text-color: #FBFBFB;
-        // --p-button-primary-hover-border-color: var(--primary-color-hover);
-
-        // /* ========== SELECT (PrimeNG) ========== */
-
-        // /* border רגיל */
-        // --p-select-border-color: #D1D5DB;
-        // --p-select-hover-border-color: var(--primary-color);
-
-        // /* focus */
-        // --p-select-focus-border-color: var(--primary-color);
-        // --p-select-focus-ring-color: var(--primary-color);
-        // --p-select-focus-ring-width: 2px;
-        // --p-select-focus-ring-style: solid;
-
-        // /* dropdown option (hover / selected) */
-        // --p-highlight-background: rgba(255, 63, 114, 0.12);
-        // --p-highlight-color: #CC043D;
-        // --p-inputtext-hover-border-color: var(--primary-color);
-        // --p-inputtext-focus-border-color: var(--primary-color);
-
-
+        
 
     }
 

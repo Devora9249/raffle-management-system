@@ -15,14 +15,5 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'donor', component: DonorPage, canActivate: [DonorGuard] },
     { path: 'admin', component: AdminPage, canActivate: [AdminGuard] },
-    // {
-    //     path: 'cars', component: CarsWrapper,
-    //     children: [
-    //         { path: '', redirectTo: 'list', pathMatch: 'full' },
-    //         { path: 'list', component: CarList },
-    //         { path: 'add', component: CarReactive },
-    //         { path: 'edit/:id', component: CarReactive }
-    //     ]
-    // },
-    // { path: '**', component: NotFound }
+    
 ];

@@ -10,31 +10,17 @@ public class AppDbContext : DbContext
     {
     }
 
-    // public DbSet<DonorModel> Donors { get; set; }
     public DbSet<GiftModel> Gifts { get; set; }
     public DbSet<CategoryModel> Categories { get; set; }
     public DbSet<PurchaseModel> Purchases { get; set; }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<WinningModel> Winnings { get; set; }
-    // public DbSet<RaffleModel> Raffles { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // DonorModel configuration
-        // modelBuilder.Entity<DonorModel>(entity =>
-        // {
-        //     entity.HasKey(e => e.Id);
-        //     entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-        //     entity.Property(e => e.Email).IsRequired().HasMaxLength(200);
-        //     entity.Property(e => e.Phone).HasMaxLength(20);
-        //     entity.HasMany(e => e.Gifts)
-        //         .WithOne(e => e.Donor)
-        //         .HasForeignKey(e => e.DonorId)
-        //         .OnDelete(DeleteBehavior.Restrict);
-        // });
 
         // CategoryModel configuration
         modelBuilder.Entity<CategoryModel>(entity =>
@@ -68,15 +54,11 @@ public class AppDbContext : DbContext
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
                    entity.HasOne(g => g.Donor)
-      .WithMany() // אין לנו אוסף Gifts בתוך UserModel כרגע
+      .WithMany() 
       .HasForeignKey(g => g.DonorId)
       .IsRequired()
       .OnDelete(DeleteBehavior.Restrict);
-        //     entity.HasOne(e => e.Donor)
-        //            .WithMany(d => d.Gifts)
-        //            .HasForeignKey(e => e.DonorId)
-        //            .IsRequired()
-        //            .OnDelete(DeleteBehavior.Restrict);
+ 
         entity.Property(e => e.ImageUrl).HasMaxLength(1000);
          });
 
@@ -157,32 +139,6 @@ public class AppDbContext : DbContext
                    .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // // RaffleModel configuration
-        // modelBuilder.Entity<RaffleModel>(entity =>
-        // {
-        //     entity.HasKey(e => e.Id);
 
-        //     entity.Property(e => e.RaffleDate)
-        //         .IsRequired()
-        //         .HasDefaultValueSql("GETUTCDATE()");
-
-        //     entity.Property(e => e.Description)
-        //         .IsRequired()
-        //         .HasMaxLength(500);
-
-        //     entity.Property(e => e.IsActive)
-        //         .IsRequired()
-        //         .HasDefaultValue(true);
-
-        //     entity.HasMany(e => e.Gifts)
-        //           .WithOne()
-        //           .HasForeignKey("RaffleId")
-        //           .OnDelete(DeleteBehavior.Restrict);
-
-        //     entity.HasMany(e => e.Winnings)
-        //           .WithOne(e => e.Raffle)
-        //           .HasForeignKey(e => e.RaffleId)
-        //           .OnDelete(DeleteBehavior.Cascade);
-        // });
     }
 }

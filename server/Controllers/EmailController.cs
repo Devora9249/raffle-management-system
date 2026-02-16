@@ -16,7 +16,6 @@ namespace server.Controllers
         }
         
         [Authorize(Roles = "Admin")]
-        // POST: /api/email/send-mail?giftId=1&winnerId=3
         [HttpPost("send-mail")]
         public async Task<IActionResult> SendWinningMail([FromQuery] int giftId, [FromQuery] int winnerId)
         {

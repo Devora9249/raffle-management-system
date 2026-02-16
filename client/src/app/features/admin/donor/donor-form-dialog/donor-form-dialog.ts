@@ -28,7 +28,6 @@ export class DonorFormDialog {
     private fb: FormBuilder,
     private donorsService: DonorService,
     private notificationService: NotificationService,
-    // private authService: AuthService
   ) { }
 
   ngOnChanges(): void {

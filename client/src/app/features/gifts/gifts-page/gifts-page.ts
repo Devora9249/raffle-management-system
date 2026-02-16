@@ -28,7 +28,6 @@ export class GiftsPage {
   donors: DonorListItem[] = [];
   selectedGift: GiftResponseDto | null = null;
   isAdmin: boolean = false;
-  // cartItems: CartItemResponseDto[] = [];
   userId: number | null = null;
   cartItems$!: Observable<CartItemResponseDto[]>;
   constructor(private giftsService: GiftsService, private categoriesService: CategoriesService, private donorService: DonorService, private authService: AuthService, private cartService: CartService,private notificationService: NotificationService) { }
@@ -41,7 +40,7 @@ export class GiftsPage {
 
 
   ngOnInit(): void {
-    this.cartItems$ = this.cartService.cart$; // ✅ כאן זה כבר בטוח
+    this.cartItems$ = this.cartService.cart$; 
 
     this.giftsService.getAll(PriceSort.None, null, null).subscribe(gifts => {
       this.gifts = gifts;
@@ -69,9 +68,7 @@ export class GiftsPage {
 
 
 
-  // getPurchaseId(giftId: number): number | null {
-  //   return this.cartItems.find(i => i.giftId === giftId)?.purchaseId ?? null;
-  // }
+ 
 
   loadGifts(): void {
     this.giftsService.getAll(this.sortType, this.selectedCategoryId, null).subscribe(gifts => {

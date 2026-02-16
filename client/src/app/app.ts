@@ -27,7 +27,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 export class App implements OnInit {
   protected readonly title = signal('client');
   currentDonorId?: number;
-  // isDonor: boolean = false;
 
   constructor(private authService: AuthService) { }
 
@@ -39,7 +38,4 @@ export class App implements OnInit {
     });
   }
 
-  // get isDonor(): boolean {
-  //   return this.authService.isDonor();
-  // }
 }

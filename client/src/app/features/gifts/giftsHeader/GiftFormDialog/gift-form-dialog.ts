@@ -45,9 +45,7 @@ export class GiftFormDialog implements OnChanges {
     });
   }
 
-  /* =======================
-     LIFECYCLE
-     ======================= */
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['giftToEdit'] && this.giftToEdit) {
@@ -56,9 +54,6 @@ export class GiftFormDialog implements OnChanges {
     }
   }
 
-  /* =======================
-     MODE PREPARATION
-     ======================= */
 
   private prepareCreateMode(): void {
     this.editMode = false;
@@ -89,9 +84,7 @@ export class GiftFormDialog implements OnChanges {
     });
   }
 
-  /* =======================
-     PUBLIC API
-     ======================= */
+
 
   open(): void {
     this.prepareCreateMode();
@@ -103,12 +96,9 @@ export class GiftFormDialog implements OnChanges {
     this.closed.emit();
   }
 
-  /* =======================
-     FORM ACTIONS
-     ======================= */
+
 
   onFileChange(event: FileSelectEvent): void {
-    // const input = event.target as HTMLInputElement;
     const file = event.files?.[0] ?? null;
     if (!file) return;
 

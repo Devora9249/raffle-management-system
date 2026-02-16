@@ -24,20 +24,7 @@ public class CategoryController : ControllerBase
         return Ok(categories);
     }
 
-    // [HttpGet("{id}")]
-    // [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status200OK)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    // public async Task<ActionResult<CategoryResponseDto>> GetById(int id)
-    // {
-    //     var category = await _categoryService.GetCategoryByIdAsync(id);
 
-    //     if (category == null)
-    //     {
-    //         return NotFound(new { message = $"Category with ID {id} not found." });
-    //     }
-
-    //     return Ok(category);
-    // }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoryResponseDto>> GetById(int id)

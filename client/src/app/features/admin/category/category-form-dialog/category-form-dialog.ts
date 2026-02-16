@@ -36,9 +36,9 @@ name: [this.category?.name || '', [Validators.required, Validators.minLength(2),
   }
 
   submit(): void {
-    // חסימה: אם הטופס לא תקין (ריק, קצר מדי וכו'), אל תמשיך לביצוע השרת
+    // חסימה: אם הטופס לא תקין , אל תמשיך לביצוע השרת
     if (this.form.invalid) {
-      this.form.markAllAsTouched(); // גורם להצגת שגיאות ויזואליות למשתמש
+      this.form.markAllAsTouched();
       return;
     }
 

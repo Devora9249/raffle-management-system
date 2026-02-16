@@ -20,7 +20,6 @@ export class GiftCard {
   constructor(private cartService: CartService, private giftsService: GiftsService, private authService: AuthService, private router: Router, private notificationService: NotificationService ) { }
 
   @Input() gift!: GiftResponseDto;
-  // @Input() count!: number;
   @Input() isAdmin: boolean = false;
   @Input() purchaseId: number | null = null;
   @Input() qty: number=0;
