@@ -1,3 +1,4 @@
+using AutoMapper;
 using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
@@ -8,36 +9,37 @@ namespace server.Services.Implementations
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _repo;
+        private readonly IMapper _mapper;
 
-        public PurchaseService(IPurchaseRepository repo)
+        public PurchaseService(IPurchaseRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetAllAsync()
-            => (await _repo.GetAllAsync()).Select(ToResponseDto);
+        {
+            return _mapper.Map<IEnumerable<PurchaseResponseDto>>(
+                    await _repo.GetAllAsync()
+            );
+
+        }
 
         public async Task<PurchaseResponseDto?> GetByIdAsync(int id)
         {
             var p = await _repo.GetByIdAsync(id);
-            return p == null ? null : ToResponseDto(p);
+            return p == null ? null : _mapper.Map<PurchaseResponseDto>(p);
         }
 
         public async Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto)
         {
             if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
-            var purchase = new PurchaseModel
-            {
-                UserId = createDto.UserId,
-                GiftId = createDto.GiftId,
-                Qty = createDto.Qty,
-                Status = Status.Completed,
-                PurchaseDate = DateTime.UtcNow
-            };
+            var purchase = _mapper.Map<PurchaseModel>(createDto);
+
 
             var created = await _repo.AddAsync(purchase);
-            return ToResponseDto(created);
+            return _mapper.Map<PurchaseResponseDto>(created);
         }
         public async Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto)
         {
@@ -63,7 +65,7 @@ namespace server.Services.Implementations
                 throw new KeyNotFoundException("Purchase not found");
 
             // החזרת DTO
-            return ToResponseDto(updated);
+            return _mapper.Map<PurchaseResponseDto>(updated);
         }
 
 
@@ -83,7 +85,11 @@ namespace server.Services.Implementations
         }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetByGiftAsync(int giftId)
-            => (await _repo.GetByGiftAsync(giftId)).Select(ToResponseDto).ToList();
+        {
+            return _mapper.Map<IEnumerable<PurchaseResponseDto>>(
+                await _repo.GetByGiftAsync(giftId)
+            );
+        }
 
         public async Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync()
         {
@@ -98,24 +104,24 @@ namespace server.Services.Implementations
             });
         }
 
-        private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
-        {
+        // private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
+        // {
 
-            return new PurchaseResponseDto
-            {
-                Id = p.Id,
-                UserId = p.UserId,
-                UserName = p.User.Name,
-                GiftId = p.GiftId,
-                GiftName = p.Gift.Description,
-                DonorId = p.Gift.DonorId,
-                DonorName = p.Gift.Donor.Name,
-                Qty = p.Qty,
-                Status = p.Status,
-                PurchaseDate = p.PurchaseDate
-            };
+        //     return new PurchaseResponseDto
+        //     {
+        //         Id = p.Id,
+        //         UserId = p.UserId,
+        //         UserName = p.User.Name,
+        //         GiftId = p.GiftId,
+        //         GiftName = p.Gift.Description,
+        //         DonorId = p.Gift.DonorId,
+        //         DonorName = p.Gift.Donor.Name,
+        //         Qty = p.Qty,
+        //         Status = p.Status,
+        //         PurchaseDate = p.PurchaseDate
+        //     };
 
-        }
+        // }
 
     }
 }
