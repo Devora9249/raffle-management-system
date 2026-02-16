@@ -39,7 +39,7 @@ export class GiftFormDialog implements OnChanges {
   constructor(private fb: FormBuilder, private giftsService: GiftsService, private notificationService: NotificationService ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(10), Validators.pattern('^[0-9]*$'), Validators]],
+      price: [null, [Validators.required, Validators.min(10), Validators.pattern('^[0-9]*$'),]],
       categoryId: [null, Validators.required],
       donorId: [null, Validators.required],
     });
@@ -57,7 +57,9 @@ export class GiftFormDialog implements OnChanges {
 
   private prepareCreateMode(): void {
     this.editMode = false;
-    this.form.reset();
+    this.form.reset({
+      price: 10
+    });
     this.selectedFile = null;
     this.previewUrl = null; 
   }
