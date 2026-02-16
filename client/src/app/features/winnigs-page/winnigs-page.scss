@@ -1,0 +1,87 @@
+.winners-container {
+  padding: 2.5rem;
+  direction: ltr;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 3.5rem;
+
+    h1 {
+      color: var(--p-primary-color);
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      i { font-size: 2rem; margin-right: 12px; vertical-align: middle; }
+    }
+    p { color: var(--p-text-secondary-color); font-size: 1.1rem; }
+  }
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.winner-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  }
+
+  .gift-banner {
+    background: linear-gradient(135deg, #cc043d, var(--p-primary-color));
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i { font-size: 3rem; color: white; opacity: 0.9; }
+  }
+
+  .gift-info {
+    text-align: center;
+    padding: 1rem 0;
+    .label-text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #777; }
+    .gift-name { margin: 8px 0; color: var(--p-text-color); font-weight: 600; }
+    .id-subtext { color: #aaa; font-family: monospace; }
+  }
+
+  .divider {
+    border: 0;
+    border-top: 1px solid var(--p-surface-200);
+    margin: 1rem auto;
+    width: 80%;
+  }
+
+  .winner-info {
+    text-align: center;
+    padding-bottom: 1rem;
+    .winner-name {
+      margin: 15px 0 5px;
+      font-size: 1.5rem;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+    }
+    .winner-id { font-size: 0.9rem; color: var(--p-text-secondary-color); font-style: italic; }
+  }
+}
+
+.loading-state, .no-data {
+  text-align: center;
+  padding: 100px 0;
+  color: var(--p-text-secondary-color);
+  i { font-size: 4rem; margin-bottom: 20px; color: var(--p-surface-300); }
+}
+
+@media (max-width: 600px) {
+  .winners-container { padding: 1.5rem; }
+  .winners-grid { grid-template-columns: 1fr; }
+}

@@ -1,1 +1,44 @@
-<p>winnigs-page works!</p>
+<div class="winners-container">
+  <div class="header-section">
+    <h1><i class="pi pi-trophy"></i> Prize Winners</h1>
+    <p>View all the gifts and their lucky winners</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+      <p>Fetching results...</p>
+    </div>
+  } @else {
+    <div class="winners-grid">
+      @for (item of winnings; track item.giftId) {
+        <p-card class="winner-card">
+          <ng-template pTemplate="header">
+            <div class="gift-banner">
+              <i class="pi pi-gift"></i>
+            </div>
+          </ng-template>
+
+          <div class="gift-info">
+            <span class="label-text">Prize</span>
+            <h2 class="gift-name">{{ item.giftName }}</h2>
+            <small class="id-subtext">Gift ID: #{{ item.giftId }}</small>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="winner-info">
+            <p-tag severity="success" icon="pi pi-user" value="WINNER"></p-tag>
+            <h3 class="winner-name">{{ item.winnerName }}</h3>
+            <span class="winner-id">User ID: {{ item.winnerId }}</span>
+          </div>
+        </p-card>
+      } @empty {
+        <div class="no-data">
+          <i class="pi pi-info-circle"></i>
+          <p>No raffle results found yet.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
