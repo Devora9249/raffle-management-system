@@ -19,7 +19,7 @@ public class DonorProfile : Profile
             )
             .ForMember(
                 dest => dest.Gifts,
-                opt => opt.Ignore() // ימולא ידנית מה-GiftService
+                opt => opt.Ignore() 
             );
     }
 }
