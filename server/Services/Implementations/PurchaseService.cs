@@ -10,11 +10,12 @@ namespace server.Services.Implementations
     {
         private readonly IPurchaseRepository _repo;
         private readonly IMapper _mapper;
-
-        public PurchaseService(IPurchaseRepository repo, IMapper mapper)
+        private readonly Logger<PurchaseService> _logger;
+        public PurchaseService(IPurchaseRepository repo, IMapper mapper, Logger<PurchaseService> logger)
         {
             _repo = repo;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetAllAsync()
@@ -33,14 +34,28 @@ namespace server.Services.Implementations
 
         public async Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto)
         {
-            if (createDto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
+            _logger.LogInformation("Starting process to add a new purchase for User ID: {UserId}, Gift ID: {GiftId}", createDto.UserId, createDto.GiftId);
+            if (createDto.Qty <= 0)
+            {
+                _logger.LogWarning("Purchase attempt failed: Qty must be greater than 0. Provided Qty: {Qty}", createDto.Qty);
+                throw new ArgumentException("Qty must be greater than 0");
+            }
 
-            var purchase = _mapper.Map<PurchaseModel>(createDto);
-
-
-            var created = await _repo.AddAsync(purchase);
-            return _mapper.Map<PurchaseResponseDto>(created);
-        }
+            try
+    {
+        var purchase = _mapper.Map<PurchaseModel>(createDto);
+        var created = await _repo.AddAsync(purchase);
+        
+        _logger.LogInformation("Purchase successfully created. Purchase ID: {PurchaseId} for User: {UserId}", created.Id, created.UserId);
+        
+        return _mapper.Map<PurchaseResponseDto>(created);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error occurred while adding purchase for User ID: {UserId}", createDto.UserId);
+        throw;
+    }
+}
         public async Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto)
         {
             // שליפת הרכישה

@@ -12,9 +12,7 @@ export class DonorService {
 
   constructor(private http: HttpClient) {}
 
-  // ======================
   // Admin
-  // ======================
 
   /** GET api/Donor?search=&city= */
   getDonors(search?: string, city?: string): Observable<DonorListItem[]> {
@@ -42,9 +40,7 @@ export class DonorService {
     );
   }
 
-  // ======================
   // Donor
-  // ======================
 
   /** GET api/Donor/dashboard */
   getMyDashboard(): Observable<DonorDashboardResponse> {

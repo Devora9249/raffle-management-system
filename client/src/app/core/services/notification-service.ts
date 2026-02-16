@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 
 @Injectable({
-  providedIn: 'root' // זה אומר שהסרביס זמין בכל האפליקציה
+  providedIn: 'root'
 })
 export class NotificationService {
 
@@ -13,7 +13,8 @@ export class NotificationService {
     this.messageService.add({ 
       severity: 'success', 
       summary: 'Success', 
-      detail: message 
+      detail: message,
+      life: 1500
     });
   }
 
@@ -22,12 +23,13 @@ export class NotificationService {
     this.messageService.add({ 
       severity: 'error', 
       summary: 'Error', 
-      detail: message 
+      detail: message,
+      life: 1500
     });
   }
   confirmDelete(onConfirm: () => void) {
     this.confirmationService.confirm({
-      message: 'are you sure you want to delete this item?',
+      message: 'Are you sure you want to delete this item?',
       header: 'Delete Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'yes',
@@ -36,7 +38,7 @@ export class NotificationService {
       rejectButtonStyleClass: 'p-button-text',
       
       accept: () => {
-        onConfirm(); // כאן הוא מפעיל את פעולת המחיקה ששלחת לו
+        onConfirm();
       }
     });
   }

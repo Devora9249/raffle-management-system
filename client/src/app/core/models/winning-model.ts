@@ -1,4 +1,3 @@
-// WinningResponseDto – תואם ל־server.DTOs.WinningResponseDto
 export interface WinningResponseDto {
   id: number;
   giftId: number;
@@ -7,7 +6,6 @@ export interface WinningResponseDto {
   winnerName: string;
 }
 
-// WinningCreateDto – תואם ל־server.DTOs.WinningCreateDto
 export interface WinningCreateDto {
   giftId: number;
   winnerId: number;

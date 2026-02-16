@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// serilog
+// serilog - הגדרה תקינה בתוך ה-Host לפני ה-Build
 builder.Host.UseSerilog((context, services, configuration) =>
 {
     configuration
@@ -30,14 +30,6 @@ builder.Host.UseSerilog((context, services, configuration) =>
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 14);
 });
-
-// Log.Logger = new LoggerConfiguration()
-//     .ReadFrom.Configuration(builder.Configuration) 
-//     .WriteTo.Console() 
-//     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
-//     .CreateLogger();
-
-//Log.Information("Application is starting");
 
 // --- Services ---
 
@@ -144,8 +136,9 @@ builder.Services.AddControllers();
 
 // --- Build app ---
 var app = builder.Build();
-app.Logger.LogInformation("Application started");
 
+// לוג התחלה ראשוני
+app.Logger.LogInformation("Application started");
 
 // הפעלת CORS
 app.UseCors("AllowAngularDev");
@@ -177,6 +170,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 // --- Middleware ---
+
+// לוגים אוטומטיים לכל בקשת HTTP
+app.UseSerilogRequestLogging();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -184,12 +181,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseGlobalExceptionHandling();
-app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseStaticFiles();
-
 
 app.Run();

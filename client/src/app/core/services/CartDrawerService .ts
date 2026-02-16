@@ -8,7 +8,6 @@ export class CartDrawerService {
   visible$ = this.visibleSubject.asObservable();
 
   open(): void {
-    // console.log('Cart opened1');
     this.visibleSubject.next(true);
   }
 
