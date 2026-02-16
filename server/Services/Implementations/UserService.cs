@@ -1,3 +1,4 @@
+using AutoMapper;
 using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
@@ -8,16 +9,17 @@ namespace server.Services.Implementations
     public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
-
-        public UserService(IUserRepository repo)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
         {
             var users = await _repo.GetAllUsersAsync();
-            return users.Select(ToResponseDto);
+            return _mapper.Map<IEnumerable<UserResponseDto>>(users);
         }
 
         public async Task<UserResponseDto> GetUserByIdAsync(int id)
@@ -26,7 +28,7 @@ namespace server.Services.Implementations
             if (user == null)
                 throw new KeyNotFoundException("User not found");
 
-            return ToResponseDto(user!);
+            return _mapper.Map<UserResponseDto>(user);
         }
 
         public async Task<UserResponseDto> AddUserAsync(UserCreateDto createDto)
@@ -35,19 +37,11 @@ namespace server.Services.Implementations
             if (string.IsNullOrWhiteSpace(createDto.Name))
                 throw new ArgumentException("Name is required");
 
-            var user = new UserModel
-            {
-                Name = createDto.Name,
-                Email = createDto.Email,
-                Phone = createDto.Phone,
-                City = createDto.City,
-                Address = createDto.Address,
-                Password = BCrypt.Net.BCrypt.HashPassword(createDto.Password),
-                Role = createDto.Role
-            };
+            var user = _mapper.Map<UserModel>(createDto);
+
 
             var created = await _repo.AddUserAsync(user);
-            return ToResponseDto(created!);
+            return _mapper.Map<UserResponseDto>(created);
         }
 
         public async Task<UserResponseDto> UpdateUserAsync(int id, UserUpdateDto dto)
@@ -67,23 +61,22 @@ namespace server.Services.Implementations
             if (dto.Role.HasValue) existing.Role = dto.Role.Value;
 
             var updated = await _repo.UpdateUserAsync(existing);
-            return ToResponseDto(updated);
+            return _mapper.Map<UserResponseDto>(updated);
         }
 
         public Task<bool> DeleteUserAsync(int id)
             => _repo.DeleteUserAsync(id);
 
-//מה הפונקציה הזו עושה?
-        private static UserResponseDto ToResponseDto(UserModel user)
-            => new UserResponseDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                Phone = user.Phone,
-                City = user.City,
-                Address = user.Address,
-                Role = user.Role
-            };
+        // private static UserResponseDto ToResponseDto(UserModel user)
+        //     => new UserResponseDto
+        //     {
+        //         Id = user.Id,
+        //         Name = user.Name,
+        //         Email = user.Email,
+        //         Phone = user.Phone,
+        //         City = user.City,
+        //         Address = user.Address,
+        //         Role = user.Role
+        //     };
     }
 }
