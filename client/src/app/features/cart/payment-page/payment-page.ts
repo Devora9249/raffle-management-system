@@ -38,7 +38,7 @@ export class PaymentPage implements OnInit {
   private fb = inject(FormBuilder);
   private notificationService = inject(NotificationService);
 
-  // המרת ה-Observable ל-Signal בצורה בטוחה
+  // המרת ה-Observable ל-Signal 
   totalPrice = toSignal(this.cartService.totalPrice$, { initialValue: 0 });
 
   paymentForm!: FormGroup;

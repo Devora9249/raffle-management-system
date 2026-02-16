@@ -13,7 +13,7 @@ export class PurchaseService {
 
   constructor(private http: HttpClient) {}
 
-  /** Admin בלבד */
+  // Admin בלבד 
   getAll(): Observable<PurchaseResponseDto[]> {
     return this.http.get<PurchaseResponseDto[]>(this.baseUrl);
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MessageService,ConfirmationService } from 'primeng/api';
 
 @Injectable({
-  providedIn: 'root' // זה אומר שהסרביס זמין בכל האפליקציה
+  providedIn: 'root'
 })
 export class NotificationService {
 
@@ -38,7 +38,7 @@ export class NotificationService {
       rejectButtonStyleClass: 'p-button-text',
       
       accept: () => {
-        onConfirm(); // כאן הוא מפעיל את פעולת המחיקה ששלחת לו
+        onConfirm();
       }
     });
   }

@@ -16,17 +16,13 @@ export class CartService {
 
   private readonly baseUrl = 'http://localhost:5071/api/Cart';
 
-  // =========================
   // Single source of truth
-  // =========================
   private readonly _cart$ = new BehaviorSubject<CartItemResponseDto[]>([]);
   readonly cart$ = this._cart$.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  // =========================
   // Initial load (called once per login)
-  // =========================
   loadCart(userId: number): Observable<void> {
     return this.http
       .get<CartItemResponseDto[]>(`${this.baseUrl}/${userId}`)
@@ -36,9 +32,7 @@ export class CartService {
       );
   }
 
-  // =========================
   // Add item to cart
-  // =========================
   add(dto: CartAddDto): Observable<CartItemResponseDto> {
     return this.http.post<CartItemResponseDto>(this.baseUrl, dto).pipe(
       tap(item => {
@@ -47,9 +41,7 @@ export class CartService {
     );
   }
 
-  // =========================
   // Update quantity
-  // =========================
   updateQty(dto: CartAddDto): Observable<CartItemResponseDto> {
             console.log("comeing to update", dto);
 
@@ -66,9 +58,8 @@ export class CartService {
     );
   }
 
-  // =========================
   // Remove item
-  // =========================
+  
   remove(purchaseId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${purchaseId}`).pipe(
       tap(() => {
@@ -80,9 +71,7 @@ export class CartService {
     );
   }
 
-  // =========================
   // Checkout
-  // =========================
   checkout(userId: number): Observable<CartCheckoutResponseDto> {
     return this.http
       .post<CartCheckoutResponseDto>(`${this.baseUrl}/checkout/${userId}`, null)
@@ -93,9 +82,8 @@ export class CartService {
       );
   }
 
-  // =========================
   // Optional helpers (selectors)
-  // =========================
+  
   readonly totalItems$ = this.cart$.pipe(
     map(items => items.reduce((sum, i) => sum + i.qty, 0))
   );
