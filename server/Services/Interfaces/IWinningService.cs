@@ -11,5 +11,7 @@ namespace server.Services.Interfaces
         Task DeleteWinningAsync(int id);
         Task<IEnumerable<WinningResponseDto>> RaffleAsync();
         Task<decimal> GetTotalIncome();
+        Task<WinningResponseDto?> RaffleSingleGiftAsync(int giftId);
+
     }
 }

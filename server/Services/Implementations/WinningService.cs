@@ -184,6 +184,69 @@ public class WinningService : IWinningService
     }
 
 
+    public async Task<WinningResponseDto?> RaffleSingleGiftAsync(int giftId)
+    {
+        await _unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+            var gift = await _giftRepository.GetGiftByIdAsync(giftId);
+            if (gift == null)
+                throw new KeyNotFoundException($"Gift {giftId} not found");
+
+            if (gift.HasWinning)
+            {
+                _logger.LogInformation($"Gift {giftId} already has a winning. Skipping.");
+                return null;
+            }
+
+            var purchases = await _purchaseRepository.GetByGiftIdsAsync(new List<int> { giftId });
+
+            if (purchases.Count() == 0)
+            {
+                _logger.LogInformation($"No purchases for gift {giftId}. Skipping raffle.");
+                return null;
+            }
+
+            var rng = new Random();
+            var purchasesList = purchases.ToList();
+
+            var winnerUserId =
+                purchasesList[rng.Next(purchasesList.Count)].UserId;
+
+
+            var winning = new WinningModel
+            {
+                GiftId = giftId,
+                WinnerId = winnerUserId
+            };
+
+            await _winningRepository.AddWinningAsync(winning);
+            await _giftService.MarkGiftAsHavingWinningAsync(giftId);
+
+            await _unitOfWork.CommitAsync();
+
+            try
+            {
+                await _emailService.SendWinningEmailAsync(giftId, winnerUserId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    $"Failed to send winning email. GiftId={giftId}, WinnerId={winnerUserId}");
+            }
+
+            return await GetWinningByIdAsync(winning.Id);
+        }
+        catch
+        {
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
+    }
+
+
+
     public async Task<decimal> GetTotalIncome()
     {
         var purchases = await _purchaseRepository.GetAllAsync();

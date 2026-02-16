@@ -9,9 +9,10 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { NotificationService } from '../../../core/services/notification-service';
+import { ReportsPanel } from './reports-panel/reports-panel';
 @Component({
   selector: 'app-raffle-panel',
-  imports: [Spinner, CardModule, ButtonModule, PaginatorModule, TableModule, TagModule, ProgressSpinnerModule],
+  imports: [Spinner, CardModule, ButtonModule, PaginatorModule, TableModule, TagModule, ProgressSpinnerModule, ReportsPanel],
   templateUrl: './raffle-panel.html',
   styleUrl: '../globalAdminDesign.scss',
   standalone: true

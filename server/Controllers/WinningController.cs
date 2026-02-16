@@ -63,4 +63,11 @@ public class WinningController : ControllerBase
     {
         return await _winningService.RaffleAsync();
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("raffle-single/{giftId}")]
+    public async Task<WinningResponseDto?> RaffleSingleGift(int giftId)
+    {
+        return await _winningService.RaffleSingleGiftAsync(giftId);
+    }
 }
