@@ -39,7 +39,7 @@ export class GiftFormDialog implements OnChanges {
   constructor(private fb: FormBuilder, private giftsService: GiftsService, private notificationService: NotificationService ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
+      price: [null, [Validators.required, Validators.min(10), Validators.pattern('^[0-9]*$'), Validators]],
       categoryId: [null, Validators.required],
       donorId: [null, Validators.required],
     });
