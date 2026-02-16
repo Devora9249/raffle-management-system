@@ -24,6 +24,7 @@ namespace server.Repositories.Interfaces
         Task<IEnumerable<GiftModel>> FilterByGiftDonor(string name);
         Task<IEnumerable<GiftModel>> GetByDonorAsync(int donorId);
         Task<IEnumerable<GiftPurchaseCountDto>> GetPurchaseCountByGiftAsync();
+        Task<bool> ExistsByDescriptionAsync(string description);
 
     }
 }

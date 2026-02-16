@@ -19,7 +19,7 @@ public class WinningService : IWinningService
     private readonly ILogger<WinningService> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
+    private readonly IRaffleStateService _raffleStateService;
     public WinningService(
         IWinningRepository winningRepository,
         IPurchaseRepository purchaseRepository,
@@ -28,7 +28,8 @@ public class WinningService : IWinningService
         IGiftService giftService,
         ILogger<WinningService> logger,
         IUnitOfWork unitOfWork,
-        IMapper mapper
+        IMapper mapper,
+        IRaffleStateService raffleStateService
         )
     {
         _winningRepository = winningRepository;
@@ -39,6 +40,7 @@ public class WinningService : IWinningService
         _logger = logger;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _raffleStateService = raffleStateService;
     }
 
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
@@ -166,7 +168,7 @@ public class WinningService : IWinningService
                     _logger.LogError(ex, "Failed to send winning email for GiftId={GiftId}, WinnerId={WinnerId}", giftId, winnerId);
                 }
             }
-
+            _raffleStateService.FinishRaffle();
             return await GetAllWinningsAsync();
         }
         catch (Exception ex)

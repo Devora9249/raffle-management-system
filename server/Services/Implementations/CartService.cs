@@ -1,5 +1,5 @@
 using server.DTOs;
-using server.Models; 
+using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
 
@@ -8,10 +8,11 @@ namespace server.Services.Implementations
     public class CartService : ICartService
     {
         private readonly IPurchaseRepository _repo;
-
-        public CartService(IPurchaseRepository repo)
+        private readonly IRaffleStateService _raffleState;
+        public CartService(IPurchaseRepository repo, IRaffleStateService raffleState)
         {
             _repo = repo;
+            _raffleState = raffleState;
         }
 
         public async Task<List<CartItemResponseDto>> GetCartAsync(int userId)
@@ -22,6 +23,12 @@ namespace server.Services.Implementations
 
         public async Task<CartItemResponseDto> AddToCartAsync(CartAddDto dto)
         {
+            if (_raffleState.Status == RaffleStatus.Finished)
+            {
+                throw new InvalidOperationException("Raffle has ended");
+            }
+
+
             if (dto.Qty <= 0) throw new ArgumentException("Qty must be greater than 0");
 
             var purchase = new PurchaseModel
@@ -39,6 +46,11 @@ namespace server.Services.Implementations
 
         public async Task<CartItemResponseDto> UpdateQtyAsync(CartAddDto dto)
         {
+            if (_raffleState.Status == RaffleStatus.Finished)
+            {
+                throw new InvalidOperationException("Raffle has ended");
+            }
+
             if (dto.Qty <= 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
@@ -50,7 +62,7 @@ namespace server.Services.Implementations
             existing.Qty = dto.Qty;
 
             var updated = await _repo.UpdateAsync(existing);
-            return ToCartItemDto(updated!); 
+            return ToCartItemDto(updated!);
         }
 
         public async Task<bool> RemoveAsync(int purchaseId)
@@ -58,7 +70,7 @@ namespace server.Services.Implementations
             var existing = await _repo.GetByIdAsync(purchaseId);
             if (existing == null)
                 throw new KeyNotFoundException("Cart item not found");
-;
+            ;
             if (existing.Status != Status.Draft)
                 throw new InvalidOperationException("Only Draft items can be deleted");
 
