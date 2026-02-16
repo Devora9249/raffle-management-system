@@ -8,8 +8,7 @@ namespace server.Models
         public UserModel User { get; set; } = default!;
         public GiftModel Gift { get; set; }=default!;
 
-        // public int RaffleId { get; set; }
-        // public RaffleModel Raffle { get; set; }
+     
 
     }
 }

@@ -62,5 +62,4 @@ public class WinningRepository : IWinningRepository
         return true;
     }
 
-    //
 }
