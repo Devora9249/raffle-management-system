@@ -91,32 +91,23 @@ export class CartPage implements OnInit {
   }
 
 
+
   checkout(): void {
-    //אימות משתמש
-    this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-      if (!userId) {
-        this.router.navigate(['/login']);
+  this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
+    if (!userId) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.cartItems$.pipe(take(1)).subscribe(items => {
+      if (items.length === 0) {
+        this.notificationService.showError('Your cart is empty');
         return;
       }
 
-      //בדיקת סל
-      this.cartItems$.pipe(take(1)).subscribe(items => {
-        if (items.length === 0) {
-          this.notificationService.showError('Your cart is empty. Please add items before checkout.');
-          return;
-        }
-
-        //checkout
-        this.cartService.checkout(userId).subscribe({
-          next: () => {
-            this.notificationService.showSuccess('Checkout successful!');
-          },
-          error: err => {
-            console.error('Checkout failed', err);
-            this.notificationService.showError('Checkout failed. Please try again later.');
-          }
-        });
-      });
+      this.cartDrawer.close();
+      this.router.navigate(['/payment']); 
     });
-  }
+  });
+}
 }

@@ -1,0 +1,55 @@
+<div class="payment-container">
+  <p-card class="custom-card">
+    
+    <div class="payment-summary">
+      <h3>Order Summary</h3>
+      <div class="total-row">
+        <span>Total Amount:</span>
+        <span class="price-tag">{{ totalPrice() }} ₪</span>
+      </div>
+    </div>
+
+    <form [formGroup]="paymentForm" (ngSubmit)="processPayment()" class="p-fluid">
+      
+      <div class="field">
+        <label for="cardNumber">Credit Card Number</label>
+        <input id="cardNumber" pInputText formControlName="cardNumber" maxlength="16" placeholder="16 digits" />
+      </div>
+
+      <div class="field">
+        <label for="idNumber">ID Number</label>
+        <input id="idNumber" pInputText formControlName="idNumber" maxlength="9" placeholder="9 digits" />
+      </div>
+
+      <div class="formgrid grid">
+        <div class="field col">
+          <label for="expiry">Expiry (MM/YY)</label>
+          <input id="expiry" pInputText formControlName="expiryDate" placeholder="05/26" maxlength="5" />
+        </div>
+        <div class="field col">
+          <label for="cvv">CVV</label>
+          <input id="cvv" pInputText formControlName="cvv" maxlength="3" placeholder="3 digits" />
+        </div>
+      </div>
+
+      <div class="actions-group">
+        <p-button 
+            [label]="'Pay ' + totalPrice() + ' ₪ Now'" 
+            icon="pi pi-credit-card" 
+            [loading]="loading"
+            [disabled]="paymentForm.invalid" 
+            type="submit">
+        </p-button>
+        
+        <p-button 
+            label="Cancel" 
+            icon="pi pi-times" 
+            [outlined]="true" 
+            severity="secondary" 
+            (onClick)="goBack()">
+        </p-button>
+      </div>
+
+    </form>
+  </p-card>
+</div>

@@ -4,22 +4,6 @@ import { catchError, Observable } from "rxjs";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { NotificationService } from "../services/notification-service";
 
-// @Injectable()
-// export class HttpErrorInterceptor implements HttpInterceptor {
-//   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-//     return next.handle(req).pipe(
-//       catchError((err: HttpErrorResponse) => {
-//         console.error('HTTP Error:', {
-//           status: err.status,
-//           statusText: err.statusText,
-//           url: err.url,
-//           error: err.error
-//         });
-//         return throwError(() => err);
-//       })
-//     );
-//   }
-// }
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -67,10 +51,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             break;
         }
 
-        // ✅ הודעה גלובלית
+        //הודעה גלובלית
         this.notificationService.showError(message);
 
-        // ✅ לוג טכני בלבד
+        //  לוג טכני בלבד
         console.error('HTTP Error:', {
           status: err.status,
           url: err.url,
