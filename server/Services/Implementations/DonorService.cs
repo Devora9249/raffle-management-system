@@ -24,7 +24,7 @@ namespace server.Services
             _logger = logger;
             _mapper = mapper;
         }
-        ///מטרה: להביא רשימה של כל המשתמשים שהם תורמים (Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
+        ///(Role = Donor), עם אפשרות סינון לפי חיפוש ולפי עיר.
         // -------- פעולות אדמין --------
         public async Task<IEnumerable<DonorListItemDto>> GetDonorsAsync(string? search, string? city)
         {
@@ -75,7 +75,7 @@ namespace server.Services
 
         }
 
-        ///מטרה: לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
+        /// לשנות תפקיד (Role) למשתמש מסוים — פעולה של אדמין.
         public async Task SetUserRoleAsync(int userId, RoleEnum role)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -85,8 +85,8 @@ namespace server.Services
             await _context.SaveChangesAsync();
         }
 
-        // -------- דשבורד לתורם --------
-        ///מטרה: להחזיר “דשבורד לתורם” — נתונים מסכמים לתורם ספציפי: מתנות שלו, כמות כרטיסים שנמכרו, כמה קונים ייחודיים לכל מתנה, והאם יש זכייה.
+        // דשבורד לתורם 
+        /// להחזיר “דשבורד לתורם” — נתונים מסכמים לתורם ספציפי: מתנות שלו, כמות כרטיסים שנמכרו, כמה קונים ייחודיים לכל מתנה, והאם יש זכייה.
         public async Task<DonorDashboardResponseDto> GetDonorDashboardAsync(int donorId)
         {
             var donor = await _context.Users.FirstOrDefaultAsync(u => u.Id == donorId);
@@ -100,7 +100,7 @@ namespace server.Services
 
             var giftIds = gifts.Select(g => g.Id).ToList();
 
-            // 2) סטטיסטיקת רכישות Completed בלבד
+            // 2)  רכישות Completed 
             var purchaseStats = await _context.Purchases
                 .Where(p => giftIds.Contains(p.GiftId) && p.Status == Status.Completed)
                 .GroupBy(p => p.GiftId)
@@ -175,7 +175,7 @@ namespace server.Services
                 IsActive = true
             };
 
-            //  Hash לסיסמה
+            //  Hash סיסמה
             newDonor.Password = authService.HashPassword(donorDto.Password);
 
             _context.Users.Add(newDonor);

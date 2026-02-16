@@ -33,7 +33,7 @@ namespace server.Services.Implementations
 
         public async Task<UserResponseDto> AddUserAsync(UserCreateDto createDto)
         {
-            // בדיקות בסיסיות (אופציונלי)
+            // בדיקות בסיסיות 
             if (string.IsNullOrWhiteSpace(createDto.Name))
                 throw new ArgumentException("Name is required");
 
@@ -67,16 +67,6 @@ namespace server.Services.Implementations
         public Task<bool> DeleteUserAsync(int id)
             => _repo.DeleteUserAsync(id);
 
-        // private static UserResponseDto ToResponseDto(UserModel user)
-        //     => new UserResponseDto
-        //     {
-        //         Id = user.Id,
-        //         Name = user.Name,
-        //         Email = user.Email,
-        //         Phone = user.Phone,
-        //         City = user.City,
-        //         Address = user.Address,
-        //         Role = user.Role
-        //     };
+
     }
 }
