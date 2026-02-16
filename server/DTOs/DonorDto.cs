@@ -13,7 +13,6 @@ namespace server.DTOs.Donors
         public string Phone { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
-        // public Task<List<GiftModel>>? Gifts { get; set; }
     }
 
     public class DonorWithGiftsDto
