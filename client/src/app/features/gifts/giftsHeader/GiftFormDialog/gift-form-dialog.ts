@@ -138,7 +138,6 @@ export class GiftFormDialog implements OnChanges {
         }
         this.close();
       },
-      error: () => this.notificationService.showError(' An error occurred while saving the gift'),
     });
   }
 }

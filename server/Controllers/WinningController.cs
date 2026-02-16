@@ -12,9 +12,11 @@ namespace server.Controllers;
 public class WinningController : ControllerBase
 {
     private readonly IWinningService _winningService;
+    private readonly IRaffleStateService _raffleState;
 
-    public WinningController(IWinningService winningService)
+    public WinningController(IWinningService winningService, IRaffleStateService raffleState)
     {
+        _raffleState = raffleState;
         _winningService = winningService;
     }
 
@@ -56,7 +58,7 @@ public class WinningController : ControllerBase
     {
         return await _winningService.GetTotalIncome();
     }
-    
+
     [Authorize(Roles = "Admin")]
     [HttpGet("doRaffle")]
     public async Task<IEnumerable<WinningResponseDto>> DoRaffle()
@@ -70,4 +72,14 @@ public class WinningController : ControllerBase
     {
         return await _winningService.RaffleSingleGiftAsync(giftId);
     }
+
+    [HttpGet("statusIsFinished")]
+    public IActionResult GetRaffleStatus()
+    {
+        return Ok(new
+        {
+            finished = _raffleState.Status == RaffleStatus.Finished
+        });
+    }
+
 }

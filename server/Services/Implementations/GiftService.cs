@@ -43,7 +43,7 @@ public class GiftService : IGiftService
     {
         var gifts = await _giftRepository.GetGiftsAsync(sort);
 
-   
+
 
         return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
 
@@ -78,6 +78,11 @@ public class GiftService : IGiftService
 
     public async Task<GiftResponseDto> AddGiftAsync(GiftCreateWithImageDto dto)
     {
+
+        var exists = await _giftRepository.ExistsByDescriptionAsync(dto.Description);
+        if (exists)
+            throw new Exception("Gift description must be unique");
+
         var imageUrl = string.Empty;
         if (dto.Image != null)
         {
@@ -104,7 +109,6 @@ public class GiftService : IGiftService
             // 5. יצירת URL
             imageUrl = $"/uploads/gifts/{fileName}";
         }
-
 
         var model = new GiftModel
         {

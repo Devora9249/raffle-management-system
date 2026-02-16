@@ -179,11 +179,18 @@ public class GiftRepository : IGiftRepository
                 {
                     GiftId = gift.Id,
                     GiftName = gift.Description,
-                PurchaseCount = purchases.Count(p => p.Status == Status.Completed),
+                    PurchaseCount = purchases.Count(p => p.Status == Status.Completed),
                     DonorName = gift.Donor.Name
                 })
             .ToListAsync();
     }
+
+    public async Task<bool> ExistsByDescriptionAsync(string description)
+    {
+        return await _context.Gifts
+            .AnyAsync(g => g.Description.ToLower() == description.ToLower());
+    }
+
 
 
 
