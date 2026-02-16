@@ -4,6 +4,7 @@ using server.DTOs;
 using server.Models;
 using server.Models.Enums;
 using server.Repositories.Implementations;
+using AutoMapper;
 
 namespace server.Services.Implementations;
 
@@ -16,7 +17,7 @@ public class WinningService : IWinningService
     private readonly IGiftService _giftService;
     private readonly ILogger<WinningService> _logger;
     private readonly IUnitOfWork _unitOfWork;
-
+    private readonly IMapper _mapper;
 
     public WinningService(
         IWinningRepository winningRepository,
@@ -25,7 +26,8 @@ public class WinningService : IWinningService
         IEmailService emailService,
         IGiftService giftService,
         ILogger<WinningService> logger,
-        IUnitOfWork unitOfWork
+        IUnitOfWork unitOfWork,
+        IMapper mapper
         )
     {
         _winningRepository = winningRepository;
@@ -35,23 +37,15 @@ public class WinningService : IWinningService
         _giftService = giftService;
         _logger = logger;
         _unitOfWork = unitOfWork;
-        _emailService = emailService;
-        _giftService = giftService;
-        _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
     {
         var winnings = await _winningRepository.GetAllWinningsAsync();
 
-        return winnings.Select(w => new WinningResponseDto
-        {
-            Id = w.Id,
-            GiftId = w.GiftId,
-            giftName = w.Gift?.Description ?? "",
-            WinnerId = w.WinnerId,
-            winnerName = w.User?.Name ?? ""
-        });
+        return _mapper.Map<IEnumerable<WinningResponseDto>>(winnings);
+
     }
 
     public async Task<WinningResponseDto> GetWinningByIdAsync(int id)
@@ -59,14 +53,7 @@ public class WinningService : IWinningService
         var winning = await _winningRepository.GetWinningByIdAsync(id);
         if (winning == null) throw new KeyNotFoundException($"Winning {id} not found");
 
-        return new WinningResponseDto
-        {
-            Id = winning.Id,
-            GiftId = winning.GiftId,
-            giftName = winning.Gift?.Description ?? "",
-            WinnerId = winning.WinnerId,
-            winnerName = winning.User?.Name ?? ""
-        };
+        return _mapper.Map<WinningResponseDto>(winning);
     }
 
     public async Task<WinningResponseDto> AddWinningAsync(WinningCreateDto dto)
@@ -80,14 +67,7 @@ public class WinningService : IWinningService
         var full = await _winningRepository.GetWinningByIdAsync(created.Id);
         if (full == null) throw new Exception("Winning was created but could not be loaded.");
 
-        return new WinningResponseDto
-        {
-            Id = full.Id,
-            GiftId = full.GiftId,
-            giftName = full.Gift?.Description ?? "",
-            WinnerId = full.WinnerId,
-            winnerName = full.User?.Name ?? ""
-        };
+        return _mapper.Map<WinningResponseDto>(full);
     }
 
     public async Task<WinningResponseDto> UpdateWinningAsync(int id, WinningCreateDto dto)
@@ -105,14 +85,7 @@ public class WinningService : IWinningService
         var full = await _winningRepository.GetWinningByIdAsync(updated.Id);
         if (full == null) throw new Exception("Winning was updated but could not be loaded.");
 
-        return new WinningResponseDto
-        {
-            Id = full.Id,
-            GiftId = full.GiftId,
-            giftName = full.Gift?.Description ?? "",
-            WinnerId = full.WinnerId,
-            winnerName = full.User?.Name ?? ""
-        };
+        return _mapper.Map<WinningResponseDto>(full);
     }
 
 
