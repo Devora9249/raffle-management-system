@@ -10,8 +10,8 @@ namespace server.Services.Implementations
     {
         private readonly IPurchaseRepository _repo;
         private readonly IMapper _mapper;
-        private readonly Logger<PurchaseService> _logger;
-        public PurchaseService(IPurchaseRepository repo, IMapper mapper, Logger<PurchaseService> logger)
+        private readonly ILogger<PurchaseService> _logger;
+        public PurchaseService(IPurchaseRepository repo, IMapper mapper, ILogger<PurchaseService> logger)
         {
             _repo = repo;
             _mapper = mapper;
