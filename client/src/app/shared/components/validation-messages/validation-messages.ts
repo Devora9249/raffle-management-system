@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common'; // הוספנו את זה
+import { CommonModule } from '@angular/common'; 
 import { AbstractControl } from '@angular/forms';
 import { getValidatorErrorMessage } from '../validation-messages';
 
 @Component({
   selector: 'app-validation-messages',
-  standalone: true, // וודאי שזה מופיע
-  imports: [CommonModule], // וודאי שזה מופיע
+  standalone: true, 
+  imports: [CommonModule],
   template: `
     <div *ngIf="errorMessage" class="error-text">
       <small style="color: grey;">{{ errorMessage }}</small>

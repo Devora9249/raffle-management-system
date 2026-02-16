@@ -18,7 +18,7 @@
 }
 
 :host ::ng-deep .purchase-table .p-datatable-wrapper {
-  max-height: 320px; /* 🔒 גובה קבוע – אין קפיצות */
+  max-height: 320px; 
   overflow-y: auto;
 }
 

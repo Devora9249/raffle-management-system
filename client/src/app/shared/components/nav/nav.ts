@@ -54,7 +54,6 @@ ngOnDestroy(): void {
 }
 
 
-//     MAIN MENU
 
 private buildMainMenu(): void {
   const items: MenuItem[] = [
@@ -90,7 +89,6 @@ private buildMainMenu(): void {
 }
 
 
-//USER MENU
 
   private buildUserMenu(): void {
     this.userMenuItems = this.isLoggedIn
@@ -115,7 +113,6 @@ private buildMainMenu(): void {
         ];
   }
 
-    // ACTIONS
 
   private logout(): void {
     this.notificationService.showSuccess('Logged out successfully');

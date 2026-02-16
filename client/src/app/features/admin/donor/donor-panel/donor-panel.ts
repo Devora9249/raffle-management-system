@@ -70,57 +70,6 @@ onFilterChanged(): void {
   this.donors = result;
 }
 
-
-
-
-  // filterGifts(): void {
-  //   if (!this.searchTermGifts) {
-  //     this.loadDonors();
-  //     return;
-  //   }
-  //   const term = this.searchTermGifts.toLowerCase();
-  //   this.donors = this.allDonors.filter(donor =>
-  //     donor.gifts.some(gift => gift.description.toLowerCase().includes(term))
-      
-  //   );
-  //         console.log(this.donors, 'donors1');
-
-  // }
-
-  // filterDonors(): void {
-  //   if (!this.searchTermDonors) {
-  //     this.loadDonors();
-  //     return;
-  //   }
-  //   const term = this.searchTermDonors.toLowerCase();
-  //   this.donors = this.allDonors.filter(donor =>
-  //     donor.name.toLowerCase().includes(term)
-  //   );
-  // }
-
-  // openEdit(donor: DonorListItem): void {
-  //   this.selectedDonor = donor;
-  //   this.showDialog = true;
-  // }
-
-// delete(id: number): void {
-//   this.authService.delete(id).subscribe({
-//     next: () => {
-//       this.loadDonors();
-//     },
-//     error: (err) => {
-//       console.error('Delete donor failed', err);
-//   const message =
-//           err?.error?.detail ||
-//           err?.error?.message ||
-//           'Unauthorized or unexpected error';
-
-//         alert('Delete donor failed: ' + message);
-//     }
-//   });
-// }
-
-
   onSaved(): void {
     console.log("hi");
     
@@ -128,9 +77,6 @@ onFilterChanged(): void {
     this.loadDonors();
   }
 
-  // openGiftsDialog(): void {
-  //   this.showGiftsDialog = true;
-  // }
 
   
   openGiftsDialog(donor: DonorWithGiftsDto): void {

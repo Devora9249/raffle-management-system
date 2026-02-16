@@ -16,7 +16,7 @@
     @for (item of (cartItems$ | async) ?? []; track item.purchaseId) {
       <div class="cart-item">
 
-        <!-- Name + subtotal -->
+        <!-- Name  -->
         <div class="cart-item-header">
           <span class="cart-item-name">{{ item.giftName }}</span>
           <span class="cart-item-subtotal">
@@ -24,7 +24,7 @@
           </span>
         </div>
 
-        <!-- Unit price -->
+        <!--  price -->
         <div class="cart-item-unit-price">
           ${{ item.giftPrice }} each
         </div>

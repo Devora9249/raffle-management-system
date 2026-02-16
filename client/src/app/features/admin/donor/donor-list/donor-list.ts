@@ -12,7 +12,5 @@ export class DonorList {
   @Input() donors: DonorWithGiftsDto[] = [];
   @Output() selectedDonor = new EventEmitter<DonorWithGiftsDto>();
 
-  
-  // @Output() edit = new EventEmitter<DonorListItem>();
-  // @Output() remove = new EventEmitter<number>();
+
 }

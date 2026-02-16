@@ -39,7 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px; /* רווח בין כפתורים לפילטרים */
+  gap: 12px; 
   margin-bottom: 20px;
 }
 
@@ -107,23 +107,23 @@
   font-weight: 500;
 }
 
-/* חיפוש מעוצב בתוך אזור הפעולות */
+
 .search-container {
-  max-width: 300px; /* הגבלת רוחב למראה אלגנטי */
+  max-width: 300px; 
   width: 100%;
 }
 
 /* ===== searching box ===== */
 
-/* חיפוש מעוצב - פתרון חזק עבור PrimeNG */
+
 .search-container {
   max-width: 300px;
   width: 100%;
 }
 
-/* שימוש ב-ng-deep כדי לחדור לתוך רכיבי PrimeNG */
+
 :host ::ng-deep .panel-actions .p-inputtext {
-  padding-left: 35px !important; /* דחיפת הטקסט שהאייקון לא יסתיר */
+  padding-left: 35px !important;
   border-radius: 8px !important;
   border: 1px solid var(--p-surface-300) !important;
   background: var(--p-surface-0) !important;
@@ -136,7 +136,7 @@
   box-shadow: 0 0 0 2px var(--p-primary-100) !important;
 }
 
-/* מיקום האייקון בתוך השדה */
+
 :host ::ng-deep .panel-actions .p-input-icon-left > i,
 :host ::ng-deep .panel-actions .p-iconfield > i {
   left: 12px !important;
