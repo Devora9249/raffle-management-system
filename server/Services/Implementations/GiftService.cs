@@ -43,16 +43,7 @@ public class GiftService : IGiftService
     {
         var gifts = await _giftRepository.GetGiftsAsync(sort);
 
-        // return gifts.Select(g => new GiftResponseDto
-        // {
-        //     Id = g.Id,
-        //     Description = g.Description,
-        //     CategoryName = g.Category.Name,
-        //     CategoryId = g.CategoryId,
-        //     Price = g.Price,
-        //     DonorId = g.DonorId,
-        //     ImageUrl = g.ImageUrl
-        // });
+   
 
         return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
 

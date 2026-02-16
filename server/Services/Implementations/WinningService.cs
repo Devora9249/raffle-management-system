@@ -97,41 +97,7 @@ public class WinningService : IWinningService
     }
 
 
-    // public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
-    // {
-    //     var gifts = await _giftRepository.GetGiftsAsync(PriceSort.None);
-    //     var rng = new Random();
-
-    //     foreach (var gift in gifts)
-    //     {
-    //         _logger.LogInformation($"Raffling gift {gift.Id} - {gift.Description} hasWinning: {gift.HasWinning} 🎁");
-    //         var purchases = (await _purchaseRepository.GetByGiftAsync(gift.Id)).ToList();
-
-    //         if (purchases.Count == 0) continue;
-
-    //         var winnerUserId =
-    //             purchases[rng.Next(purchases.Count)].UserId;
-
-    //         await _winningRepository.AddWinningAsync(new WinningModel
-    //         {
-    //             GiftId = gift.Id,
-    //             WinnerId = winnerUserId
-    //         });
-
-    //         try
-    //         {
-    //             await _emailService.SendWinningEmailAsync(gift.Id, winnerUserId);
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             Console.WriteLine(ex.Message);
-    //         }
-    //         _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
-    //         await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
-    //     }
-
-    //     return await GetAllWinningsAsync();
-    // }
+    
 
     public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
     {
@@ -141,14 +107,14 @@ public class WinningService : IWinningService
         {
             var rng = new Random();
 
-            // 1️⃣ מתנות שעדיין לא הוגרלו
+            //  מתנות שעדיין לא הוגרלו
             var gifts = (await _giftRepository.GetGiftsAsync(PriceSort.None))
                 .Where(g => !g.HasWinning)
                 .ToList();
 
             _logger.LogInformation($"Raffling {gifts.Count} gifts that have not been raffled yet.");
 
-            // 2️⃣ שליפת כל הרכישות בבת אחת
+            // שליפת כל הרכישות בבת אחת
             var giftIds = gifts.Select(g => g.Id).ToList();
 
             var purchases = await _purchaseRepository.GetByGiftIdsAsync(giftIds);
@@ -177,24 +143,24 @@ public class WinningService : IWinningService
                 var winnerUserId =
                     giftPurchases[rng.Next(giftPurchases.Count)].UserId;
 
-                // 3️⃣ יצירת זכייה
+                // יצירת זכייה
                 await _winningRepository.AddWinningAsync(new WinningModel
                 {
                     GiftId = gift.Id,
                     WinnerId = winnerUserId
                 });
 
-                // 4️⃣ סימון מתנה כהוגרלה
+                //  סימון מתנה כהוגרלה
                 await _giftService.MarkGiftAsHavingWinningAsync(gift.Id);
                 _logger.LogInformation($"User {winnerUserId} won gift {gift.Id} hasWinning: {gift.HasWinning} 🎁");
 
                 winningsToEmail.Add((gift.Id, winnerUserId));
             }
 
-            // 5️⃣ Commit אטומי
+            //  Commit אטומי
             await _unitOfWork.CommitAsync();
 
-            // 6️⃣ Side effects אחרי Commit
+            //  Side effects אחרי Commit
             foreach (var (giftId, winnerId) in winningsToEmail)
             {
                 try

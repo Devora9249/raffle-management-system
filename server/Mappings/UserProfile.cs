@@ -15,7 +15,7 @@ public class UserProfile : Profile
         CreateMap<UserCreateDto, UserModel>()
             .ForMember(dest => dest.Password, opt => opt.Ignore());
 
-        // Update DTO -> Entity (partial update)
+        // Update DTO -> Entity 
         CreateMap<UserUpdateDto, UserModel>()
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForAllMembers(opt =>

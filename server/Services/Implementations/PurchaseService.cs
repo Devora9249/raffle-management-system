@@ -104,24 +104,7 @@ namespace server.Services.Implementations
             });
         }
 
-        // private static PurchaseResponseDto ToResponseDto(PurchaseModel p)
-        // {
-
-        //     return new PurchaseResponseDto
-        //     {
-        //         Id = p.Id,
-        //         UserId = p.UserId,
-        //         UserName = p.User.Name,
-        //         GiftId = p.GiftId,
-        //         GiftName = p.Gift.Description,
-        //         DonorId = p.Gift.DonorId,
-        //         DonorName = p.Gift.Donor.Name,
-        //         Qty = p.Qty,
-        //         Status = p.Status,
-        //         PurchaseDate = p.PurchaseDate
-        //     };
-
-        // }
+  
 
     }
 }
