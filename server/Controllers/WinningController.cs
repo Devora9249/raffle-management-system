@@ -74,12 +74,14 @@ public class WinningController : ControllerBase
         return await _winningService.RaffleSingleGiftAsync(giftId);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("statusIsFinished")]
     public IActionResult GetRaffleStatus()
     {
         return Ok(_raffleState.isFinished());
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("finishRaffle")]
     public IActionResult FinishRaffle()
     {
@@ -87,6 +89,7 @@ public class WinningController : ControllerBase
         return Ok(_raffleState.isFinished());
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("resetStatus")]
     public IActionResult ResetRaffleStatus()
     {
@@ -94,6 +97,7 @@ public class WinningController : ControllerBase
         return Ok(_raffleState.Status == RaffleStatus.Open);
 
     }
+    
     [HttpGet("sorted-by-most-purchased")]
     public async Task<ActionResult<IEnumerable<WinningResponseDto>>> GetWinningsSortedByMostPurchasedGift()
     {

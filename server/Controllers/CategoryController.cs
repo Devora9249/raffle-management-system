@@ -17,7 +17,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<CategoryResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CategoryResponseDto>>> GetAll()
     {
         var categories = await _categoryService.GetAllCategoriesAsync();
@@ -30,10 +29,12 @@ public class CategoryController : ControllerBase
     public async Task<ActionResult<CategoryResponseDto>> GetById(int id)
     {
         var category = await _categoryService.GetCategoryByIdAsync(id);
+        if (category == null)
+            return NotFound();
         return Ok(category);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<CategoryResponseDto>> Create([FromBody] CategoryCreateDto dto)
     {
