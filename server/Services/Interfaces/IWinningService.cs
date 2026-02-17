@@ -13,5 +13,10 @@ namespace server.Services.Interfaces
         Task<decimal> GetTotalIncome();
         Task<WinningResponseDto?> RaffleSingleGiftAsync(int giftId);
 
+
+
+//מיון לפי מתנה נרכשת ביותר
+Task<IEnumerable<WinningResponseDto>> GetWinningsSortedByMostPurchasedGiftAsync();
+
     }
 }

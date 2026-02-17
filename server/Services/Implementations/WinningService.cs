@@ -242,4 +242,27 @@ public class WinningService : IWinningService
             .Where(p => p.Status == Status.Completed)
             .Sum(p => p.Qty * (p.Gift?.Price ?? 0m));
     }
+
+
+//מיון לפי מתנה נרכשת ביותר       
+    public async Task<IEnumerable<WinningResponseDto>> GetWinningsSortedByMostPurchasedGiftAsync()
+{
+    _logger.LogInformation("Fetching winnings sorted by most purchased gift.");
+
+    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+
+    var sortedGiftIds = purchaseCounts
+        .OrderByDescending(x => x.PurchaseCount)
+        .Select(x => x.GiftId)
+        .ToList();
+
+    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+
+    var sortedWinnings = allWinnings
+        .OrderBy(w => sortedGiftIds.IndexOf(w.GiftId))
+        .ToList();
+
+    return _mapper.Map<IEnumerable<WinningResponseDto>>(sortedWinnings);
+}
+
 }

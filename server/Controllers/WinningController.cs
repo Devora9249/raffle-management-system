@@ -82,4 +82,12 @@ public class WinningController : ControllerBase
         });
     }
 
+    [HttpGet("sorted-by-most-purchased")]
+public async Task<ActionResult<IEnumerable<WinningResponseDto>>> GetWinningsSortedByMostPurchasedGift()
+{
+    var winnings = await _winningService.GetWinningsSortedByMostPurchasedGiftAsync();
+    return Ok(winnings);
+}
+
+
 }
