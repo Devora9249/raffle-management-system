@@ -78,7 +78,7 @@ public class WinningController : ControllerBase
     {
         return Ok(_raffleState.isFinished());
     }
-    
+
     [HttpPost("finishRaffle")]
     public IActionResult FinishRaffle()
     {
@@ -93,4 +93,22 @@ public class WinningController : ControllerBase
         return Ok(_raffleState.Status == RaffleStatus.Open);
 
     }
+    [HttpGet("sorted-by-most-purchased")]
+    public async Task<ActionResult<IEnumerable<WinningResponseDto>>> GetWinningsSortedByMostPurchasedGift()
+    {
+        var winnings = await _winningService.GetWinningsSortedByMostPurchasedGiftAsync();
+        return Ok(winnings);
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<WinningResponseDto>>> SearchWinnings(
+        [FromQuery] string? giftName,
+        [FromQuery] string? donorName,
+        [FromQuery] int? minPurchases)
+    {
+        var results = await _winningService.SearchWinningsAsync(giftName, donorName, minPurchases);
+        return Ok(results);
+    }
+
+
 }

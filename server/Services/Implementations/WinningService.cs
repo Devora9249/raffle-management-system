@@ -242,4 +242,62 @@ public class WinningService : IWinningService
             .Where(p => p.Status == Status.Completed)
             .Sum(p => p.Qty * (p.Gift?.Price ?? 0m));
     }
+
+
+//מיון לפי מתנה נרכשת ביותר       
+    public async Task<IEnumerable<WinningResponseDto>> GetWinningsSortedByMostPurchasedGiftAsync()
+{
+    _logger.LogInformation("Fetching winnings sorted by most purchased gift.");
+
+    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+
+    var sortedGiftIds = purchaseCounts
+        .OrderByDescending(x => x.PurchaseCount)
+        .Select(x => x.GiftId)
+        .ToList();
+
+    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+
+    var sortedWinnings = allWinnings
+        .OrderBy(w => sortedGiftIds.IndexOf(w.GiftId))
+        .ToList();
+
+    return _mapper.Map<IEnumerable<WinningResponseDto>>(sortedWinnings);
+}
+
+//חיפוש לפי...
+public async Task<IEnumerable<WinningResponseDto>> SearchWinningsAsync(string? giftName, string? donorName, int? minPurchases)
+{
+    _logger.LogInformation("Searching winnings: Gift='{GiftName}', Donor='{DonorName}', MinPurchases={MinPurchases}",
+        giftName, donorName, minPurchases);
+
+    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+
+    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+
+    var query = from w in allWinnings
+                join p in purchaseCounts on w.GiftId equals p.GiftId
+                select new
+                {
+                    Winning = w,
+                    GiftName = p.GiftName,
+                    DonorName = p.DonorName,
+                    PurchaseCount = p.PurchaseCount
+                };
+
+    if (!string.IsNullOrEmpty(giftName))
+        query = query.Where(x => x.GiftName.Contains(giftName, StringComparison.OrdinalIgnoreCase));
+
+    if (!string.IsNullOrEmpty(donorName))
+        query = query.Where(x => x.DonorName.Contains(donorName, StringComparison.OrdinalIgnoreCase));
+
+    if (minPurchases.HasValue)
+        query = query.Where(x => x.PurchaseCount >= minPurchases.Value);
+
+    var filteredWinnings = query.Select(x => x.Winning).ToList();
+
+    return _mapper.Map<IEnumerable<WinningResponseDto>>(filteredWinnings);
+}
+
+
 }
