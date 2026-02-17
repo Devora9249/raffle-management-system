@@ -265,4 +265,39 @@ public class WinningService : IWinningService
     return _mapper.Map<IEnumerable<WinningResponseDto>>(sortedWinnings);
 }
 
+//חיפוש לפי...
+public async Task<IEnumerable<WinningResponseDto>> SearchWinningsAsync(string? giftName, string? donorName, int? minPurchases)
+{
+    _logger.LogInformation("Searching winnings: Gift='{GiftName}', Donor='{DonorName}', MinPurchases={MinPurchases}",
+        giftName, donorName, minPurchases);
+
+    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+
+    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+
+    var query = from w in allWinnings
+                join p in purchaseCounts on w.GiftId equals p.GiftId
+                select new
+                {
+                    Winning = w,
+                    GiftName = p.GiftName,
+                    DonorName = p.DonorName,
+                    PurchaseCount = p.PurchaseCount
+                };
+
+    if (!string.IsNullOrEmpty(giftName))
+        query = query.Where(x => x.GiftName.Contains(giftName, StringComparison.OrdinalIgnoreCase));
+
+    if (!string.IsNullOrEmpty(donorName))
+        query = query.Where(x => x.DonorName.Contains(donorName, StringComparison.OrdinalIgnoreCase));
+
+    if (minPurchases.HasValue)
+        query = query.Where(x => x.PurchaseCount >= minPurchases.Value);
+
+    var filteredWinnings = query.Select(x => x.Winning).ToList();
+
+    return _mapper.Map<IEnumerable<WinningResponseDto>>(filteredWinnings);
+}
+
+
 }

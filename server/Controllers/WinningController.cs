@@ -89,5 +89,15 @@ public async Task<ActionResult<IEnumerable<WinningResponseDto>>> GetWinningsSort
     return Ok(winnings);
 }
 
+[HttpGet("search")]
+public async Task<ActionResult<IEnumerable<WinningResponseDto>>> SearchWinnings(
+    [FromQuery] string? giftName,
+    [FromQuery] string? donorName,
+    [FromQuery] int? minPurchases)
+{
+    var results = await _winningService.SearchWinningsAsync(giftName, donorName, minPurchases);
+    return Ok(results);
+}
+
 
 }

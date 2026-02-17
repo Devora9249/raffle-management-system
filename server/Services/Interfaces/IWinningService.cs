@@ -17,6 +17,8 @@ namespace server.Services.Interfaces
 
 //מיון לפי מתנה נרכשת ביותר
 Task<IEnumerable<WinningResponseDto>> GetWinningsSortedByMostPurchasedGiftAsync();
+//חיפוש לפי...
+Task<IEnumerable<WinningResponseDto>> SearchWinningsAsync(string? giftName, string? donorName, int? minPurchases);
 
     }
 }
