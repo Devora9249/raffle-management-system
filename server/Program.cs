@@ -174,6 +174,9 @@ using (var scope = app.Services.CreateScope())
 // לוגים אוטומטיים לכל בקשת HTTP
 app.UseSerilogRequestLogging();
 
+app.UseStaticFiles();
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -185,6 +188,5 @@ app.UseGlobalExceptionHandling();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseStaticFiles();
 
 app.Run();
