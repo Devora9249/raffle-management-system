@@ -9,8 +9,19 @@ import { DonorGuard } from './core/guards/DonorGuard';
 import { AdminGuard } from './core/guards/AdminGuard';
 import { PaymentPage } from './features/cart/payment-page/payment-page';
 import { WinnigsPage } from './features/winnigs-page/winnigs-page';
+import { raffleRedirectGuard } from './core/guards/raffleRedirectGuard';
+
 export const routes: Routes = [
-    { path: '', component: HomePage },
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'home' 
+    },
+    { 
+        path: 'home', 
+        component: HomePage,
+        canActivate: [raffleRedirectGuard]
+    },
     { path: 'gifts', component: GiftsPage },
     { path: 'register', component: Register },
     { path: 'login', component: LoginComponent },

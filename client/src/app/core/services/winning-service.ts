@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { WinningResponseDto, WinningCreateDto } from '../models/winning-model';
+import { RaffleStatusResponse } from '../models/winning-model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,4 +47,8 @@ export class WinningService {
   doRaffle(): Observable<WinningResponseDto[]> {
     return this.http.get<WinningResponseDto[]>(`${this.baseUrl}/doRaffle`);
   }
+
+    getStatus(): Observable<RaffleStatusResponse> {
+      return this.http.get<RaffleStatusResponse>(`${this.baseUrl}/statusIsFinished`);
+    }
 }

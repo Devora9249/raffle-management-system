@@ -10,3 +10,7 @@ export interface WinningCreateDto {
   giftId: number;
   winnerId: number;
 }
+
+export interface RaffleStatusResponse {
+  finished: boolean;
+}
