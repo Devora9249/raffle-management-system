@@ -76,10 +76,21 @@ public class WinningController : ControllerBase
     [HttpGet("statusIsFinished")]
     public IActionResult GetRaffleStatus()
     {
-        return Ok(new
-        {
-            finished = _raffleState.Status == RaffleStatus.Finished
-        });
+        return Ok(_raffleState.isFinished());
+    }
+    
+    [HttpPost("finishRaffle")]
+    public IActionResult FinishRaffle()
+    {
+        _raffleState.FinishRaffle();
+        return Ok(_raffleState.isFinished());
     }
 
+    [HttpPost("resetStatus")]
+    public IActionResult ResetRaffleStatus()
+    {
+        _raffleState.Reset();
+        return Ok(_raffleState.Status == RaffleStatus.Open);
+
+    }
 }

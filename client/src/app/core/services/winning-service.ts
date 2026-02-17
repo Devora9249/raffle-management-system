@@ -50,5 +50,6 @@ export class WinningService {
 
     getStatus(): Observable<RaffleStatusResponse> {
       return this.http.get<RaffleStatusResponse>(`${this.baseUrl}/statusIsFinished`);
+      
     }
 }

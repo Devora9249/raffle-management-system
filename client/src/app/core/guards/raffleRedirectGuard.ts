@@ -30,17 +30,15 @@ export const raffleRedirectGuard: CanActivateFn = (): Observable<boolean | UrlTr
   const router = inject(Router);
 
   return winningService.getStatus().pipe(
-    take(1), // חשוב מאוד כדי שהגארד יסיים את הריצה
+    take(1),
     map(res => {
-      // אם ההגרלה הסתיימה, נווט לעמוד הזכיות
-      if (res && res.finished) {
+      console.log("Raffle status received in guard:", res);
+      if (res) {
         return router.createUrlTree(['/winnings']);
       }
-      // אחרת, אפשר להמשיך לנתיב המבוקש
       return true;
     }),
     catchError(() => {
-      // במקרה של שגיאה בשרת, נאפשר כניסה לדף הבית כברירת מחדל
       return of(true);
     })
   );
