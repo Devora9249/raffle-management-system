@@ -105,7 +105,6 @@ builder.Services.AddScoped<IWinningService, WinningService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IRaffleStateService, RaffleStateService>();
 
@@ -143,33 +142,6 @@ app.Logger.LogInformation("Application started");
 // הפעלת CORS
 app.UseCors("AllowAngularDev");
 
-// יצירת משתמש אדמין אם לא קיים
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-    var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
-
-    var adminPassword = configuration["Admin:Password"];
-    if (string.IsNullOrWhiteSpace(adminPassword))
-        throw new Exception("Admin password is not configured");
-
-    if (!context.Users.Any(u => u.Email == configuration["EmailSettings:AdminEmail"]))
-    {
-        var password = configuration["Admin:Password"]!;
-        var admin = new UserModel
-        {
-            Name = "Admin1",
-            Email = configuration["EmailSettings:AdminEmail"]!,
-            Password = authService.HashPassword(password),
-            Role = RoleEnum.Admin
-        };
-        context.Users.Add(admin);
-        context.SaveChanges();
-    }
-}
-
-// --- Middleware ---
 
 // לוגים אוטומטיים לכל בקשת HTTP
 app.UseSerilogRequestLogging();

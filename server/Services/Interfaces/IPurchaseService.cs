@@ -7,7 +7,7 @@ namespace server.Services.Interfaces
         Task<IEnumerable<PurchaseResponseDto>> GetAllAsync();
         Task<PurchaseResponseDto?> GetByIdAsync(int id);
 
-        Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto);
+        Task<PurchaseResponseDto> AddAsync(int userId, PurchaseCreateDto createDto);
         Task<PurchaseResponseDto> UpdateAsync(int id, PurchaseUpdateDto dto);
 
         Task<bool> DeleteAsync(int id);

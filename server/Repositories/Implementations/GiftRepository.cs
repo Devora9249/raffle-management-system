@@ -72,7 +72,7 @@ public class GiftRepository : IGiftRepository
 
     }
 
-    public async Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId)
+    public async Task<IEnumerable<GiftModel>> GetGiftByCategoryAsync(int categoryId)
     {
         return await _context.Gifts
         .Where(g => g.CategoryId == categoryId)

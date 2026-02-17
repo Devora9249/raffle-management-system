@@ -101,24 +101,6 @@ public class PurchaseRepository : IPurchaseRepository
             .Where(p => p.UserId == userId && p.Status == Status.Draft)
             .ToListAsync();
 
-    public async Task<int> CheckoutAsync(int userId)
-    {
-        var cartItems = await _context.Purchases
-            .Where(p => p.UserId == userId && p.Status == Status.Draft)
-            .ToListAsync();
-
-        if (!cartItems.Any())
-            return 0;
-
-        foreach (var item in cartItems)
-        {
-            item.Status = Status.Completed;
-            item.PurchaseDate = DateTime.UtcNow;
-        }
-
-        await _context.SaveChangesAsync();
-        return cartItems.Count;
-    }
 
     public async Task<PurchaseModel?> FindDraftByUserAndGift(int userId, int giftId)
     {

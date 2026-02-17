@@ -32,9 +32,9 @@ namespace server.Services.Implementations
             return p == null ? null : _mapper.Map<PurchaseResponseDto>(p);
         }
 
-        public async Task<PurchaseResponseDto> AddAsync(PurchaseCreateDto createDto)
+        public async Task<PurchaseResponseDto> AddAsync(int userId, PurchaseCreateDto createDto)
         {
-            _logger.LogInformation("Starting process to add a new purchase for User ID: {UserId}, Gift ID: {GiftId}", createDto.UserId, createDto.GiftId);
+            _logger.LogInformation("Starting process to add a new purchase for User ID: {UserId}, Gift ID: {GiftId}", userId, createDto.GiftId);
             if (createDto.Qty <= 0)
             {
                 _logger.LogWarning("Purchase attempt failed: Qty must be greater than 0. Provided Qty: {Qty}", createDto.Qty);
@@ -52,7 +52,7 @@ namespace server.Services.Implementations
     }
     catch (Exception ex)
     {
-        _logger.LogError(ex, "Error occurred while adding purchase for User ID: {UserId}", createDto.UserId);
+        _logger.LogError(ex, "Error occurred while adding purchase for User ID: {UserId}", userId);
         throw;
     }
 }

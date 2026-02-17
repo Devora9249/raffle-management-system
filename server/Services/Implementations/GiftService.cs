@@ -52,7 +52,7 @@ public class GiftService : IGiftService
 
     public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
     {
-        var gifts = await _giftRepository.GetByGiftByCategoryAsync(categoryId);
+        var gifts = await _giftRepository.GetGiftByCategoryAsync(categoryId);
         if (gifts == null) return null;
 
         return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
@@ -81,7 +81,7 @@ public class GiftService : IGiftService
 
         var exists = await _giftRepository.ExistsByDescriptionAsync(dto.Description);
         if (exists)
-            throw new Exception("Gift description must be unique");
+            throw new InvalidOperationException("Gift description must be unique");
 
         var imageUrl = string.Empty;
         if (dto.Image != null)

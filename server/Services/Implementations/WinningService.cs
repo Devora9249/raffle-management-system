@@ -6,6 +6,7 @@ using server.Models.Enums;
 using server.Repositories.Implementations;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using server.Data;
 
 namespace server.Services.Implementations;
 
@@ -17,9 +18,9 @@ public class WinningService : IWinningService
     private readonly IEmailService _emailService;
     private readonly IGiftService _giftService;
     private readonly ILogger<WinningService> _logger;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IRaffleStateService _raffleStateService;
+    private readonly AppDbContext _context;
     public WinningService(
         IWinningRepository winningRepository,
         IPurchaseRepository purchaseRepository,
@@ -27,9 +28,9 @@ public class WinningService : IWinningService
         IEmailService emailService,
         IGiftService giftService,
         ILogger<WinningService> logger,
-        IUnitOfWork unitOfWork,
         IMapper mapper,
-        IRaffleStateService raffleStateService
+        IRaffleStateService raffleStateService,
+        AppDbContext context
         )
     {
         _winningRepository = winningRepository;
@@ -38,9 +39,9 @@ public class WinningService : IWinningService
         _emailService = emailService;
         _giftService = giftService;
         _logger = logger;
-        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _raffleStateService = raffleStateService;
+        _context = context;
     }
 
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
@@ -64,7 +65,7 @@ public class WinningService : IWinningService
     public async Task<WinningResponseDto> AddWinningAsync(WinningCreateDto dto)
     {
         _logger.LogInformation("Manually adding winning for Gift ID {GiftId}, Winner ID {WinnerId}", dto.GiftId, dto.WinnerId);
-        
+
         var created = await _winningRepository.AddWinningAsync(new WinningModel
         {
             GiftId = dto.GiftId,
@@ -111,8 +112,7 @@ public class WinningService : IWinningService
     public async Task<IEnumerable<WinningResponseDto>> RaffleAsync()
     {
         _logger.LogInformation("Starting bulk raffle process for all available gifts.");
-        await _unitOfWork.BeginTransactionAsync();
-
+        await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             var rng = new Random();
@@ -153,8 +153,9 @@ public class WinningService : IWinningService
 
                 winningsToEmail.Add((gift.Id, winnerUserId));
             }
-
-            await _unitOfWork.CommitAsync();
+            
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             _logger.LogInformation("Bulk raffle transaction committed successfully.");
 
             foreach (var (giftId, winnerId) in winningsToEmail)
@@ -174,7 +175,7 @@ public class WinningService : IWinningService
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "CRITICAL ERROR during bulk raffle. Rolling back transaction.");
-            await _unitOfWork.RollbackAsync();
+            await transaction.RollbackAsync();
             throw;
         }
     }
@@ -182,8 +183,8 @@ public class WinningService : IWinningService
     public async Task<WinningResponseDto?> RaffleSingleGiftAsync(int giftId)
     {
         _logger.LogInformation("Starting single raffle for Gift ID {GiftId}", giftId);
-        await _unitOfWork.BeginTransactionAsync();
-
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync();
         try
         {
             var gift = await _giftRepository.GetGiftByIdAsync(giftId);
@@ -211,8 +212,8 @@ public class WinningService : IWinningService
 
             await _winningRepository.AddWinningAsync(winning);
             await _giftService.MarkGiftAsHavingWinningAsync(giftId);
-
-            await _unitOfWork.CommitAsync();
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             _logger.LogInformation("Single raffle committed: User {WinnerId} won Gift {GiftId}", winnerUserId, giftId);
 
             try
@@ -229,7 +230,7 @@ public class WinningService : IWinningService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during single raffle for Gift {GiftId}. Rolling back.", giftId);
-            await _unitOfWork.RollbackAsync();
+            await transaction.RollbackAsync();
             throw;
         }
     }
@@ -244,60 +245,60 @@ public class WinningService : IWinningService
     }
 
 
-//מיון לפי מתנה נרכשת ביותר       
+    //מיון לפי מתנה נרכשת ביותר       
     public async Task<IEnumerable<WinningResponseDto>> GetWinningsSortedByMostPurchasedGiftAsync()
-{
-    _logger.LogInformation("Fetching winnings sorted by most purchased gift.");
+    {
+        _logger.LogInformation("Fetching winnings sorted by most purchased gift.");
 
-    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+        var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
 
-    var sortedGiftIds = purchaseCounts
-        .OrderByDescending(x => x.PurchaseCount)
-        .Select(x => x.GiftId)
-        .ToList();
+        var sortedGiftIds = purchaseCounts
+            .OrderByDescending(x => x.PurchaseCount)
+            .Select(x => x.GiftId)
+            .ToList();
 
-    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+        var allWinnings = await _winningRepository.GetAllWinningsAsync();
 
-    var sortedWinnings = allWinnings
-        .OrderBy(w => sortedGiftIds.IndexOf(w.GiftId))
-        .ToList();
+        var sortedWinnings = allWinnings
+            .OrderBy(w => sortedGiftIds.IndexOf(w.GiftId))
+            .ToList();
 
-    return _mapper.Map<IEnumerable<WinningResponseDto>>(sortedWinnings);
-}
+        return _mapper.Map<IEnumerable<WinningResponseDto>>(sortedWinnings);
+    }
 
-//חיפוש לפי...
-public async Task<IEnumerable<WinningResponseDto>> SearchWinningsAsync(string? giftName, string? donorName, int? minPurchases)
-{
-    _logger.LogInformation("Searching winnings: Gift='{GiftName}', Donor='{DonorName}', MinPurchases={MinPurchases}",
-        giftName, donorName, minPurchases);
+    //חיפוש לפי...
+    public async Task<IEnumerable<WinningResponseDto>> SearchWinningsAsync(string? giftName, string? donorName, int? minPurchases)
+    {
+        _logger.LogInformation("Searching winnings: Gift='{GiftName}', Donor='{DonorName}', MinPurchases={MinPurchases}",
+            giftName, donorName, minPurchases);
 
-    var allWinnings = await _winningRepository.GetAllWinningsAsync();
+        var allWinnings = await _winningRepository.GetAllWinningsAsync();
 
-    var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
+        var purchaseCounts = await _purchaseRepository.GetPurchaseCountByGiftAsync();
 
-    var query = from w in allWinnings
-                join p in purchaseCounts on w.GiftId equals p.GiftId
-                select new
-                {
-                    Winning = w,
-                    GiftName = p.GiftName,
-                    DonorName = p.DonorName,
-                    PurchaseCount = p.PurchaseCount
-                };
+        var query = from w in allWinnings
+                    join p in purchaseCounts on w.GiftId equals p.GiftId
+                    select new
+                    {
+                        Winning = w,
+                        GiftName = p.GiftName,
+                        DonorName = p.DonorName,
+                        PurchaseCount = p.PurchaseCount
+                    };
 
-    if (!string.IsNullOrEmpty(giftName))
-        query = query.Where(x => x.GiftName.Contains(giftName, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrEmpty(giftName))
+            query = query.Where(x => x.GiftName.Contains(giftName, StringComparison.OrdinalIgnoreCase));
 
-    if (!string.IsNullOrEmpty(donorName))
-        query = query.Where(x => x.DonorName.Contains(donorName, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrEmpty(donorName))
+            query = query.Where(x => x.DonorName.Contains(donorName, StringComparison.OrdinalIgnoreCase));
 
-    if (minPurchases.HasValue)
-        query = query.Where(x => x.PurchaseCount >= minPurchases.Value);
+        if (minPurchases.HasValue)
+            query = query.Where(x => x.PurchaseCount >= minPurchases.Value);
 
-    var filteredWinnings = query.Select(x => x.Winning).ToList();
+        var filteredWinnings = query.Select(x => x.Winning).ToList();
 
-    return _mapper.Map<IEnumerable<WinningResponseDto>>(filteredWinnings);
-}
+        return _mapper.Map<IEnumerable<WinningResponseDto>>(filteredWinnings);
+    }
 
 
 }

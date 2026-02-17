@@ -2,7 +2,6 @@ using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace server.Services.Implementations;
 

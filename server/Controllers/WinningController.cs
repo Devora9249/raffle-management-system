@@ -9,6 +9,7 @@ namespace server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class WinningController : ControllerBase
 {
     private readonly IWinningService _winningService;

@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs;
 using server.Services.Interfaces;
+using System.Security.Claims;
 
 namespace server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CartController : ControllerBase
 {
     private readonly ICartService _service;
@@ -15,22 +18,41 @@ public class CartController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("{userId:int}")]
-    public async Task<IActionResult> GetCart(int userId)
-        => Ok(await _service.GetCartAsync(userId));
+    [HttpGet("cart")]
+    public async Task<ActionResult<IEnumerable<CartItemResponseDto>>> GetCart()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = int.Parse(userIdClaim);
+        return Ok(await _service.GetCartAsync(userId));
+    }
+
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] CartAddDto dto)
+    public async Task<ActionResult<IEnumerable<CartItemResponseDto>>> Add([FromBody] CartAddDto dto)
     {
-        var created = await _service.AddToCartAsync(dto);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = int.Parse(userIdClaim);
+
+        var created = await _service.AddToCartAsync(dto, userId);
         return Ok(created);
     }
 
 
     [HttpPut]
-    public async Task<IActionResult> UpdateQty([FromBody] CartAddDto dto)
+    public async Task<ActionResult<IEnumerable<CartItemResponseDto>>> UpdateQty([FromBody] CartAddDto dto)
     {
-        var updated = await _service.UpdateQtyAsync(dto);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = int.Parse(userIdClaim);
+        var updated = await _service.UpdateQtyAsync(dto, userId);
         return Ok(updated);
     }
 
@@ -42,8 +64,16 @@ public class CartController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("checkout/{userId:int}")]
+    [HttpPost("checkout")]
     [ProducesResponseType(typeof(CartCheckoutResponseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Checkout(int userId)
-        => Ok(await _service.CheckoutAsync(userId));
+    public async Task<IActionResult> Checkout()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = int.Parse(userIdClaim);
+        return Ok(await _service.CheckoutAsync(userId));
+    }
+
 }

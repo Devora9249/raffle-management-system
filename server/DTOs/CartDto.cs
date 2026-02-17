@@ -4,7 +4,6 @@ namespace server.DTOs
 {
     public class CartAddDto
     {
-        [Required] public int UserId { get; set; }
         [Required] public int GiftId { get; set; }
         [Required, Range(1, int.MaxValue)] public int Qty { get; set; }
     }

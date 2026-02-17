@@ -44,16 +44,19 @@ public class GiftController : ControllerBase
     public async Task<ActionResult<GiftResponseDto>> GetById(int id)
     {
         var gift = await _giftService.GetGiftByIdAsync(id);
+        if (gift == null)
+            return NotFound();
+
         return Ok(gift);
     }
 
     [HttpGet("byCategory/{categoryId:int}")]
-    public async Task<IActionResult> GetByCategory(int categoryId)
+    public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetByCategory(int categoryId)
         => Ok(await _giftService.GetByGiftByCategoryAsync(categoryId));
 
 
     [HttpGet("byDonor/{donorId:int}")]
-    public async Task<IActionResult> GetByDonor(int donorId)
+    public async Task<ActionResult<IEnumerable<GiftResponseDto>>> GetByDonor(int donorId)
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
 
@@ -62,8 +65,6 @@ public class GiftController : ControllerBase
     public async Task<ActionResult<GiftResponseDto>> CreateWithImage([FromForm] GiftCreateWithImageDto dto)
     {
         var gift = await _giftService.AddGiftAsync(dto);
-        Console.WriteLine("❤️", gift.ImageUrl);
-
         return CreatedAtAction(nameof(GetById), new { id = gift.Id }, gift);
     }
 

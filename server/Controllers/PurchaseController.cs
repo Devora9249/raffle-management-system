@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs;
@@ -7,6 +8,7 @@ namespace server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PurchaseController : ControllerBase
 {
     private readonly IPurchaseService _service;
@@ -18,14 +20,13 @@ public class PurchaseController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PurchaseResponseDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<PurchaseResponseDto>>> GetAll()
             => Ok(await _service.GetAllAsync());
 
 
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<PurchaseResponseDto?>> GetById(int id)
     {
         var purchase = await _service.GetByIdAsync(id);
         return Ok(purchase);
@@ -33,17 +34,21 @@ public class PurchaseController : ControllerBase
 
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] PurchaseCreateDto dto)
+    public async Task<ActionResult<IEnumerable<PurchaseResponseDto>>> Create([FromBody] PurchaseCreateDto dto)
     {
-        var created = await _service.AddAsync(dto);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        var created = await _service.AddAsync(userId, dto);
         return Ok(created);
     }
 
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] PurchaseUpdateDto dto)
+    [HttpPut]
+    public async Task<ActionResult<IEnumerable<PurchaseResponseDto?>>> Update([FromBody] PurchaseUpdateDto dto)
     {
-        await _service.UpdateAsync(id, dto);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        await _service.UpdateAsync(userId, dto);
         return NoContent();
     }
 
@@ -56,13 +61,15 @@ public class PurchaseController : ControllerBase
         return ok ? NoContent() : NotFound(new { message = $"Purchase with ID {id} not found." });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("byGift/{giftId:int}")]
-    public async Task<IActionResult> GetByGift(int giftId)
+    public async Task<ActionResult<IEnumerable<PurchaseResponseDto>>> GetByGift(int giftId)
         => Ok(await _service.GetByGiftAsync(giftId));
-        
 
+
+    [Authorize(Roles = "Admin")]
     [HttpGet("count-by-gift")]
-    public async Task<IActionResult> GetPurchaseCountByGift()
+    public async Task<ActionResult<IEnumerable<GiftPurchaseCountDto>>> GetPurchaseCountByGift()
     => Ok(await _service.GetPurchaseCountByGiftAsync());
 
 }

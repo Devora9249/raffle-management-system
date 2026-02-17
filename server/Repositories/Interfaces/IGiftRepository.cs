@@ -13,7 +13,7 @@ namespace server.Repositories.Interfaces
         PriceSort sort);
         Task<IEnumerable<GiftModel>> GetGiftsAsync(PriceSort sort);
         Task<GiftModel?> GetGiftByIdAsync(int id);
-        Task<IEnumerable<GiftModel>> GetByGiftByCategoryAsync(int categoryId);
+        Task<IEnumerable<GiftModel>> GetGiftByCategoryAsync(int categoryId);
         Task<GiftModel> AddGiftAsync(GiftModel gift);
         Task<GiftModel?> UpdateGiftAsync(GiftModel gift);
         Task<bool> HasPurchasesAsync(int productId);

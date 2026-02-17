@@ -5,8 +5,6 @@ namespace server.DTOs
 {
     public class PurchaseCreateDto
     {
-        [Required]
-        public int UserId { get; set; }
 
         [Required]
         public int GiftId { get; set; }

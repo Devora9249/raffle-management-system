@@ -2,6 +2,7 @@ using server.DTOs;
 using server.Models;
 using server.Repositories.Interfaces;
 using server.Services.Interfaces;
+using server.Data;
 
 namespace server.Services.Implementations
 {
@@ -9,10 +10,12 @@ namespace server.Services.Implementations
     {
         private readonly IPurchaseRepository _repo;
         private readonly IRaffleStateService _raffleState;
-        public CartService(IPurchaseRepository repo, IRaffleStateService raffleState)
+        private readonly AppDbContext _context;
+        public CartService(IPurchaseRepository repo, IRaffleStateService raffleState, AppDbContext context)
         {
             _repo = repo;
             _raffleState = raffleState;
+            _context = context;
         }
 
         public async Task<List<CartItemResponseDto>> GetCartAsync(int userId)
@@ -21,7 +24,7 @@ namespace server.Services.Implementations
             return items.Select(ToCartItemDto).ToList();
         }
 
-        public async Task<CartItemResponseDto> AddToCartAsync(CartAddDto dto)
+        public async Task<CartItemResponseDto> AddToCartAsync(CartAddDto dto, int userId)
         {
             if (_raffleState.Status == RaffleStatus.Finished)
             {
@@ -33,7 +36,7 @@ namespace server.Services.Implementations
 
             var purchase = new PurchaseModel
             {
-                UserId = dto.UserId,
+                UserId = userId,
                 GiftId = dto.GiftId,
                 Qty = dto.Qty,
                 Status = Status.Draft,
@@ -44,7 +47,7 @@ namespace server.Services.Implementations
             return ToCartItemDto(created!);
         }
 
-        public async Task<CartItemResponseDto> UpdateQtyAsync(CartAddDto dto)
+        public async Task<CartItemResponseDto> UpdateQtyAsync(CartAddDto dto, int userId)
         {
             if (_raffleState.Status == RaffleStatus.Finished)
             {
@@ -54,10 +57,10 @@ namespace server.Services.Implementations
             if (dto.Qty <= 0)
                 throw new ArgumentException("Qty must be greater than 0");
 
-            var existing = await _repo.FindDraftByUserAndGift(dto.UserId, dto.GiftId);
+            var existing = await _repo.FindDraftByUserAndGift(userId, dto.GiftId);
 
             if (existing == null)
-                return await AddToCartAsync(dto);
+                return await AddToCartAsync(dto, userId);
 
             existing.Qty = dto.Qty;
 
@@ -79,23 +82,31 @@ namespace server.Services.Implementations
 
         public async Task<CartCheckoutResponseDto> CheckoutAsync(int userId)
         {
-            var count = await _repo.CheckoutAsync(userId);
+            var cartItems = await _repo.GetUserCartAsync(userId);
 
-            if (count == 0)
+            if (cartItems.Count == 0)
                 return new CartCheckoutResponseDto
                 {
                     UserId = userId,
                     ItemsCompleted = 0,
                     Message = "Cart is empty"
                 };
+            foreach (var item in cartItems)
+            {
+                item.Status = Status.Completed;
+                item.PurchaseDate = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
 
             return new CartCheckoutResponseDto
             {
                 UserId = userId,
-                ItemsCompleted = count,
+                ItemsCompleted = cartItems.Count,
                 Message = "Checkout completed successfully"
             };
         }
+
 
         private static CartItemResponseDto ToCartItemDto(PurchaseModel p)
             => new CartItemResponseDto

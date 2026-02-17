@@ -9,6 +9,7 @@ namespace server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DonorController : ControllerBase
     {
         private readonly IDonorService _donorService;
