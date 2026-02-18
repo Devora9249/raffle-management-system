@@ -32,7 +32,7 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.authService.getCurrentUser().subscribe((user) => {
-      if (!user) return; 
+      if (user === null) return; 
       console.log(user.name);
       this.currentDonorId = user.id;
     });

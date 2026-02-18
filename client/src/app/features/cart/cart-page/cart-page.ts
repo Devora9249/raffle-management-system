@@ -47,7 +47,7 @@ export class CartPage implements OnInit {
 
       if (visible) {
         this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-          if (!userId) {
+          if (userId === null) {
             this.massage = 'Please log in to view your cart.';
             return;
           }
@@ -59,10 +59,10 @@ export class CartPage implements OnInit {
 
 
   onCountChange(item: CartItemResponseDto, qty: number): void {
-    if (!item?.purchaseId) return;
+    if (item?.purchaseId === undefined) return;
 
     this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-      if (!userId) {
+      if (userId === null) {
         this.router.navigate(['/login']);
         return;
       }
@@ -73,7 +73,6 @@ export class CartPage implements OnInit {
       }
 
       this.cartService.updateQty({
-        userId,
         giftId: item.giftId,
         qty
       }).subscribe();
@@ -82,7 +81,7 @@ export class CartPage implements OnInit {
 
 
   onDelete(item: CartItemResponseDto): void {
-    if (!item.purchaseId) return;
+    if (item.purchaseId === undefined) return;
     this.notificationService.confirmDelete(() => {
       this.cartService.remove(item.purchaseId!).subscribe(() => {
         this.notificationService.showSuccess('deleted successfully ');
@@ -94,7 +93,7 @@ export class CartPage implements OnInit {
 
   checkout(): void {
   this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-    if (!userId) {
+    if (userId === null) {
       this.router.navigate(['/login']);
       return;
     }

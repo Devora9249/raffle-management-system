@@ -60,7 +60,7 @@ export class PaymentPage implements OnInit {
 
     this.loading = true;
     this.authService.getCurrentUserId().pipe(take(1)).subscribe(userId => {
-      if (!userId) {
+      if (userId === null) {
         this.notificationService.showError('User not connected');
         this.loading = false;
         return;

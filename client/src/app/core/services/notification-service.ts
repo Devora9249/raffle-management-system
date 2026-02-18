@@ -14,7 +14,7 @@ export class NotificationService {
       severity: 'success', 
       summary: 'Success', 
       detail: message,
-      life: 1500
+      life: 800
     });
   }
 
@@ -24,7 +24,7 @@ export class NotificationService {
       severity: 'error', 
       summary: 'Error', 
       detail: message,
-      life: 1500
+      life: 800
     });
   }
   confirmDelete(onConfirm: () => void) {

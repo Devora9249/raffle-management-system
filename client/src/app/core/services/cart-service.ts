@@ -25,7 +25,7 @@ export class CartService {
   // Initial load (called once per login)
   loadCart(): Observable<void> {
     return this.http
-      .get<CartItemResponseDto[]>(`${this.baseUrl}`)
+      .get<CartItemResponseDto[]>(`${this.baseUrl}/cart`)
       .pipe(
         tap(cart => this._cart$.next(cart)),
         map(() => void 0)

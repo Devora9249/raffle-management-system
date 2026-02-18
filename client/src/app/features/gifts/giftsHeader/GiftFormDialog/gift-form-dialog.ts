@@ -102,7 +102,7 @@ export class GiftFormDialog implements OnChanges {
 
   onFileChange(event: FileSelectEvent): void {
     const file = event.files?.[0] ?? null;
-    if (!file) return;
+    if (file === null) return;
 
     this.selectedFile = file;
     this.previewUrl = URL.createObjectURL(file);

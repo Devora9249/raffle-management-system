@@ -31,12 +31,12 @@ export class GiftCard {
 
 
   onCountChange(count: number) {
-    if (!this.gift?.id) return;
+    if (this.gift?.id === undefined) return;
 
 
     this.authService.getCurrentUserId().subscribe(userId => {
       console.log("userId", userId);
-      if (!userId) { this.notificationService.showError('User not logged in'); this.router.navigate(['/login']); return; }
+      if (userId === null) { this.notificationService.showError('User not logged in'); this.router.navigate(['/login']); return; }
       console.log('purchaseID', this.purchaseId);
 
       if (count === 0 && this.purchaseId) {
@@ -45,7 +45,6 @@ export class GiftCard {
       }
 
       this.cartService.updateQty({
-        userId,
         giftId: this.gift.id,
         qty: count
       }).subscribe();

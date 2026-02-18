@@ -62,7 +62,7 @@ export class AuthService {
     if (!this.isTokenValid()) return of(null); //  בדיקה מוקדמת
 
     const token = this.getToken();
-    if (!token) return of(null);
+    if (token === null) return of(null);
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);
@@ -93,7 +93,7 @@ export class AuthService {
 
   getRole(): string | null {
     const token = this.getToken();
-    if (!token || !this.isTokenValid()) return null;
+    if (token === null || !this.isTokenValid()) return null;
 
     const decoded = jwtDecode<JwtPayload>(token) as any;
 
@@ -125,7 +125,7 @@ export class AuthService {
 
     const token = this.getToken();
 
-    if (!token) return false;
+    if (token === null) return false;
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);

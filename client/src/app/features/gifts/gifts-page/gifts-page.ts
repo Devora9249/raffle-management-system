@@ -59,7 +59,7 @@ export class GiftsPage {
     });
 
     this.authService.getCurrentUserId().subscribe(userId => {
-      if (!userId) return;
+      if (userId === null) return;
       this.userId = userId;
       this.cartService.loadCart().subscribe();
     });
