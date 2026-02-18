@@ -23,9 +23,9 @@ export class CartService {
   constructor(private http: HttpClient) {}
 
   // Initial load (called once per login)
-  loadCart(userId: number): Observable<void> {
+  loadCart(): Observable<void> {
     return this.http
-      .get<CartItemResponseDto[]>(`${this.baseUrl}/${userId}`)
+      .get<CartItemResponseDto[]>(`${this.baseUrl}`)
       .pipe(
         tap(cart => this._cart$.next(cart)),
         map(() => void 0)
@@ -72,9 +72,9 @@ export class CartService {
   }
 
   // Checkout
-  checkout(userId: number): Observable<CartCheckoutResponseDto> {
+  checkout(): Observable<CartCheckoutResponseDto> {
     return this.http
-      .post<CartCheckoutResponseDto>(`${this.baseUrl}/checkout/${userId}`, null)
+      .post<CartCheckoutResponseDto>(`${this.baseUrl}/checkout`, null)
       .pipe(
         tap(() => {
           this._cart$.next([]); // clear cart after checkout

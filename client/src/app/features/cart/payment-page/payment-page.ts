@@ -66,7 +66,7 @@ export class PaymentPage implements OnInit {
         return;
       }
 
-      this.cartService.checkout(userId).subscribe({
+      this.cartService.checkout().subscribe({
         next: () => {
           this.loading = false;
           this.notificationService.showSuccess('Payment successful! Your order is on its way.');

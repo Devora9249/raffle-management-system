@@ -51,7 +51,7 @@ export class CartPage implements OnInit {
             this.massage = 'Please log in to view your cart.';
             return;
           }
-          this.cartService.loadCart(userId).subscribe();
+          this.cartService.loadCart().subscribe();
         });
       }
     });

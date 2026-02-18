@@ -5,7 +5,6 @@
 // Add item to cart (create draft)
 
 export interface CartAddDto {
-  userId: number;
   giftId: number;
   qty: number;
 }

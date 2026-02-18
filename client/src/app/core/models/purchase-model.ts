@@ -13,7 +13,6 @@ export interface PurchaseResponseDto {
 
 
 export interface PurchaseCreateDto {
-  userId: number;
   giftId: number;
   qty: number;
 }
