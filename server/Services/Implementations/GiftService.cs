@@ -53,7 +53,7 @@ public class GiftService : IGiftService
     public async Task<IEnumerable<GiftResponseDto?>> GetByGiftByCategoryAsync(int categoryId)
     {
         var gifts = await _giftRepository.GetGiftByCategoryAsync(categoryId);
-        if (gifts == null) return null;
+        if (gifts == null) throw new KeyNotFoundException($"No gifts found for category {categoryId}");
 
         return _mapper.Map<IEnumerable<GiftResponseDto>>(gifts);
 
@@ -70,7 +70,7 @@ public class GiftService : IGiftService
     {
         var gift = await _giftRepository.GetGiftByIdAsync(id);
         if (gift == null)
-            return null;
+            throw new KeyNotFoundException($"Gift {id} not found");
 
         return _mapper.Map<GiftResponseDto>(gift);
 

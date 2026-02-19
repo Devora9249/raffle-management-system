@@ -44,8 +44,8 @@ namespace server.DTOs
     public class GiftPurchaseCountDto
     {
         public int GiftId { get; set; }
-        public string GiftName { get; set; }
+        public string GiftName { get; set; } = string.Empty;
         public int PurchaseCount { get; set; }
-        public string DonorName { get; set; }
+        public string DonorName { get; set; } = string.Empty;
     }
 }
