@@ -6,17 +6,16 @@ The frontend application for the Raffle Management System, built with Angular 20
 
 - [Overview](#overview)
 - [Technologies Used](#technologies-used)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
-- [Environment Configuration](#environment-configuration)
 - [UI Screenshots](#ui-screenshots)
-- [Development Guidelines](#development-guidelines)
 
 ## Overview
 
 This is the client-side application of the Raffle Management System. It provides an intuitive, responsive user interface for managing raffle events, browsing gifts, making purchases, and administering the system based on user roles.
+
+<img src="./screenshots/גיף כל האתר.gif" width="900" />
+
 
 The application is built with Angular and uses a component-based architecture with lazy loading for optimal performance.
 
@@ -26,13 +25,11 @@ The application is built with Angular and uses a component-based architecture wi
 
 - **Angular**: 20.3.0
 - **TypeScript**: Latest
-- **RxJS**: 7.8.0 (Reactive programming)
-- **Zone.js**: 0.15.0
+
 
 ### UI Component Libraries
 
 - **PrimeNG**: 20.4.0 - Primary UI component library
-- **ng-zorro-antd**: 20.4.4 - Additional UI components
 - **PrimeIcons**: 7.0.0 - Icon library
 - **@primeng/themes**: 20.4.0 - Theme system
 - **@primeuix/themes**: 2.0.2 - Extended themes
@@ -53,17 +50,17 @@ The application is built with Angular and uses a component-based architecture wi
 
 - **Angular CLI**: 20.3.8
 - **@angular/build**: 20.3.8
-- **TypeScript Compiler**: Latest
 
-## Prerequisites
 
-Before you begin, ensure you have the following installed:
+## Getting Started
+
+Ensure these are installed on your development machine:
 
 - **Node.js**: 22.16.0 or higher
 - **npm**: 10.9.2 or higher
-- **Angular CLI**: 20.3.13 or higher
+- **Angular CLI**: 20.3.x (optional for global commands)
 
-Verify your installation:
+Verify versions:
 
 ```bash
 node --version
@@ -71,38 +68,40 @@ npm --version
 ng version
 ```
 
-## Getting Started
+## Getting Started (Client)
 
-### 1. Clone the Repository
+1. Clone the repository and open the client folder:
 
 ```bash
-git clone <repository-url>
 cd finalProject/client
 ```
 
-### 2. Install Dependencies
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-This will install all required packages as defined in `package.json`.
+3. Point the Angular app to the backend API
 
-### 3. Configure Environment (if needed)
 
-If you need to connect to a different backend API, update the API base URL in your environment configuration files (typically in `src/environments/`).
-
-### 4. Start the Development Server
+4. Start the dev server:
 
 ```bash
 npm start
 # or
-ng serve
+ng serve --open
 ```
 
-The application will be available at `http://localhost:4200/`.
+The app will open at `http://localhost:4200` by default.
 
-The development server supports hot module replacement, so any changes you make to the source files will automatically reload the application in the browser.
+5. Build for production:
+
+```bash
+npm run build
+```
+
+For backend details and database configuration, see the Server README: [../server/README.md](../server/README.md)
 
 ### 5. Access the Application
 
@@ -144,79 +143,6 @@ client/
 - **shared/**: Contains reusable components, directives, and pipes that are shared across features
 - **styles/**: Contains global SCSS variables, mixins, and theme configurations
 
-## Available Scripts
-
-### Development
-
-```bash
-npm start
-# or
-ng serve
-```
-
-Starts the development server on `http://localhost:4200`.
-
-### Build
-
-```bash
-npm run build
-# or
-ng build
-```
-
-Builds the application for production. The build artifacts will be stored in the `dist/` directory.
-
-### Build (Watch Mode)
-
-```bash
-npm run watch
-# or
-ng build --watch --configuration development
-```
-
-Builds the application in watch mode, automatically rebuilding when files change.
-
-### Testing
-
-```bash
-npm test
-# or
-ng test
-```
-
-Runs unit tests using Karma test runner.
-
-### Code Generation
-
-Generate new components, services, and other Angular artifacts:
-
-```bash
-# Generate a new component
-ng generate component component-name
-
-# Generate a new service
-ng generate service service-name
-
-# Generate a new module
-ng generate module module-name
-
-# See all available schematics
-ng generate --help
-```
-
-## Environment Configuration
-
-The application can be configured for different environments (development, production, etc.).
-
-### API Configuration
-
-To connect to a different backend API, update the API base URL in your environment files or configuration service.
-
-Typical configuration includes:
-
-- **API Base URL**: The backend API endpoint
-- **JWT Token Key**: Local storage key for authentication token
-- **Timeout Settings**: HTTP request timeout values
 
 ## UI Screenshots
 
@@ -224,131 +150,25 @@ This section showcases the user interface of the Raffle Management System.
 
 ### Home Page
 
-> _Screenshot placeholder: Add a screenshot of the home page showing the main landing view_
+<!-- ![Home_page](./screenshots/home_page.png) -->
+<img src="./screenshots/home_page.png" width="660" />
+
 
 ### Gift Catalog
-
-> _Screenshot placeholder: Add a screenshot of the gift browsing interface with category filters_
+<img src="./screenshots/catalog.png" width="660" />
 
 ### Shopping Cart
-
-> _Screenshot placeholder: Add a screenshot of the shopping cart with gift items_
-
-### User Dashboard
-
-> _Screenshot placeholder: Add a screenshot of the user dashboard showing purchases and wins_
+<img src="./screenshots/cart.png" width="660" />
 
 ### Admin Panel
+<img src="./screenshots/גיף%20מנהל.gif" width="660" />
 
-> _Screenshot placeholder: Add a screenshot of the admin panel for managing gifts and categories_
+### Add gift form
+<img src="./screenshots/גיף%20הוספת%20מתנה.gif" width="660" />
 
-### Donor Management
-
-> _Screenshot placeholder: Add a screenshot of the donor interface for contributing gifts_
+### Donor Dashbord
+<img src="./screenshots/גיף%20תורם.gif" width="660" />
 
 ### Authentication
-
-> _Screenshot placeholder: Add screenshots of login and registration pages_
-
-### Responsive Design
-
-> _Screenshot placeholder: Add screenshots demonstrating mobile responsiveness_
-
----
-
-**Note**: To add screenshots, replace the placeholders above with actual image files stored in a `screenshots/` or `docs/` folder, then reference them using markdown image syntax:
-
-```markdown
-![Alt text](./path/to/screenshot.png)
-```
-
-## Development Guidelines
-
-### Code Style
-
-This project uses Prettier for code formatting. The configuration is defined in `package.json`:
-
-- Print width: 100 characters
-- Single quotes for strings
-- Angular HTML parser for template files
-
-### Component Structure
-
-- Use standalone components where appropriate
-- Follow the single responsibility principle
-- Keep components small and focused
-- Use smart/dumb component pattern (container/presentation)
-
-### State Management
-
-- Use RxJS for reactive state management
-- Use services for shared state
-- Implement proper subscription management (use `async` pipe or unsubscribe)
-
-### Styling
-
-- Use SCSS for styling
-- Follow BEM naming convention for CSS classes
-- Leverage PrimeNG theme system for consistent UI
-- Keep component styles scoped
-
-### Best Practices
-
-1. **TypeScript**: Enable strict mode and fix all type errors
-2. **Performance**: Use `OnPush` change detection strategy where possible
-3. **Accessibility**: Ensure proper ARIA labels and keyboard navigation
-4. **Lazy Loading**: Load feature modules on demand
-5. **Error Handling**: Implement proper error handling and user feedback
-6. **Security**: Never store sensitive data in client-side storage without encryption
-
-### Testing
-
-- Write unit tests for components and services
-- Aim for meaningful test coverage
-- Use mocking for external dependencies
-- Test both success and error scenarios
-
-## Troubleshooting
-
-### Port Already in Use
-
-If port 4200 is already in use, specify a different port:
-
-```bash
-ng serve --port 4201
-```
-
-### Module Not Found Errors
-
-If you encounter module not found errors, try:
-
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Build Errors
-
-Clear the Angular cache and rebuild:
-
-```bash
-ng cache clean
-npm run build
-```
-
-## Additional Resources
-
-- [Angular Documentation](https://angular.dev/)
-- [Angular CLI Reference](https://angular.dev/tools/cli)
-- [PrimeNG Documentation](https://primeng.org/)
-- [ng-zorro-antd Documentation](https://ng.ant.design/)
-- [RxJS Documentation](https://rxjs.dev/)
-
-## Support
-
-For issues and questions:
-
-1. Check the [main README](../README.md) for general project information
-2. Review the [server README](../server/README.md) for backend-related issues
-3. Consult the Angular and component library documentation
-4. Check existing issues in the project repository
+<img src="./screenshots/register.png" width="660" />
+<img src="./screenshots/login.png" width="660" />

@@ -6,16 +6,13 @@ The backend REST API for the Raffle Management System, built with ASP.NET Core 8
 
 - [Overview](#overview)
 - [Technologies Used](#technologies-used)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [API Overview](#api-overview)
-- [Environment Variables](#environment-variables)
 - [Database](#database)
 - [Authentication & Authorization](#authentication--authorization)
 - [Logging](#logging)
 - [Testing](#testing)
-- [Development Guidelines](#development-guidelines)
 
 ## Overview
 
@@ -44,123 +41,94 @@ The API is built using a clean architecture approach with separation of concerns
 
 ### Authentication & Security
 
-- **JWT Bearer Authentication**: Microsoft.AspNetCore.Authentication.JwtBearer 8.0
-- **BCrypt.Net-Next**: 4.0.3 - Password hashing
+- **JWT Bearer Authentication**: `Microsoft.AspNetCore.Authentication.JwtBearer` (used for issuing and validating JWT tokens)
+- **Password hashing**: `BCrypt.Net-Next` (used for secure password hashing)
 
-### Additional Libraries
 
-- **AutoMapper**: 12.0.1 - Object-to-object mapping
-- **Serilog**: 4.3.0 - Structured logging
-  - Serilog.AspNetCore: 10.0.0
-  - Serilog.Sinks.Console: 6.1.1
-  - Serilog.Sinks.File: 7.0.0
-- **Swashbuckle.AspNetCore**: 6.5.0 - Swagger/OpenAPI documentation
-
-### Architecture Patterns
-
-- Repository Pattern for data access
-- Service Layer for business logic
-- Dependency Injection
-- Clean Architecture principles
-
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **.NET SDK**: 8.0 or higher
-- **SQL Server**: Local instance, Docker container, or remote server
-- **Entity Framework Core Tools**: For running migrations
-
-Verify your installation:
-
-```bash
-dotnet --version
-dotnet ef --version
-```
-
-If EF Core tools are not installed:
-
-```bash
-dotnet tool install --global dotnet-ef
-```
 
 ## Getting Started
 
-### 1. Clone the Repository
+Follow these steps to configure and run the backend API locally.
 
+## 1. Initial Setup
+Clone the repository and navigate to the server directory:
 ```bash
-git clone <repository-url>
-cd finalProject/server
+cd server
 ```
 
-### 2. Set Up the Database
 
-#### Option A: Using Docker (Recommended)
+## 2. Configuration
+Configure the database connection and secrets
 
-```bash
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Pass123" -p 1433:1433 --name sql-server -d mcr.microsoft.com/mssql/server:2022-latest
-```
-
-#### Option B: Using Local SQL Server
-
-Ensure SQL Server is running and accessible on your machine.
-
-### 3. Configure the Application
-
-Edit `appsettings.Development.json`:
+Edit `appsettings.Development.json`. Below is a complete example that matches the project's configuration fields — sensitive values are redacted. Do NOT commit real secrets to source control; use User Secrets or environment variables for secrets.
 
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=RaffleDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
   },
+
   "Admin": {
-    "Password": "your-admin-password"
+    "Password": "<ADMIN_PASSWORD>"
   },
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=RaffleDb;User Id=sa;Password=<DB_PASSWORD>;TrustServerCertificate=True"
+  },
+
   "EmailSettings": {
-    "AdminEmail": "your-email@example.com"
+    "Host": "smtp.gmail.com",
+    "Port": 587,
+    "EnableSSL": true,
+    "Username": "<EMAIL_USERNAME>",
+    "Password": "<EMAIL_APP_PASSWORD>",
+    "AdminEmail": "<ADMIN_EMAIL>"
+  },
+
+  "AllowedHosts": "*",
+
+  "Jwt": {
+    "Key": "<JWT_SECRET_KEY>",
+    "Issuer": "CA-Api",
+    "Audience": "CA-Client",
+    "ExpiresMinutes": 60
   }
 }
 ```
 
-**Important**: Update these settings before running the application:
-- Database connection string
-- Admin password
-- Email settings (if using email functionality)
+**Note**: For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833) instead of your regular password.
 
-See [Environment Variables](#environment-variables) for detailed configuration options.
+Important: Ensure you update the connection string, admin password, and email settings before proceeding to the next steps.
 
-### 4. Restore Dependencies
+
+
+## 3. Restore and Update
+Run the following commands to install dependencies and sync your database schema:
 
 ```bash
 dotnet restore
 ```
 
-### 5. Apply Database Migrations
+Apply Entity Framework Core migrations to create/update the database schema:
 
 ```bash
 dotnet ef database update
 ```
 
-This will create the database schema based on the existing migrations.
-
-### 6. Run the Application
+## 4. Run the Application
 
 ```bash
 dotnet run
 ```
 
-The API will start and listen on the configured ports (typically `http://localhost:5000` and `https://localhost:5001`).
+The API will listen on the configured ports (check `launchSettings.json`).
 
-### 7. Access the API Documentation
+## 5. API Documentation
+Open the Swagger UI (e.g., `http://localhost:5000/swagger`) to explore endpoints.
 
-Navigate to the Swagger UI:
-
-```
-http://localhost:5000/swagger
-```
-
-Here you can explore all available endpoints and test them interactively.
 
 ## Project Structure
 
@@ -228,6 +196,8 @@ server/
 └── server.csproj             # Project file
 ```
 
+
+
 ## API Overview
 
 The API follows RESTful conventions and is organized into the following resource groups:
@@ -291,105 +261,9 @@ The API follows RESTful conventions and is organized into the following resource
 
 **Note**: Detailed API documentation with request/response schemas is available via Swagger UI at `/swagger`.
 
-## Environment Variables
 
-The application can be configured through `appsettings.json` and `appsettings.Development.json` files.
-
-### Required Configuration
-
-#### Connection Strings
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=RaffleDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
-  }
-}
-```
-
-**Format**: `Server=<host>,<port>;Database=<db-name>;User Id=<username>;Password=<password>;TrustServerCertificate=True`
-
-#### JWT Configuration
-
-```json
-{
-  "Jwt": {
-    "Key": "your-secret-key-at-least-32-characters-long",
-    "Issuer": "CA-Api",
-    "Audience": "CA-Client",
-    "ExpiresMinutes": 60
-  }
-}
-```
-
-**Important**: Change the `Key` value in production to a strong, unique secret.
-
-#### Email Settings
-
-```json
-{
-  "EmailSettings": {
-    "Host": "smtp.gmail.com",
-    "Port": 587,
-    "EnableSSL": true,
-    "Username": "your-email@gmail.com",
-    "Password": "your-app-password",
-    "AdminEmail": "admin@example.com"
-  }
-}
-```
-
-**Note**: For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833) instead of your regular password.
-
-#### Admin Configuration
-
-```json
-{
-  "Admin": {
-    "Password": "secure-admin-password"
-  }
-}
-```
-
-### Optional Configuration
-
-#### Logging (Serilog)
-
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft": "Warning",
-        "System": "Warning"
-      }
-    }
-  }
-}
-```
-
-#### CORS
-
-CORS is configured in `Program.cs` to allow requests from the Angular development server (`http://localhost:4200`). Modify this for production deployments.
-
-### Using User Secrets (Development)
-
-For sensitive data in development, use .NET User Secrets:
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "your-connection-string"
-dotnet user-secrets set "Jwt:Key" "your-secret-key"
-```
 
 ## Database
-
-### Technology
-
-- **Database Management System**: Microsoft SQL Server
-- **ORM**: Entity Framework Core 8.0.7
-- **Migration Tool**: EF Core Migrations
 
 ### Entities
 
@@ -402,39 +276,7 @@ The database includes the following main entities:
 - **Winnings**: Raffle winners
 - **Cart**: Shopping cart items
 
-### Migrations
 
-#### Create a New Migration
-
-```bash
-dotnet ef migrations add MigrationName
-```
-
-#### Apply Migrations
-
-```bash
-dotnet ef database update
-```
-
-#### Rollback Migration
-
-```bash
-dotnet ef database update PreviousMigrationName
-```
-
-#### Remove Last Migration
-
-```bash
-dotnet ef migrations remove
-```
-
-### Database Schema
-
-The schema is defined through Entity Framework Core models in the `Models/` directory. Relationships are configured using:
-
-- One-to-many relationships (e.g., Category → Gifts, User → Purchases)
-- Foreign keys and navigation properties
-- Cascade delete policies
 
 ## Authentication & Authorization
 
@@ -454,7 +296,7 @@ The API uses JSON Web Tokens (JWT) for stateless authentication:
 Three roles are defined:
 
 - **Admin** (Role = 0): Full system access
-- **Donor** (Role = 1): Can manage their own gifts
+- **Donor** (Role = 1): Can see their own gifts
 - **User** (Role = 2): Can browse and purchase
 
 ### Protected Endpoints
@@ -502,44 +344,6 @@ All HTTP requests are automatically logged with:
 
 Unit tests are located in the `SERVER.Tests/` project.
 
-#### Run All Tests
-
-```bash
-dotnet test
-```
-
-#### Run Tests with Code Coverage
-
-```bash
-dotnet test /p:CollectCoverage=true
-```
-
-### Manual Testing
-
-Use the Swagger UI at `/swagger` to test endpoints manually:
-
-1. Navigate to `http://localhost:5000/swagger`
-2. Expand an endpoint
-3. Click "Try it out"
-4. Fill in parameters
-5. Click "Execute"
-
-For protected endpoints:
-
-1. First, authenticate via `/api/auth/login`
-2. Copy the returned JWT token
-3. Click the "Authorize" button in Swagger
-4. Enter `Bearer <token>` and authorize
-5. All subsequent requests will include the token
-
-## Development Guidelines
-
-### Code Style
-
-- Follow C# coding conventions
-- Use meaningful variable and method names
-- Keep methods small and focused
-- Write XML documentation comments for public APIs
 
 ### Architecture Principles
 
@@ -549,25 +353,6 @@ For protected endpoints:
 4. **DTOs**: Never expose domain models directly in APIs
 5. **AutoMapper**: Use for mapping between models and DTOs
 
-### Adding a New Feature
-
-1. **Model**: Create the entity in `Models/`
-2. **DTO**: Define DTOs in `DTOs/`
-3. **Mapping**: Create AutoMapper profile in `Mappings/`
-4. **Repository**: Create interface and implementation in `Repositories/`
-5. **Service**: Create interface and implementation in `Services/`
-6. **Controller**: Create controller in `Controllers/`
-7. **Migration**: Generate and apply migration
-8. **Tests**: Write unit tests in `SERVER.Tests/`
-
-### Best Practices
-
-- **Async/Await**: Use async methods for I/O operations
-- **Exception Handling**: Let the global middleware handle exceptions
-- **Validation**: Validate input using Data Annotations or FluentValidation
-- **Logging**: Log important events and errors
-- **Security**: Never log sensitive data (passwords, tokens)
-- **Performance**: Use EF Core efficiently (avoid N+1 queries, use projections)
 
 ### Error Handling
 
@@ -578,56 +363,3 @@ The application uses global exception handling middleware:
 - Error details are included in development mode only
 - Generic error messages in production for security
 
-## Troubleshooting
-
-### Database Connection Fails
-
-- Verify SQL Server is running
-- Check the connection string in `appsettings.Development.json`
-- Ensure the database user has proper permissions
-- For Docker: Verify the container is running with `docker ps`
-
-### Migration Errors
-
-```bash
-# Reset the database (WARNING: deletes all data)
-dotnet ef database drop
-dotnet ef database update
-```
-
-### Port Already in Use
-
-Modify the port in `Properties/launchSettings.json`:
-
-```json
-{
-  "profiles": {
-    "http": {
-      "applicationUrl": "http://localhost:5001"
-    }
-  }
-}
-```
-
-### JWT Authentication Fails
-
-- Verify the JWT settings in `appsettings.json` match between client and server
-- Check that the token hasn't expired
-- Ensure the `Authorization` header is formatted correctly: `Bearer <token>`
-
-## Additional Resources
-
-- [ASP.NET Core Documentation](https://learn.microsoft.com/en-us/aspnet/core/)
-- [Entity Framework Core Documentation](https://learn.microsoft.com/en-us/ef/core/)
-- [Serilog Documentation](https://serilog.net/)
-- [AutoMapper Documentation](https://docs.automapper.org/)
-- [Swagger/OpenAPI Documentation](https://swagger.io/docs/)
-
-## Support
-
-For issues and questions:
-
-1. Check the [main README](../README.md) for general project information
-2. Review the [client README](../client/README.md) for frontend-related issues
-3. Consult the official ASP.NET Core documentation
-4. Check existing issues in the project repository
