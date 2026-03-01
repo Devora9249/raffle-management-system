@@ -11,7 +11,10 @@ A comprehensive full-stack web application for managing raffle events with role-
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
+
+For detailed information about each component:
+- See [client/README.md](client/README.md) for frontend documentation
+- See [server/README.md](server/README.md) for backend documentation
 
 ## Overview
 
@@ -73,7 +76,6 @@ The application follows a modern three-tier architecture:
 - **Framework**: Angular 20.3
 - **UI Libraries**: 
   - PrimeNG 20.4 (Primary component library)
-  - ng-zorro-antd 20.4 (Additional UI components)
 - **Language**: TypeScript
 - **Styling**: SCSS
 - **Additional Libraries**: 
@@ -98,7 +100,6 @@ The application follows a modern three-tier architecture:
 ### Database
 
 - **DBMS**: SQL Server
-- **Development Environment**: Docker container (recommended)
 - **Migration Tool**: Entity Framework Core Migrations
 
 ## Prerequisites
@@ -110,7 +111,7 @@ Before running this project, ensure you have the following installed:
 - **Angular CLI**: 20.3.13 or higher
 - **.NET SDK**: 8.0 or higher
 - **SQL Server**: Local instance, Docker container, or remote server
-- **Docker** (optional, recommended): For running SQL Server in a container
+
 
 ### Verify Installation
 
@@ -130,93 +131,17 @@ dotnet --version
 
 ## Getting Started
 
-Follow these steps to run the application locally:
+These steps provide a minimal, high-level flow to get the full system running locally. For detailed configuration and platform-specific options, follow the component READMEs linked below.
 
-### 1. Clone the Repository
+1. Configure the backend connection string and secrets (see Server README).
+2. Start the backend: restore, apply EF Core migrations, and run the API (see Server README).
+3. Install frontend dependencies and start the Angular development server (see Client README).
+4. Open the application in your browser at `http://localhost:4200`.
 
-```bash
-git clone <repository-url>
-cd finalProject
-```
+For detailed instructions and environment-specific configuration:
 
-### 2. Set Up the Database
-
-#### Option A: Using Docker (Recommended)
-
-```bash
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Pass123" -p 1433:1433 --name sql-server -d mcr.microsoft.com/mssql/server:2022-latest
-```
-
-#### Option B: Using Local SQL Server
-
-Ensure SQL Server is running on your machine and accessible.
-
-### 3. Configure the Server
-
-Navigate to the server directory and update the connection string:
-
-```bash
-cd server
-```
-
-Edit `appsettings.Development.json`:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=RaffleDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
-  }
-}
-```
-
-**Important Configuration Items**:
-- Update the `ConnectionStrings:DefaultConnection` with your database credentials
-- Configure `EmailSettings` if you need email functionality
-- The `Jwt` settings are pre-configured but can be customized if needed
-
-### 4. Apply Database Migrations
-
-```bash
-dotnet ef database update
-```
-
-### 5. Start the Server
-
-```bash
-dotnet run
-```
-
-The API will be available at `http://localhost:5000` (or the port specified in `launchSettings.json`).
-
-Access the Swagger documentation at: `http://localhost:5000/swagger`
-
-### 6. Set Up the Client
-
-Open a new terminal and navigate to the client directory:
-
-```bash
-cd client
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-### 7. Start the Client
-
-```bash
-npm start
-# or
-ng serve
-```
-
-The application will be available at `http://localhost:4200`.
-
-### 8. Access the Application
-
-Open your browser and navigate to `http://localhost:4200`.
+- Server: [server/README.md](server/README.md)
+- Client: [client/README.md](client/README.md)
 
 ## Project Structure
 
@@ -244,20 +169,6 @@ finalProject/
 └── README.md           # This file
 ```
 
-For detailed information about each component:
-- See [client/README.md](client/README.md) for frontend documentation
-- See [server/README.md](server/README.md) for backend documentation
 
-## Contributing
 
-When contributing to this project:
-
-1. Follow the existing code style and conventions
-2. Write meaningful commit messages
-3. Test your changes thoroughly before submitting
-4. Update documentation when adding new features
-5. Ensure all tests pass before pushing changes
-
-## License
-
-This project is developed as part of an academic/educational project.
+ 
