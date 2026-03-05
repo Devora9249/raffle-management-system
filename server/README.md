@@ -278,7 +278,7 @@ The database includes the following main entities:
 
 ### Seed Data
 
-A SQL script with sample data is available at [`documents/script/`](../documents/script/).  
+A SQL script with sample data is available at [`documents/script.sql`](documents/script.sql).  
 You can run it after applying the EF Core migrations to populate the database with initial data.
 
 ## Authentication & Authorization
