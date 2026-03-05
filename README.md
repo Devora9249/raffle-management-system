@@ -36,9 +36,11 @@ The Raffle Management System is designed to streamline the process of organizing
 
 ### User Roles
 
-- **Administrator**: Manages the entire system, including users, gifts, categories, and raffle draws
-- **Donor**: Contributes gifts to the raffle system
-- **User**: Browses gifts, purchases raffle tickets, and participates in raffles
+| Role | Description |
+|------|-------------|
+| **Administrator** | Manages the entire system, including users, gifts, categories, and raffle draws |
+| **Donor** | Contributes gifts to the raffle system |
+| **User** | Browses gifts, purchases raffle tickets, and participates in raffles |
 
 ## Features
 
