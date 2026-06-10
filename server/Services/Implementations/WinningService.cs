@@ -21,6 +21,7 @@ public class WinningService : IWinningService
     private readonly IMapper _mapper;
     private readonly IRaffleStateService _raffleStateService;
     private readonly AppDbContext _context;
+    private readonly ITransactionProducerService _producer;
     public WinningService(
         IWinningRepository winningRepository,
         IPurchaseRepository purchaseRepository,
@@ -30,7 +31,8 @@ public class WinningService : IWinningService
         ILogger<WinningService> logger,
         IMapper mapper,
         IRaffleStateService raffleStateService,
-        AppDbContext context
+        AppDbContext context,
+        ITransactionProducerService producer
         )
     {
         _winningRepository = winningRepository;
@@ -42,6 +44,7 @@ public class WinningService : IWinningService
         _mapper = mapper;
         _raffleStateService = raffleStateService;
         _context = context;
+        _producer = producer;
     }
 
     public async Task<IEnumerable<WinningResponseDto>> GetAllWinningsAsync()
@@ -162,6 +165,25 @@ public class WinningService : IWinningService
             {
                 try
                 {
+                    await _producer.ProduceTransactionAsync(new TransactionEventDto
+                    {
+                        EventType = "RaffleWinnerSelected",
+                        WinnerId = winnerId,
+                        UserId = winnerId,
+                        GiftId = giftId,
+                        Quantity = 0,
+                        Amount = 0m,
+                        Description = "Bulk raffle winner",
+                        Timestamp = DateTime.UtcNow
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to publish Kafka raffle winner event for GiftId={GiftId}, WinnerId={WinnerId}", giftId, winnerId);
+                }
+
+                try
+                {
                     await _emailService.SendWinningEmailAsync(giftId, winnerId);
                 }
                 catch (Exception ex)
@@ -215,6 +237,25 @@ public class WinningService : IWinningService
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
             _logger.LogInformation("Single raffle committed: User {WinnerId} won Gift {GiftId}", winnerUserId, giftId);
+
+            try
+            {
+                await _producer.ProduceTransactionAsync(new TransactionEventDto
+                {
+                    EventType = "RaffleWinnerSelected",
+                    WinnerId = winnerUserId,
+                    UserId = winnerUserId,
+                    GiftId = giftId,
+                    Quantity = 0,
+                    Amount = gift.Price,
+                    Description = gift.Description,
+                    Timestamp = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to publish Kafka raffle winner event for GiftId={GiftId}, WinnerId={WinnerId}", giftId, winnerUserId);
+            }
 
             try
             {

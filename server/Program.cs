@@ -13,6 +13,7 @@ using System.Threading.RateLimiting;
 using server.Services;
 using server.Middlewares;
 using server.Models;
+using server.Services.Options;
 using System.Security.Claims;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -103,6 +104,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.Configure<EmailSettingsOptions>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Kafka
+builder.Services.Configure<KafkaSettingsOptions>(
+    builder.Configuration.GetSection("Kafka"));
+builder.Services.AddSingleton<ITransactionProducerService, KafkaTransactionProducerService>();
 
 // Repositories
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();

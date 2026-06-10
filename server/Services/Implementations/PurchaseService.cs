@@ -11,11 +11,18 @@ namespace server.Services.Implementations
         private readonly IPurchaseRepository _repo;
         private readonly IMapper _mapper;
         private readonly ILogger<PurchaseService> _logger;
-        public PurchaseService(IPurchaseRepository repo, IMapper mapper, ILogger<PurchaseService> logger)
+        private readonly ITransactionProducerService _producer;
+
+        public PurchaseService(
+            IPurchaseRepository repo,
+            IMapper mapper,
+            ILogger<PurchaseService> logger,
+            ITransactionProducerService producer)
         {
             _repo = repo;
             _mapper = mapper;
             _logger = logger;
+            _producer = producer;
         }
 
         public async Task<IEnumerable<PurchaseResponseDto>> GetAllAsync()
@@ -47,7 +54,21 @@ namespace server.Services.Implementations
         var created = await _repo.AddAsync(purchase);
         
         _logger.LogInformation("Purchase successfully created. Purchase ID: {PurchaseId} for User: {UserId}", created.Id, created.UserId);
-        
+
+        var transactionMessage = new TransactionEventDto
+        {
+            EventType = "PurchaseCreated",
+            PurchaseId = created.Id,
+            UserId = created.UserId,
+            GiftId = created.GiftId,
+            Quantity = created.Qty,
+            Amount = created.Qty * (created.Gift?.Price ?? 0m),
+            Description = created.Gift?.Description ?? string.Empty,
+            Timestamp = DateTime.UtcNow
+        };
+
+        await _producer.ProduceTransactionAsync(transactionMessage);
+
         return _mapper.Map<PurchaseResponseDto>(created);
     }
     catch (Exception ex)
