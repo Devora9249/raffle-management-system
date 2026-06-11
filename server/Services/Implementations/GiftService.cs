@@ -17,18 +17,20 @@ public class GiftService : IGiftService
     private readonly IMapper _mapper;
     private readonly IDistributedCache _cache;
     private readonly IConfiguration _config;
+    private readonly ITransactionProducerService _producer;
 
     private const string GiftCachePrefix = "raffle:gifts";
     private const string GiftCacheVersionKey = "raffle:gifts:version";
 
     public GiftService(IGiftRepository giftRepository, ILogger<GiftService> logger, IMapper mapper, IDistributedCache cache,
-    IConfiguration config)
+    IConfiguration config, ITransactionProducerService producer)
     {
         _giftRepository = giftRepository;
         _logger = logger;
         _mapper = mapper;
         _cache = cache;
         _config = config;
+        _producer = producer;
     }
 
     private async Task<string> GetGiftCacheVersionAsync()
@@ -285,6 +287,26 @@ public class GiftService : IGiftService
 
         var created = await _giftRepository.AddGiftAsync(model);
         await InvalidateGiftCacheAsync();
+
+        try
+        {
+            _logger.LogInformation("Publishing GiftCreated event for gift {GiftId}", created.Id);
+            await _producer.ProduceTransactionAsync(new TransactionEventDto
+            {
+                EventType = "GiftCreated",
+                GiftId = created.Id,
+                UserId = 0,
+                Quantity = 0,
+                Amount = created.Price,
+                Description = created.Description,
+                Timestamp = DateTime.UtcNow
+            });
+            _logger.LogInformation("GiftCreated event published for gift {GiftId}", created.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to publish GiftCreated event for gift {GiftId}", created.Id);
+        }
 
         return _mapper.Map<GiftResponseDto>(created);
 

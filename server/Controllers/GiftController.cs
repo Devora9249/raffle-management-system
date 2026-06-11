@@ -61,7 +61,7 @@ public class GiftController : ControllerBase
         => Ok(await _giftService.GetByDonorAsync(donorId));
 
 
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<GiftResponseDto>> CreateWithImage([FromForm] GiftCreateWithImageDto dto)
     {

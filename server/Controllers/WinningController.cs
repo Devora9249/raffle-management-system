@@ -62,7 +62,7 @@ public class WinningController : ControllerBase
         return await _winningService.GetTotalIncome();
     }
 
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("doRaffle")]
     public async Task<IEnumerable<WinningResponseDto>> DoRaffle()
     {

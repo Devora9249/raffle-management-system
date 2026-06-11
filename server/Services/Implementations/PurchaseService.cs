@@ -51,6 +51,7 @@ namespace server.Services.Implementations
             try
     {
         var purchase = _mapper.Map<PurchaseModel>(createDto);
+        purchase.UserId = userId;
         var created = await _repo.AddAsync(purchase);
         
         _logger.LogInformation("Purchase successfully created. Purchase ID: {PurchaseId} for User: {UserId}", created.Id, created.UserId);
@@ -67,7 +68,14 @@ namespace server.Services.Implementations
             Timestamp = DateTime.UtcNow
         };
 
-        await _producer.ProduceTransactionAsync(transactionMessage);
+        try
+        {
+            await _producer.ProduceTransactionAsync(transactionMessage);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to publish Kafka purchase event for PurchaseId {PurchaseId}", created.Id);
+        }
 
         return _mapper.Map<PurchaseResponseDto>(created);
     }

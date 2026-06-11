@@ -11,11 +11,17 @@ namespace server.Services.Implementations
         private readonly IPurchaseRepository _repo;
         private readonly IRaffleStateService _raffleState;
         private readonly AppDbContext _context;
-        public CartService(IPurchaseRepository repo, IRaffleStateService raffleState, AppDbContext context)
+        private readonly ITransactionProducerService _producer;
+        private readonly ILogger<CartService> _logger;
+
+        public CartService(IPurchaseRepository repo, IRaffleStateService raffleState, AppDbContext context,
+            ITransactionProducerService producer, ILogger<CartService> logger)
         {
             _repo = repo;
             _raffleState = raffleState;
             _context = context;
+            _producer = producer;
+            _logger = logger;
         }
 
         public async Task<List<CartItemResponseDto>> GetCartAsync(int userId)
@@ -98,6 +104,28 @@ namespace server.Services.Implementations
             }
 
             await _context.SaveChangesAsync();
+
+            foreach (var item in cartItems)
+            {
+                try
+                {
+                    await _producer.ProduceTransactionAsync(new TransactionEventDto
+                    {
+                        EventType = "PurchaseCreated",
+                        PurchaseId = item.Id,
+                        UserId = item.UserId,
+                        GiftId = item.GiftId,
+                        Quantity = item.Qty,
+                        Amount = item.Qty * (item.Gift?.Price ?? 0m),
+                        Description = item.Gift?.Description ?? string.Empty,
+                        Timestamp = DateTime.UtcNow
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to publish Kafka purchase event for PurchaseId {PurchaseId}", item.Id);
+                }
+            }
 
             return new CartCheckoutResponseDto
             {

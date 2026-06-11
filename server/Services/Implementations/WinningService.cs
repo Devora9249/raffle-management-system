@@ -168,7 +168,6 @@ public class WinningService : IWinningService
                     await _producer.ProduceTransactionAsync(new TransactionEventDto
                     {
                         EventType = "RaffleWinnerSelected",
-                        WinnerId = winnerId,
                         UserId = winnerId,
                         GiftId = giftId,
                         Quantity = 0,
@@ -243,7 +242,6 @@ public class WinningService : IWinningService
                 await _producer.ProduceTransactionAsync(new TransactionEventDto
                 {
                     EventType = "RaffleWinnerSelected",
-                    WinnerId = winnerUserId,
                     UserId = winnerUserId,
                     GiftId = giftId,
                     Quantity = 0,
